@@ -1,0 +1,23 @@
+<?php return array(
+    'amount' => 'القيمة',
+    'customer_account' => 'اختار الحساب',
+    'customer' => 'الحساب',
+    'new_customer_account' => 'الحساب الجديد',
+    'selected_customer' => 'الحساب القديم',
+    'note' => 'الملاحظات',
+    'username' => 'User Name',
+    'customer_name' => 'اسم العميل',
+    'branch_name' => 'اسم الفرع',
+    'date_at' => 'بتاريخ',
+    'debenture_cashing' => 'سند صرف نقديه',
+    'debenture_deposit' => 'سند ايداع نقديه',
+    'purchases_bill' => 'فاتورة مشتريات',
+    'selected_branch' => 'اختار الفرع',
+    'sales_bill' => 'فاتوره مبيعات',
+    'account_adjustment' => 'تسويه حساب',
+    'selected_product' => 'اختار الصنف',
+    'price' => 'السعر',
+    'quantity' => 'الكمية',
+    'price' => 'السعر',
+
+);
