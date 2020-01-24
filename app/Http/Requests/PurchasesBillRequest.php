@@ -27,7 +27,7 @@ class PurchasesBillRequest extends FormRequest
         return [
             'branch_id' => 'required|exists:branches,id',
             'customer_id' => 'required|exists:customers,id',
-            'products.*' => 'required',
+            'products' => 'required',
         ];
     }
     /**
