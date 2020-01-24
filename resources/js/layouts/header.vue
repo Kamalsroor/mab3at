@@ -120,7 +120,10 @@
         </a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">خانه</a>
+        <a href="#" @click.prevent="logout">
+          <i class="fas fa-power-off"></i>
+          تسجيل خروج
+        </a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">تماس</a>
