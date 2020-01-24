@@ -30,12 +30,15 @@
                   </thead>
                   <tbody>
                     <tr v-for="(customer, index) in customers.data" :key="index">
-                      <td v-text="customer.name"></td>
+                      <td v-if="customer.debtor - customer.creditor != 0" v-text="customer.name"></td>
                       <!-- <td v-text="customer.creditor"></td> -->
                       <!-- <td v-text="customer.debtor"></td> -->
-                      <td v-text="customer.debtor - customer.creditor"></td>
+                      <td
+                        v-if="customer.debtor - customer.creditor != 0"
+                        v-text="customer.debtor - customer.creditor"
+                      ></td>
 
-                      <td class="table-option">
+                      <td v-if="customer.debtor - customer.creditor != 0" class="table-option">
                         <div class="btn-group">
                           <button
                             class="btn btn-info btn-sm"

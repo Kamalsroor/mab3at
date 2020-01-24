@@ -17,7 +17,7 @@
         <div class="card">
           <div class="card-body">
             <div class="card-body">
-              <h2>سند صرف نقدية</h2>
+              <h2 v-if="customers.data[0].DebentureCashings.length">سند صرف نقدية</h2>
               <div class="table-responsive" v-if="customers.data[0].DebentureCashings.length">
                 <table class="table">
                   <thead>
@@ -50,7 +50,7 @@
                 </table>
               </div>
 
-              <h2>سند ايداع نقدية</h2>
+              <h2 v-if="customers.data[0].DebentureDeposits.length">سند ايداع نقدية</h2>
               <div class="table-responsive" v-if="customers.data[0].DebentureDeposits.length">
                 <table class="table">
                   <thead>
@@ -83,7 +83,7 @@
               </div>
 
               <hr />
-              <h2>فواتير مشتريات</h2>
+              <h2 v-if="customers.data[0].PurchasesBill.length">فواتير مشتريات</h2>
 
               <div class="table-responsive" v-if="customers.data[0].PurchasesBill.length">
                 <table class="table">
@@ -113,7 +113,7 @@
                 </table>
               </div>
 
-              <h2>فواتير مبيعات</h2>
+              <h2 v-if="customers.data[0].SalesBill.length">فواتير مبيعات</h2>
 
               <div class="table-responsive" v-if="customers.data[0].SalesBill.length">
                 <table class="table">
@@ -140,7 +140,7 @@
                 </table>
               </div>
 
-              <h2>تسويه</h2>
+              <h2 v-if="customers.data[0].AccountAdjustment.length">تسويه</h2>
 
               <div class="table-responsive" v-if="customers.data[0].AccountAdjustment.length">
                 <table class="table">
