@@ -50,7 +50,7 @@
             class="form-control"
             type="number"
             v-model="generalForm.amount"
-            :keyup="new_customer_account = parseInt(generalForm.amount) +parseInt(customer_account)"
+            :keyup="new_customer_account = parseInt(customer_account) +  parseInt(generalForm.amount)"
             name="amount"
             :placeholder="trans('product.amount')"
           />
@@ -100,7 +100,7 @@
       <div class="col-12 col-sm-12">
         <div class="form-group">
           <label for>{{trans('debenture_cashing.note')}}</label>
-          <textarea class="form-control" type="text" value="" v-model="generalForm.note" rows="4" name="note" :placeholder="trans('debenture_cashing.note')"></textarea>
+          <textarea></textarea>
 
           <show-error :form-name="generalForm" prop-name="note"></show-error>
         </div>
@@ -193,7 +193,7 @@ export default {
           this.customer_account = 0;
           this.new_customer_account = 0;
           //  new_customer_account: 0
-    this.generalForm.date_at = new Date();
+          this.generalForm.date_at = new Date();
 
           this.$emit("completed");
 
@@ -214,10 +214,19 @@ export default {
     getCustomerAccount() {
       this.generalForm.customer_id = this.selected_customer.id;
       axios
-        .get("/api/customer/" + this.selected_customer.id + "/account/"+this.generalForm.amount)
+        .get(
+          "/api/customer/" +
+            this.selected_customer.id +
+            "/account/" +
+            this.generalForm.amount
+        )
         .then(response => response.data)
         .then(response => {
-          this.customer_account = response.customerAccount;
+          // this.customer_account = response.customerAccount;
+          this.customer_account =
+            response.customerAccount > 0
+              ? -response.customerAccount
+              : +response.customerAccount;
         })
         .catch(error => {
           helper.showDataErrorMsg(error);
@@ -240,9 +249,7 @@ export default {
           this.selected_branch.name = response.branch.name;
           this.selected_customer.id = response.customer.id;
           this.selected_customer.name = response.customer.name;
-          this.getCustomerAccount()
-          
-
+          this.getCustomerAccount();
         })
         .catch(error => {
           helper.showDataErrorMsg(error);

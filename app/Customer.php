@@ -11,7 +11,6 @@ class Customer extends Model
     protected $primaryKey = 'id';
     protected $table = 'customers';
 
-
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
@@ -24,5 +23,15 @@ class Customer extends Model
     public function DebentureDeposits()
     {
         return $this->hasMany('App\DebenturesDeposit', 'customer_id');
+    }
+
+    public function SalesBill()
+    {
+        return $this->hasMany('App\SalesBill', 'customer_id');
+    }
+
+    public function PurchasesBill()
+    {
+        return $this->hasMany('App\PurchasesBill', 'customer_id');
     }
 }

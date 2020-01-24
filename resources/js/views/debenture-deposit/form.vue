@@ -50,7 +50,7 @@
             class="form-control"
             type="number"
             v-model="generalForm.amount"
-            :keyup="new_customer_account =   parseInt(customer_account) - parseInt(generalForm.amount) "
+            :keyup="new_customer_account =   parseInt(customer_account) - parseInt(generalForm.amount) > 0 ?  - (parseInt(customer_account) - parseInt(generalForm.amount)) :  + parseInt(customer_account) - parseInt(generalForm.amount)  "
             name="amount"
             :placeholder="trans('product.amount')"
           />
@@ -100,7 +100,7 @@
       <div class="col-12 col-sm-12">
         <div class="form-group">
           <label for>{{trans('debenture_cashing.note')}}</label>
-          <textarea class="form-control" type="text" value="" v-model="generalForm.note" rows="4" name="note" :placeholder="trans('debenture_cashing.note')"></textarea>
+          <textarea></textarea>
 
           <show-error :form-name="generalForm" prop-name="note"></show-error>
         </div>
@@ -226,7 +226,10 @@ export default {
         )
         .then(response => response.data)
         .then(response => {
-          this.customer_account = response.customerAccount;
+          this.customer_account =
+            response.customerAccount > 0
+              ? -response.customerAccount
+              : +response.customerAccount;
         })
         .catch(error => {
           helper.showDataErrorMsg(error);

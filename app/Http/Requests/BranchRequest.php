@@ -28,7 +28,7 @@ class BranchRequest extends FormRequest
             'name' => 'required',
             'address' => 'required',
             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11|unique:branches,phone,' . $this->id,
-            'telephone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:8|unique:branches,telephone,' . $this->id,
+            'telephone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:8|unique:branches,telephone,' . $this->id,
             'user_id' => 'required|exists:users,id',
         ];
     }

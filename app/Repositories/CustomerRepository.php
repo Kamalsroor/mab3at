@@ -16,7 +16,7 @@ class CustomerRepository
      */
     public function __construct(Customer $customer)
     {
-        $this->data = $customer->with('user', 'user.profile', 'DebentureCashings.user.profile', 'DebentureCashings.branch', 'DebentureDeposits.user.profile', 'DebentureDeposits.branch');
+        $this->data = $customer->with('user', 'user.profile', 'SalesBill.SalesBillDetails.SalesBillDetailSrials', 'PurchasesBill.PurchasesBillDetails.PurchasesBillDetailSrials', 'DebentureCashings.user.profile', 'DebentureCashings.branch', 'DebentureDeposits.user.profile', 'DebentureDeposits.branch');
     }
 
     /**
@@ -161,9 +161,22 @@ class CustomerRepository
         if (!$data) {
             throw ValidationException::withMessages(['message' => trans('todo.could_not_find')]);
         }
-        return $data->DebentureCashings->sum('amount') - $data->DebentureDeposits->sum('amount') - $amount;
-    }
+        $PurchasesBillAmount = 0;
+        foreach ($data->PurchasesBill as $PurchasesBill) {
+            foreach ($PurchasesBill->PurchasesBillDetails as $PurchasesBillDetails) {
+                $PurchasesBillAmount += count($PurchasesBillDetails->PurchasesBillDetailSrials) * $PurchasesBillDetails->amount;
+            }
+        }
 
+        $SalesBillAmount = 0;
+        foreach ($data->SalesBill as $SalesBill) {
+            foreach ($SalesBill->SalesBillDetails as $SalesBillDetails) {
+                $SalesBillAmount += count($SalesBillDetails->SalesBillDetailSrials) * $SalesBillDetails->amount;
+            }
+        }
+        return $PurchasesBillAmount + $data->DebentureDeposits->sum('amount') - $data->DebentureCashings->sum('amount') - $SalesBillAmount - $amount;
+    }
+    
     public function getStatement()
     {
         $datas = $this->data->get();

@@ -26,8 +26,8 @@ class CustomerRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'address' => 'required',
-            'email' => 'required|email',
+            'address' => 'nullable',
+            'email' => 'nullable|email',
             'type' => 'required|in:client,seller',
             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11|unique:customers,phone,' . $this->id,
             'telephone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:8|unique:customers,telephone,' . $this->id,

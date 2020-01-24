@@ -136,7 +136,7 @@ export default {
         min_price: null,
         max_price: null,
         parcode: null,
-        status: false
+        status: true
       }),
       categorys: [],
       selected_category: {
@@ -177,6 +177,15 @@ export default {
         .post("/api/product")
         .then(response => {
           toastr.success(response.message);
+          this.selected_category = {
+            id: null,
+            name: null
+          };
+          this.selected_group = {
+            id: null,
+            name: null
+          };
+          this.generalForm.status = ture;
           this.$emit("completed");
         })
         .catch(error => {
