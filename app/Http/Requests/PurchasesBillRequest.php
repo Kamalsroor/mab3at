@@ -25,9 +25,11 @@ class PurchasesBillRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'branch_id' => 'required|exists:branches,id',
-            // 'customer_id' => 'required|exists:customers,id',
-            // 'amount' => 'required|numeric',
+            'branch_id' => 'required|exists:branches,id',
+            'customer_id' => 'required|exists:customers,id',
+            'amount' => 'required|numeric',
+            'products.*' => 'required',
+
             // 'note' => 'nullable',
             // 'date_at' => 'required',
         ];
