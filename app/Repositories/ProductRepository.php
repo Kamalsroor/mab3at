@@ -20,7 +20,7 @@ class ProductRepository
      */
     public function __construct(Product $product, PurchasesBill $PurchasesBill, SalesBill $SalesBill)
     {
-
+// rwar
         $this->data = $product->with('Category', 'Group');
         $this->PurchasesBill = $PurchasesBill;
         $this->SalesBill = $SalesBill;
