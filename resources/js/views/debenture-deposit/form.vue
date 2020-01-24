@@ -100,8 +100,14 @@
       <div class="col-12 col-sm-12">
         <div class="form-group">
           <label for>{{trans('debenture_cashing.note')}}</label>
-          <textarea></textarea>
-
+          <autosize-textarea
+            row="1"
+            class="form-control"
+            v-model="generalForm.note"
+            :placeholder="trans('configuration.maintenance_mode_message')"
+            rows="3"
+            name="maintenance_mode_message"
+          ></autosize-textarea>
           <show-error :form-name="generalForm" prop-name="note"></show-error>
         </div>
       </div>

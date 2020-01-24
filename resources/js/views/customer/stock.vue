@@ -22,8 +22,8 @@
                   <thead>
                     <tr>
                       <th>اسم العميل</th>
-                      <th>دائن</th>
-                      <th>مدين</th>
+                      <!-- <th>دائن</th> -->
+                      <!-- <th>مدين</th> -->
                       <th>الاجمالي</th>
                       <th class="table-option">{{trans('general.action')}}</th>
                     </tr>
@@ -31,8 +31,8 @@
                   <tbody>
                     <tr v-for="(customer, index) in customers.data" :key="index">
                       <td v-text="customer.name"></td>
-                      <td v-text="customer.creditor"></td>
-                      <td v-text="customer.debtor"></td>
+                      <!-- <td v-text="customer.creditor"></td> -->
+                      <!-- <td v-text="customer.debtor"></td> -->
                       <td v-text="customer.debtor - customer.creditor"></td>
 
                       <td class="table-option">

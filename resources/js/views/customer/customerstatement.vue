@@ -26,6 +26,9 @@
                       <th>{{trans('debenture_cashing.branch_name')}}</th>
                       <th>{{trans('debenture_cashing.amount')}}</th>
                       <th>{{trans('debenture_cashing.date_at')}}</th>
+
+                      <th>ملاحظات</th>
+                      <th>اضافة في</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -39,6 +42,9 @@
                       <td v-text="debenture_cashing.branch.name"></td>
                       <td v-text="debenture_cashing.amount"></td>
                       <td v-text="debenture_cashing.date_at"></td>
+                      <td v-text="debenture_cashing.note"></td>
+
+                      <td v-text="debenture_cashing.created_at"></td>
                     </tr>
                   </tbody>
                 </table>
@@ -53,6 +59,8 @@
                       <th>{{trans('debenture_cashing.branch_name')}}</th>
                       <th>{{trans('debenture_cashing.amount')}}</th>
                       <th>{{trans('debenture_cashing.date_at')}}</th>
+                      <th>ملاحظات</th>
+                      <th>اضافة في</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -66,6 +74,97 @@
                       <td v-text="debenture_cashing.branch.name"></td>
                       <td v-text="debenture_cashing.amount"></td>
                       <td v-text="debenture_cashing.date_at"></td>
+                      <td v-text="debenture_cashing.note"></td>
+
+                      <td v-text="debenture_cashing.created_at"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <hr />
+              <h2>فواتير مشتريات</h2>
+
+              <div class="table-responsive" v-if="customers.data[0].PurchasesBill.length">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>{{trans('debenture_cashing.username')}}</th>
+                      <th>{{trans('debenture_cashing.branch_name')}}</th>
+                      <th>{{trans('debenture_cashing.amount')}}</th>
+                      <th>{{trans('debenture_cashing.date_at')}}</th>
+                      <th>اضافة في</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="(purchases_bill, index) in customers.data[0].PurchasesBill"
+                      :key="index"
+                    >
+                      <td
+                        v-text="purchases_bill.user.profile.first_name+' '+purchases_bill.user.profile.last_name"
+                      ></td>
+                      <td v-text="purchases_bill.branch.name"></td>
+                      <td v-text="purchases_bill.amount"></td>
+                      <td v-text="purchases_bill.date_at"></td>
+                      <td v-text="purchases_bill.created_at"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2>فواتير مبيعات</h2>
+
+              <div class="table-responsive" v-if="customers.data[0].SalesBill.length">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>{{trans('debenture_cashing.username')}}</th>
+                      <th>{{trans('debenture_cashing.branch_name')}}</th>
+                      <th>{{trans('debenture_cashing.amount')}}</th>
+                      <th>{{trans('debenture_cashing.date_at')}}</th>
+                      <th>اضافة في</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(sales_bill, index) in customers.data[0].SalesBill" :key="index">
+                      <td
+                        v-text="sales_bill.user.profile.first_name+' '+sales_bill.user.profile.last_name"
+                      ></td>
+                      <td v-text="sales_bill.branch.name"></td>
+                      <td v-text="sales_bill.amount"></td>
+                      <td v-text="sales_bill.date_at"></td>
+                      <td v-text="sales_bill.created_at"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2>تسويه</h2>
+
+              <div class="table-responsive" v-if="customers.data[0].AccountAdjustment.length">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>{{trans('debenture_cashing.username')}}</th>
+                      <th>{{trans('debenture_cashing.amount')}}</th>
+                      <th>{{trans('debenture_cashing.date_at')}}</th>
+                      <th>ملاحظات</th>
+                      <th>اضافة في</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="(account_adjustment, index) in customers.data[0].AccountAdjustment"
+                      :key="index"
+                    >
+                      <td
+                        v-text="account_adjustment.user.profile.first_name+' '+account_adjustment.user.profile.last_name"
+                      ></td>
+                      <td v-text="account_adjustment.amount"></td>
+                      <td v-text="account_adjustment.date_at"></td>
+                      <td v-text="account_adjustment.note"></td>
+                      <td v-text="account_adjustment.created_at"></td>
                     </tr>
                   </tbody>
                 </table>

@@ -145,9 +145,12 @@ class SalesBillRepository
             'note' => isset($params['note']) ? $params['note'] : null,
             'img' => (isset($params['img']) && $params['img']) ? $params['img'] : null,
             'date_at' => (isset($params['date_at']) && $params['date_at']) ? $params['date_at'] : null,
-            'amount' => (isset($params['amount']) && $params['amount']) ? $params['amount'] : null,
+            'amount' => null,
         ];
-
+        $formatted['amount'] = 0;
+        for ($i = 0; $i < count($params['products']); $i++) {
+            $formatted['amount'] += $params['products'][$i]['price'] * count($params['products'][$i]['serial']);
+        }
         // branch_id
         // user_id
         // customer_id

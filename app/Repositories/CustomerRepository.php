@@ -16,7 +16,7 @@ class CustomerRepository
      */
     public function __construct(Customer $customer)
     {
-        $this->data = $customer->with('user', 'user.profile', 'SalesBill.SalesBillDetails.SalesBillDetailSrials', 'AccountAdjustment', 'PurchasesBill.PurchasesBillDetails.PurchasesBillDetailSrials', 'DebentureCashings.user.profile', 'DebentureCashings.branch', 'DebentureDeposits.user.profile', 'DebentureDeposits.branch');
+        $this->data = $customer->with('user', 'user.profile', 'SalesBill.branch', 'SalesBill.user.profile', 'SalesBill.SalesBillDetails.SalesBillDetailSrials', 'AccountAdjustment', 'AccountAdjustment.user.profile', 'PurchasesBill.PurchasesBillDetails.PurchasesBillDetailSrials', 'PurchasesBill.branch', 'PurchasesBill.user.profile', 'DebentureCashings.user.profile', 'DebentureCashings.branch', 'DebentureDeposits.user.profile', 'DebentureDeposits.branch');
     }
 
     /**
@@ -200,11 +200,15 @@ class CustomerRepository
                     $SalesBillAmount += count($SalesBillDetails->SalesBillDetailSrials) * $SalesBillDetails->amount;
                 }
             }
+            if ($data->name == "كتكوت") {
+
+                // dd($SalesBillAmount, $data->DebentureCashings->sum('amount') , $data->AccountAdjustment->sum('amount'));
+            }
             $items = [
                 'id' => $data->id,
                 'name' => $data->name,
                 'creditor' => $PurchasesBillAmount + $data->DebentureDeposits->sum('amount'),
-                'debtor' => $data->DebentureCashings->sum('amount') - $SalesBillAmount - $data->AccountAdjustment->sum('amount'),
+                'debtor' => $data->DebentureCashings->sum('amount') + $SalesBillAmount + $data->AccountAdjustment->sum('amount'),
             ];
             $customerStatement->put($i, $items);
             $i++;
@@ -233,6 +237,9 @@ class CustomerRepository
             'name' => $data->name,
             'DebentureCashings' => $data->DebentureCashings,
             'DebentureDeposits' => $data->DebentureDeposits,
+            'PurchasesBill' => $data->PurchasesBill,
+            'SalesBill' => $data->SalesBill,
+            'AccountAdjustment' => $data->AccountAdjustment,
         ];
         $customerStatement->push($items);
         return $customerStatement;
