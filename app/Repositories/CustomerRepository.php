@@ -16,7 +16,7 @@ class CustomerRepository
      */
     public function __construct(Customer $customer)
     {
-        $this->data = $customer->with('user', 'user.profile', 'SalesBill.SalesBillDetails.SalesBillDetailSrials', 'PurchasesBill.PurchasesBillDetails.PurchasesBillDetailSrials', 'DebentureCashings.user.profile', 'DebentureCashings.branch', 'DebentureDeposits.user.profile', 'DebentureDeposits.branch');
+        $this->data = $customer->with('user', 'user.profile', 'SalesBill.SalesBillDetails.SalesBillDetailSrials', 'AccountAdjustment', 'PurchasesBill.PurchasesBillDetails.PurchasesBillDetailSrials', 'DebentureCashings.user.profile', 'DebentureCashings.branch', 'DebentureDeposits.user.profile', 'DebentureDeposits.branch');
     }
 
     /**
@@ -174,9 +174,9 @@ class CustomerRepository
                 $SalesBillAmount += count($SalesBillDetails->SalesBillDetailSrials) * $SalesBillDetails->amount;
             }
         }
-        return $PurchasesBillAmount + $data->DebentureDeposits->sum('amount') - $data->DebentureCashings->sum('amount') - $SalesBillAmount - $amount;
+        return $PurchasesBillAmount + $data->DebentureDeposits->sum('amount') - $data->DebentureCashings->sum('amount') - $SalesBillAmount - $amount - $data->AccountAdjustment->sum('amount');
     }
-    
+
     public function getStatement()
     {
         $datas = $this->data->get();
@@ -187,11 +187,24 @@ class CustomerRepository
 
         foreach ($datas as $data) {
             $items = $customerStatement->pull('items');
+            $PurchasesBillAmount = 0;
+            foreach ($data->PurchasesBill as $PurchasesBill) {
+                foreach ($PurchasesBill->PurchasesBillDetails as $PurchasesBillDetails) {
+                    $PurchasesBillAmount += count($PurchasesBillDetails->PurchasesBillDetailSrials) * $PurchasesBillDetails->amount;
+                }
+            }
+
+            $SalesBillAmount = 0;
+            foreach ($data->SalesBill as $SalesBill) {
+                foreach ($SalesBill->SalesBillDetails as $SalesBillDetails) {
+                    $SalesBillAmount += count($SalesBillDetails->SalesBillDetailSrials) * $SalesBillDetails->amount;
+                }
+            }
             $items = [
                 'id' => $data->id,
                 'name' => $data->name,
-                'creditor' => $data->DebentureCashings->sum('amount'),
-                'debtor' => $data->DebentureDeposits->sum('amount'),
+                'creditor' => $PurchasesBillAmount + $data->DebentureDeposits->sum('amount'),
+                'debtor' => $data->DebentureCashings->sum('amount') - $SalesBillAmount - $data->AccountAdjustment->sum('amount'),
             ];
             $customerStatement->put($i, $items);
             $i++;

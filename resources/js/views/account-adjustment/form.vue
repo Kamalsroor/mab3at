@@ -33,7 +33,7 @@
             class="form-control"
             type="number"
             v-model="generalForm.amount"
-            :keyup="new_customer_account =   parseInt(customer_account) - parseInt(generalForm.amount) "
+            :keyup="new_customer_account =   parseInt(customer_account) + parseInt(generalForm.amount) "
             name="amount"
             :placeholder="trans('product.amount')"
           />
@@ -198,11 +198,18 @@ export default {
         )
         .then(response => response.data)
         .then(response => {
-          // this.customer_account = response.customerAccount;
-          // this.customer_account =
-          //   response.customerAccount > 0
-          //     ? -response.customerAccount
-          //     : +response.customerAccount;
+          if (response.customerAccount > 0) {
+            this.customer_account = +response.customerAccount;
+          } else {
+            this.customer_account = -response.customerAccount;
+          }
+          console.log(
+            response.customerAccount,
+            this.customer_account,
+            response.customerAccount > 0
+              ? +response.customerAccount
+              : -response.customerAccount
+          );
         })
         .catch(error => {
           helper.showDataErrorMsg(error);

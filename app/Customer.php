@@ -29,7 +29,12 @@ class Customer extends Model
     {
         return $this->hasMany('App\SalesBill', 'customer_id');
     }
+    public function AccountAdjustment()
+    {
+        return $this->hasMany('App\AccountAdjustment', 'customer_id');
+    }
 
+    
     public function PurchasesBill()
     {
         return $this->hasMany('App\PurchasesBill', 'customer_id');
