@@ -95,7 +95,6 @@ class PurchasesBillController extends Controller
     public function store(PurchasesBillRequest $request)
     {
 
-        dd($request->all());
         $data = $this->repo->create($this->request->all());
         $this->activity->record([
             'module' => $this->module,
