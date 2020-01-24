@@ -9,7 +9,7 @@ class SalesBillDetailSrials extends Model
     //
     protected $fillable = ['sales_bill_detail_id', 'user_id', 'srialnumper'];
     protected $primaryKey = 'id';
-    protected $table = 'sales_bills_detail_Srials';
+    protected $table = 'sales_bills_detail_srials';
 
     public function user()
     {
