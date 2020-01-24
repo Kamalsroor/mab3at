@@ -25,11 +25,9 @@ class SalesBillRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'branch_id' => 'required|exists:branches,id',
-            // 'customer_id' => 'required|exists:customers,id',
-            // 'amount' => 'required|numeric',
-            // 'note' => 'nullable',
-            // 'date_at' => 'required',
+            'branch_id' => 'required|exists:branches,id',
+            'customer_id' => 'required|exists:customers,id',
+            'products' => 'required',
         ];
         // branch_id
         // user_id
