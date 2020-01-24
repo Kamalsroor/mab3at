@@ -27,8 +27,7 @@ class PurchasesBillRequest extends FormRequest
         return [
             'branch_id' => 'required|exists:branches,id',
             'customer_id' => 'required|exists:customers,id',
-            'amount' => 'required|numeric',
-            'products.*' => 'required',
+            'products' => 'required',
 
             // 'note' => 'nullable',
             // 'date_at' => 'required',
