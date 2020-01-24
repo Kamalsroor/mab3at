@@ -25,4 +25,14 @@ class Product extends Model
     {
         return $this->name . ' (' . $this->parcode . ')';
     }
+
+    public function PurchasesBillDetails()
+    {
+        return $this->hasMany('App\PurchasesBillDetails', 'product_id');
+    }
+
+    public function SalesBillDetails()
+    {
+        return $this->hasMany('App\SalesBillDetails', 'product_id');
+    }
 }

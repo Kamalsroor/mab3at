@@ -16,7 +16,7 @@ class CustomerRepository
      */
     public function __construct(Customer $customer)
     {
-        $this->data = $customer->with('user', 'user.profile');
+        $this->data = $customer->with('user', 'user.profile', 'DebentureCashings.user.profile', 'DebentureCashings.branch', 'DebentureDeposits.user.profile', 'DebentureDeposits.branch');
     }
 
     /**
@@ -162,6 +162,54 @@ class CustomerRepository
             throw ValidationException::withMessages(['message' => trans('todo.could_not_find')]);
         }
         return $data->DebentureCashings->sum('amount') - $data->DebentureDeposits->sum('amount') - $amount;
+    }
+
+    public function getStatement()
+    {
+        $datas = $this->data->get();
+
+        // $ProductStock = new stdClass;
+        $customerStatement = collect();
+        $i = 0;
+
+        foreach ($datas as $data) {
+            $items = $customerStatement->pull('items');
+            $items = [
+                'id' => $data->id,
+                'name' => $data->name,
+                'creditor' => $data->DebentureCashings->sum('amount'),
+                'debtor' => $data->DebentureDeposits->sum('amount'),
+            ];
+            $customerStatement->put($i, $items);
+            $i++;
+        }
+        return $customerStatement;
+    }
+
+/**
+ * List CustomerAccount
+ *
+ * @param string $token
+ * @return CustomerAccount
+ */
+
+    public function getStatementByCustomer($id)
+    {
+        $data = $this->data->find($id);
+
+        if (!$data) {
+            throw ValidationException::withMessages(['message' => trans('todo.could_not_find')]);
+        }
+        $customerStatement = collect();
+
+        $items = $customerStatement->pull('items');
+        $items = [
+            'name' => $data->name,
+            'DebentureCashings' => $data->DebentureCashings,
+            'DebentureDeposits' => $data->DebentureDeposits,
+        ];
+        $customerStatement->push($items);
+        return $customerStatement;
     }
 
     /**

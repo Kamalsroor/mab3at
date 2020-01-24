@@ -96,12 +96,6 @@
                       <th>{{trans('debenture_cashing.branch_name')}}</th>
                       <th>{{trans('debenture_cashing.amount')}}</th>
                       <th>{{trans('debenture_cashing.date_at')}}</th>
-                      <!-- <th>{{trans('category.category')}}</th>
-                      <th>{{trans('group.group')}}</th>
-                      <th>{{trans('debenture_cashing.max_price')}}</th>
-                      <th>{{trans('debenture_cashing.min_price')}}</th>
-                      <th>{{trans('debenture_cashing.parcode')}}</th>
-                      <th>{{trans('debenture_cashing.status')}}</th>-->
                       <th class="table-option">{{trans('general.action')}}</th>
                     </tr>
                   </thead>

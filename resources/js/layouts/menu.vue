@@ -93,6 +93,24 @@
         <p>{{ trans("debenture_cashing.account_adjustment") }}</p>
       </router-link>
     </li>
+    <li class="nav-item">
+      <router-link to="/customer/statement" class="nav-link active">
+        <i class="nav-icon fa fa-users"></i>
+        <p>كشف حساب عملاء</p>
+      </router-link>
+    </li>
+    <li class="nav-item">
+      <router-link to="/product/returns" class="nav-link active">
+        <i class="nav-icon fa fa-users"></i>
+        <p>كشف حالة السريالات</p>
+      </router-link>
+    </li>
+    <li class="nav-item">
+      <router-link to="/stock" class="nav-link active">
+        <i class="nav-icon fa fa-users"></i>
+        <p>المخزون</p>
+      </router-link>
+    </li>
   </ul>
 </template>
 

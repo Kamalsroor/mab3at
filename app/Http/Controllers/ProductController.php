@@ -150,6 +150,26 @@ class ProductController extends Controller
         return $this->ok($this->repo->paginate($this->request->all()));
     }
 
+
+        /**
+     * Used to store branch
+     * @post ("/api/branch")
+     * @param ({
+     *      @Parameter("name", type="string", required="true", description="Name of branch"),
+     *      @Parameter("date", type="date", required="true", description="Due date of Todo"),
+     * })
+     * @return Response
+     */
+    public function CheckSrirals(Request $request)
+    {
+
+        $data = $this->repo->CheckSrirals($this->request->serials);
+
+
+        return $this->ok($data);
+    }
+
+
     /**
      * Used to store branch
      * @post ("/api/branch")

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
-use Illuminate\Http\Request;
 use App\Http\Requests\BranchRequest;
-use App\Repositories\UserRepository;
-use App\Repositories\BranchRepository;
 use App\Repositories\ActivityLogRepository;
+use App\Repositories\BranchRepository;
+use App\Repositories\UserRepository;
+use Illuminate\Http\Request;
 
 class BranchController extends Controller
 {
@@ -25,13 +25,12 @@ class BranchController extends Controller
      */
     public function __construct(Request $request, BranchRepository $repo, UserRepository $user, ActivityLogRepository $activity)
     {
-        $this->request  = $request;
-        $this->repo     = $repo;
+        $this->request = $request;
+        $this->repo = $repo;
         $this->activity = $activity;
         $this->user = $user;
         $this->middleware('feature.available:todo');
     }
-
 
     /**
      * Used to get Pre Requisite for branch Module
@@ -42,11 +41,8 @@ class BranchController extends Controller
     {
         $user = generateSelectOption($this->user->listByName());
 
-        return $this->ok($user );
+        return $this->ok($user);
     }
-
-
-
 
     /**
      * Used to get all Branch
@@ -56,10 +52,34 @@ class BranchController extends Controller
     public function index()
     {
         // dd($this->repo->paginate($this->request->all());
-        
+
         return $this->ok($this->repo->paginate($this->request->all()));
     }
 
+    /**
+     * Used to get all Branch
+     * @get ("/api/branch")
+     * @return Response
+     */
+    public function Stock()
+    {
+        // dd($this->repo->paginate($this->request->all());
+        return $this->ok($this->repo->getStock());
+    }
+
+    /**
+     * Used to get all Branch
+     * @get ("/api/branch")
+     * @return Response
+     */
+    public function getStockByBranch($id)
+    {
+        // dd($this->repo->paginate($this->request->all());
+        return $this->ok($this->repo->getStockByBranch($id));
+    }
+
+ 
+    
     /**
      * Used to store branch
      * @post ("/api/branch")
@@ -75,9 +95,9 @@ class BranchController extends Controller
         $branch = $this->repo->create($this->request->all());
 
         $this->activity->record([
-            'module'   => $this->module,
+            'module' => $this->module,
             'module_id' => $branch->id,
-            'activity' => 'added'
+            'activity' => 'added',
         ]);
 
         return $this->success(['message' => trans('todo.added')]);
@@ -99,7 +119,6 @@ class BranchController extends Controller
         return $this->ok($branch);
     }
 
-
     /**
      * Used to update Branch
      * @patch ("/api/branch/{id}")
@@ -115,9 +134,9 @@ class BranchController extends Controller
         $branch = $this->repo->findOrFail($id);
         $branch = $this->repo->update($branch, $this->request->all());
         $this->activity->record([
-            'module'   => $this->module,
+            'module' => $this->module,
             'module_id' => $branch->id,
-            'activity' => 'updated'
+            'activity' => 'updated',
         ]);
         return $this->success(['message' => trans('todo.updated')]);
     }
@@ -134,11 +153,10 @@ class BranchController extends Controller
     {
         $branch = $this->repo->findOrFail($id);
 
-
         $this->activity->record([
-            'module'   => $this->module,
+            'module' => $this->module,
             'module_id' => $branch->id,
-            'activity' => 'deleted'
+            'activity' => 'deleted',
         ]);
 
         $this->repo->delete($branch);

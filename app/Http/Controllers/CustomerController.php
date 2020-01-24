@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Customer;
-use Illuminate\Http\Request;
 use App\Http\Requests\CustomerRequest;
-use App\Repositories\UserRepository;
-use App\Repositories\CustomerRepository;
 use App\Repositories\ActivityLogRepository;
+use App\Repositories\CustomerRepository;
+use App\Repositories\UserRepository;
+use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
@@ -25,13 +24,12 @@ class CustomerController extends Controller
      */
     public function __construct(Request $request, CustomerRepository $repo, UserRepository $user, ActivityLogRepository $activity)
     {
-        $this->request  = $request;
-        $this->repo     = $repo;
+        $this->request = $request;
+        $this->repo = $repo;
         $this->activity = $activity;
         $this->user = $user;
         $this->middleware('feature.available:todo');
     }
-
 
     /**
      * Used to get Pre Requisite for branch Module
@@ -44,10 +42,8 @@ class CustomerController extends Controller
         // $newCollection = collect($this->repo->listType())->pluck('id', 'name');
         $type = generateSelectOption(collect($this->repo->listType())->pluck('name', 'id'));
 
-
         return $this->success(compact('user', 'type'));
     }
-
 
     /**
      * Used to get Pre Requisite for branch Module
@@ -61,6 +57,28 @@ class CustomerController extends Controller
         // }
         $customerAccount = $this->repo->getCustomerAccount($customer_id, $amount);
         return $this->success(compact('customerAccount'));
+    }
+
+    /**
+     * Used to get all Branch
+     * @get ("/api/branch")
+     * @return Response
+     */
+    public function getStatement()
+    {
+        // dd($this->repo->paginate($this->request->all());
+        return $this->ok($this->repo->getStatement());
+    }
+
+    /**
+     * Used to get all Branch
+     * @get ("/api/branch")
+     * @return Response
+     */
+    public function getStatementByCustomer($id)
+    {
+        // dd($this->repo->paginate($this->request->all());
+        return $this->ok($this->repo->getStatementByCustomer($id));
     }
 
     /**
@@ -90,9 +108,9 @@ class CustomerController extends Controller
         $data = $this->repo->create($this->request->all());
 
         $this->activity->record([
-            'module'   => $this->module,
+            'module' => $this->module,
             'module_id' => $data->id,
-            'activity' => 'added'
+            'activity' => 'added',
         ]);
 
         return $this->success(['message' => trans('todo.added')]);
@@ -114,7 +132,6 @@ class CustomerController extends Controller
         return $this->ok($data);
     }
 
-
     /**
      * Used to update Branch
      * @patch ("/api/branch/{id}")
@@ -132,9 +149,9 @@ class CustomerController extends Controller
         $data = $this->repo->update($data, $this->request->all());
 
         $this->activity->record([
-            'module'   => $this->module,
+            'module' => $this->module,
             'module_id' => $data->id,
-            'activity' => 'updated'
+            'activity' => 'updated',
         ]);
         return $this->success(['message' => trans('todo.updated')]);
     }
@@ -151,11 +168,10 @@ class CustomerController extends Controller
     {
         $data = $this->repo->findOrFail($id);
 
-
         $this->activity->record([
-            'module'   => $this->module,
+            'module' => $this->module,
             'module_id' => $data->id,
-            'activity' => 'deleted'
+            'activity' => 'deleted',
         ]);
 
         $this->repo->delete($data);

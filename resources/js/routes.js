@@ -262,6 +262,10 @@ let routes = [
         component: require("./views/product/edit").default
       },
       {
+        path: "/product/returns",
+        component: require("./views/product/returns").default
+      },
+      {
         path: "/debenture_cashing",
         component: require("./views/debenture-cashing/index").default
       },
@@ -300,6 +304,22 @@ let routes = [
       {
         path: "/account_adjustment/:id/edit",
         component: require("./views/account-adjustment/edit").default
+      },
+      {
+        path: "/stock",
+        component: require("./views/branch/stock").default
+      },
+      {
+        path: "/customer/statement",
+        component: require("./views/customer/stock").default
+      },
+      {
+        path: "/customer/:id/statement",
+        component: require("./views/customer/customerstatement").default
+      },
+      {
+        path: "/branch/:id/stock",
+        component: require("./views/branch/branchstock").default
       }
     ]
   },

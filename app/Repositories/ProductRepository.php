@@ -3,20 +3,27 @@
 namespace App\Repositories;
 
 use App\Product;
+use App\PurchasesBill;
+use App\SalesBill;
 use Illuminate\Validation\ValidationException;
 
 class ProductRepository
 {
     private $product;
+    protected $PurchasesBill;
+    protected $SalesBill;
 
     /**
      * Instantiate a new instance.
      *
      * @return void
      */
-    public function __construct(Product $product)
+    public function __construct(Product $product, PurchasesBill $PurchasesBill, SalesBill $SalesBill)
     {
+
         $this->data = $product->with('Category', 'Group');
+        $this->PurchasesBill = $PurchasesBill;
+        $this->SalesBill = $SalesBill;
     }
 
     /**
@@ -62,6 +69,66 @@ class ProductRepository
         }
 
         return $data;
+    }
+
+    /**
+     * Find todo with given id or throw an error.
+     *
+     * @param integer $id
+     * @return data
+     */
+
+    public function CheckSrirals($srials)
+    {
+
+        $customerStatement = collect();
+        $i = 0;
+        $NotFound = $customerStatement->pull('NotFound');
+        $NotFound = [];
+        $FoundFalse = $customerStatement->pull('FoundFalse');
+        $FoundFalse = [];
+        $FoundTrue = $customerStatement->pull('FoundTrue');
+        $FoundTrue = [];
+        foreach ($srials as $srial) {
+
+            $PurchasesBill = $this->PurchasesBill->whereHas('PurchasesBillDetails', function ($q) use ($srial) {
+                $q->whereHas('PurchasesBillDetailSrials', function ($q) use ($srial) {
+                    $q->where('srialnumper', $srial);
+                });
+            })->get();
+            if (count($PurchasesBill) > 0) {
+                $SalesBill = $this->SalesBill->whereHas('SalesBillDetails', function ($q) use ($srial) {
+                    $q->whereHas('SalesBillDetailSrials', function ($q) use ($srial) {
+                        $q->where('srialnumper', $srial);
+                    });
+                })->get();
+                if (count($SalesBill) > 0) {
+                    $FoundFalse = [
+                        'status' => "FoundFalse",
+                        'srial' => $srial,
+                    ];
+                    $customerStatement->push($FoundFalse);
+
+                } else {
+
+                    $FoundTrue = [
+                        'status' => "FoundTrue",
+
+                        'srial' => $srial,
+                    ];
+                    $customerStatement->push($FoundTrue);
+                }
+            } else {
+                $NotFound = [
+                    'status' => "NotFound",
+                    'srial' => $srial,
+                ];
+                $customerStatement->push($NotFound);
+            }
+            // $customerStatement->put($i, $items);
+            // $i++;
+        }
+        return $customerStatement;
     }
 
     /**

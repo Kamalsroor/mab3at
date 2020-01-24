@@ -140,11 +140,16 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::delete('/activity-log/{id}', 'ActivityLogController@destroy');
 
     Route::get('/branch', 'BranchController@index');
+    Route::get('/branch/stock', 'BranchController@Stock');
+    Route::get('/branch/stock/{id}', 'BranchController@getStockByBranch');
+    
     Route::post('/branch', 'BranchController@store');
     Route::get('/branch/pre-requisite', 'BranchController@preRequisite');
     Route::get('/branch/{id}', 'BranchController@show');
     Route::patch('/branch/{id}', 'BranchController@update');
     Route::delete('/branch/{id}', 'BranchController@destroy');
+
+
 
     Route::get('/customer', 'CustomerController@index');
     Route::post('/customer', 'CustomerController@store');
@@ -153,6 +158,10 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::patch('/customer/{id}', 'CustomerController@update');
     Route::delete('/customer/{id}', 'CustomerController@destroy');
     Route::get('/customer/{id}/account/{amount}', 'CustomerController@getCustomerAccount');
+    Route::get('/customers/statement', 'CustomerController@getStatement');
+    Route::get('/customers/statement/{id}', 'CustomerController@getStatementByCustomer');
+
+    
 
     Route::get('/category', 'CategoryController@index');
     Route::post('/category', 'CategoryController@store');
@@ -176,6 +185,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::delete('/product/{id}', 'ProductController@destroy');
     Route::get('/product/{id}/{price}/', 'ProductController@getProductWithPrice');
     Route::get('/product/{sriral}/sriral/{type}', 'ProductController@checkSriral');
+    
+    Route::post('/product/CheckSrirals', 'ProductController@CheckSrirals');
+
 
     Route::get('/debenture_cashing', 'DebentureCashingController@index');
     Route::post('/debenture_cashing', 'DebentureCashingController@store');
