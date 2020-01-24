@@ -6,7 +6,7 @@ use App\Http\Requests\PurchasesBillRequest;
 use App\Repositories\ActivityLogRepository;
 use App\Repositories\BranchRepository;
 use App\Repositories\CustomerRepository;
-use App\Repositories\productRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\PurchasesBillRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -28,7 +28,7 @@ class PurchasesBillController extends Controller
      *
      * @return void
      */
-    public function __construct(Request $request, productRepository $product, PurchasesBillRepository $repo, UserRepository $user, BranchRepository $branch, CustomerRepository $customer, ActivityLogRepository $activity)
+    public function __construct(Request $request, ProductRepository $product, PurchasesBillRepository $repo, UserRepository $user, BranchRepository $branch, CustomerRepository $customer, ActivityLogRepository $activity)
     {
         $this->request = $request;
         $this->repo = $repo;

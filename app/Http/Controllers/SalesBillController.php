@@ -6,7 +6,7 @@ use App\Http\Requests\SalesBillRequest;
 use App\Repositories\ActivityLogRepository;
 use App\Repositories\BranchRepository;
 use App\Repositories\CustomerRepository;
-use App\Repositories\productRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\SalesBillRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
