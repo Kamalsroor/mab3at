@@ -265,32 +265,46 @@ export default {
       else this.store();
     },
     store() {
-      this.generalForm.date_at = moment(this.generalForm.date_at).format(
-        "YYYY-MM-DD"
-      );
-      this.generalForm
-        .post("/api/sales_bill")
-        .then(response => {
-          toastr.success(response.message);
-          //  new_customer_account: 0
-          this.$emit("completed");
-          this.customer_account = 0;
-          this.new_customer_account = 0;
-          this.generalForm.amount = 0;
-          this.generalForm.products = [];
-          this.generalForm.date_at = new Date();
-          this.selected_branch = {
-            id: null,
-            name: null
-          };
-          this.selected_customer = {
-            id: null,
-            name: null
-          };
-        })
-        .catch(error => {
-          helper.showErrorMsg(error);
-        });
+      this.errorForSrails = 0;
+      for (let i = 0; i < this.generalForm.products.length; i++) {
+        if (
+          this.generalForm.products[i].quantity !=
+          this.generalForm.products[i].serial.length
+        ) {
+          helper.ErrorMsgVue("يجب اضافة جميع السريالات");
+          this.errorForSrails++;
+        }
+      }
+      if (this.errorForSrails == 0) {
+        this.generalForm.date_at = moment(this.generalForm.date_at).format(
+          "YYYY-MM-DD"
+        );
+        this.generalForm
+          .post("/api/sales_bill")
+          .then(response => {
+            toastr.success(response.message);
+            //  new_customer_account: 0
+            this.$emit("completed");
+            this.customer_account = 0;
+            this.new_customer_account = 0;
+            this.generalForm.amount = 0;
+            this.generalForm.products = [];
+            this.generalForm.date_at = new Date();
+            this.selected_branch = {
+              id: null,
+              name: null
+            };
+            this.selected_customer = {
+              id: null,
+              name: null
+            };
+          })
+          .catch(error => {
+            helper.showErrorMsg(error);
+          });
+      } else {
+        helper.ErrorMsgVue("يجب اضافة جميع السريالات");
+      }
     },
 
     prodactWithPrice() {

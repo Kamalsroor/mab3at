@@ -213,7 +213,6 @@ export default {
         amount: 0,
         products: []
       }),
-
       branches: [],
       selected_branch: {
         id: null,
@@ -228,6 +227,7 @@ export default {
       },
       new_customer_account: 0,
       submitted: false,
+      errorForSrails: 0,
 
       serial: null,
       price: 0,
@@ -265,32 +265,46 @@ export default {
       else this.store();
     },
     store() {
-      this.generalForm.date_at = moment(this.generalForm.date_at).format(
-        "YYYY-MM-DD"
-      );
-      this.generalForm
-        .post("/api/purchases_bill")
-        .then(response => {
-          toastr.success(response.message);
-          //  new_customer_account: 0
-          this.$emit("completed");
-          this.customer_account = 0;
-          this.new_customer_account = 0;
-          this.generalForm.amount = 0;
-          this.generalForm.products = [];
-          this.generalForm.date_at = new Date();
-          this.selected_branch = {
-            id: null,
-            name: null
-          };
-          this.selected_customer = {
-            id: null,
-            name: null
-          };
-        })
-        .catch(error => {
-          helper.showErrorMsg(error);
-        });
+      this.errorForSrails = 0;
+      for (let i = 0; i < this.generalForm.products.length; i++) {
+        if (
+          this.generalForm.products[i].quantity !=
+          this.generalForm.products[i].serial.length
+        ) {
+          helper.ErrorMsgVue("يجب اضافة جميع السريالات");
+          this.errorForSrails++;
+        }
+      }
+      if (this.errorForSrails == 0) {
+        this.generalForm.date_at = moment(this.generalForm.date_at).format(
+          "YYYY-MM-DD"
+        );
+        this.generalForm
+          .post("/api/purchases_bill")
+          .then(response => {
+            toastr.success(response.message);
+            //  new_customer_account: 0
+            this.$emit("completed");
+            this.customer_account = 0;
+            this.new_customer_account = 0;
+            this.generalForm.amount = 0;
+            this.generalForm.products = [];
+            this.generalForm.date_at = new Date();
+            this.selected_branch = {
+              id: null,
+              name: null
+            };
+            this.selected_customer = {
+              id: null,
+              name: null
+            };
+          })
+          .catch(error => {
+            helper.showErrorMsg(error);
+          });
+      } else {
+        helper.ErrorMsgVue("يجب اضافة جميع السريالات");
+      }
     },
 
     prodactWithPrice() {
@@ -335,34 +349,49 @@ export default {
         value != null &&
         value != " " &&
         this.generalForm.products[index].quantity -
-          this.generalForm.products[index].serials.length !=
+          this.generalForm.products[index].serial.length !=
           0
       ) {
-        axios
-          .get("/api/product/" + value + "/sriral/PurchasesBill")
-          .then(response => response.data)
-          .then(response => {
-            this.generalForm.products[index].serial.push(value);
-            this.submitted = false;
-            this.$nextTick(function() {
-              var input = document.getElementById("serial-" + index);
-              window.setTimeout(function() {
-                input.focus();
-              }, 200);
-            });
-          })
-          .catch(error => {
-            helper.showDataErrorMsg(error);
-            this.submitted = false;
-            helper.showErrorMsg(error);
-            this.$nextTick(function() {
-              var input = document.getElementById("serial-" + index);
-              window.setTimeout(function() {
-                input.focus();
-              }, 200);
-            });
-            this.$router.push("/purchases_bill");
+        let filtered = this.generalForm.products[index].serial.filter(
+          m => m === value
+        );
+        console.log(filtered.length, "test");
+        if (filtered.length > 0) {
+          helper.ErrorMsgVue("لا يمكن الاضافة مرتين");
+          this.submitted = false;
+          this.$nextTick(function() {
+            var input = document.getElementById("serial-" + index);
+            window.setTimeout(function() {
+              input.focus();
+            }, 200);
           });
+        } else {
+          axios
+            .get("/api/product/" + value + "/sriral/SalesBill")
+            .then(response => response.data)
+            .then(response => {
+              this.generalForm.products[index].serial.push(value);
+              this.submitted = false;
+              this.$nextTick(function() {
+                var input = document.getElementById("serial-" + index);
+                window.setTimeout(function() {
+                  input.focus();
+                }, 200);
+              });
+            })
+            .catch(error => {
+              helper.showDataErrorMsg(error);
+              this.submitted = false;
+              helper.showErrorMsg(error);
+              this.$nextTick(function() {
+                var input = document.getElementById("serial-" + index);
+                window.setTimeout(function() {
+                  input.focus();
+                }, 200);
+              });
+              this.$router.push("/purchases_bill");
+            });
+        }
       }
 
       // this.$set(this.generalForm.products[index].serials, "serials", value);
