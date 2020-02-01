@@ -27,7 +27,7 @@ class TodoController extends Controller
         $this->repo     = $repo;
         $this->activity = $activity;
 
-        $this->middleware('feature.available:todo');
+        
     }
 
     /**

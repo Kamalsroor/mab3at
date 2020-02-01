@@ -1,52 +1,58 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import axios from 'axios'
-import Form from './services/form'
-import helper from './services/helper'
-import VTooltip from 'v-tooltip'
-import VuejsDialog from "vuejs-dialog"
-import VuejsDialogMixin from 'vuejs-dialog/dist/vuejs-dialog-mixin.min.js';
-import 'vuejs-dialog/dist/vuejs-dialog.min.css';
-import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/vue-loading.css';
-import showTip from './components/show-tip'
-import paginationRecord from './components/pagination-record'
-import showError from './components/show-error'
-import moduleInfo from './components/module-info'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import axios from "axios";
 
-window._get = require('lodash/get');
-window._eachRight = require('lodash/eachRight');
-window._replace = require('lodash/replace');
-window._has = require('lodash/has');
-window._size = require('lodash/size');
+import VueProgressBar from "vue-progressbar";
+import Form from "./services/form";
+import helper from "./services/helper";
+import VTooltip from "v-tooltip";
+import VuejsDialog from "vuejs-dialog";
+import VuejsDialogMixin from "vuejs-dialog/dist/vuejs-dialog-mixin.min.js";
+import "vuejs-dialog/dist/vuejs-dialog.min.css";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+import showTip from "./components/show-tip";
+import paginationRecord from "./components/pagination-record";
+import showError from "./components/show-error";
+import moduleInfo from "./components/module-info";
+
+window._get = require("lodash/get");
+window._eachRight = require("lodash/eachRight");
+window._replace = require("lodash/replace");
+window._has = require("lodash/has");
+window._size = require("lodash/size");
 
 window.Vue = Vue;
+
+Vue.use(VueProgressBar);
 Vue.use(VueRouter);
 window.axios = axios;
 window.Form = Form;
 window.helper = helper;
 Vue.prototype.trans = (string, args) => {
-    let value = _get(window.i18n, string);
+  let value = _get(window.i18n, string);
 
-    _eachRight(args, (paramVal, paramKey) => {
-        value = _replace(value, `:${paramKey}`, paramVal);
-    });
-    return value;
+  _eachRight(args, (paramVal, paramKey) => {
+    value = _replace(value, `:${paramKey}`, paramVal);
+  });
+  return value;
 };
-Vue.prototype.$last = function (item, list) {
-  return item == list[list.length - 1]
+Vue.prototype.$last = function(item, list) {
+  return item == list[list.length - 1];
 };
 
 Vue.use(VTooltip);
-Vue.use(VuejsDialog)
-Vue.use(Loading);
-Vue.component('show-tip',showTip);
-Vue.component('pagination-record',paginationRecord);
-Vue.component('show-error',showError);
-Vue.component('module-info',moduleInfo);
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('auth_token');
+Vue.use(VuejsDialog);
+Vue.use(Loading);
+Vue.component("show-tip", showTip);
+Vue.component("pagination-record", paginationRecord);
+Vue.component("show-error", showError);
+Vue.component("module-info", moduleInfo);
+
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+window.axios.defaults.headers.common["Authorization"] =
+  "Bearer " + localStorage.getItem("auth_token");
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
@@ -57,9 +63,11 @@ window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage
 let token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+  window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
 } else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+  console.error(
+    "CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token"
+  );
 }
 
 /**

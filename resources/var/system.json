@@ -86,7 +86,7 @@
 	],
 	"default_permission": [
 		"access-configuration",
-        "list-user",
+        "access-user",
         "create-user",
         "edit-user",
         "delete-user",

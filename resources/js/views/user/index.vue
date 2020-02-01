@@ -182,7 +182,7 @@
                     </transition>
                     <div class="card">
                         <div class="card-body">
-                            <div class="table-responsive" v-if="hasPermission('list-user') && users.total">
+                            <div class="table-responsive" v-if="hasPermission('access-user') && users.total">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -303,7 +303,7 @@
             };
         },
         mounted(){
-            if(!helper.hasPermission('list-user') && !helper.hasPermission('create-user')){
+            if(!helper.hasPermission('access-user') && !helper.hasPermission('create-user')){
                 helper.notAccessibleMsg();
                 this.$router.push('/home');
             }

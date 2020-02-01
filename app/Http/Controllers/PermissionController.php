@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-use App\Repositories\RoleRepository;
 use App\Http\Requests\PermissionRequest;
-use Spatie\Permission\Models\Permission;
-use App\Repositories\PermissionRepository;
 use App\Repositories\ActivityLogRepository;
+use App\Repositories\PermissionRepository;
+use App\Repositories\RoleRepository;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
@@ -97,7 +97,7 @@ class PermissionController extends Controller
 
         $this->activity->record([
             'module' => $this->module,
-            'activity' => 'assigned'
+            'activity' => 'assigned',
         ]);
 
         return $this->success(['message' => trans('permission.assigned')]);
@@ -113,12 +113,12 @@ class PermissionController extends Controller
      */
     public function store(PermissionRequest $request)
     {
-        $permission = Permission::create(['name' => strtolower(request('name'))]);
-
+        $permission = Permission::create(['name' => strtolower(request('name')) ,'label' =>  request('label')]);
+        
         $this->activity->record([
             'module' => $this->module,
             'module_id' => $permission->id,
-            'activity' => 'added'
+            'activity' => 'added',
         ]);
 
         return $this->success(['message' => trans('permission.added')]);
@@ -152,7 +152,7 @@ class PermissionController extends Controller
         $this->activity->record([
             'module' => $this->module,
             'module_id' => $permission->id,
-            'activity' => 'deleted'
+            'activity' => 'deleted',
         ]);
 
         $this->repo->delete($permission);

@@ -146,9 +146,9 @@ class AuthRepository
             throw ValidationException::withMessages(['email' => trans('auth.not_activated')]);
         }
 
-        if (!$auth_user->hasPermissionTo('enable-login')) {
-            throw ValidationException::withMessages(['email' => trans('auth.login_permission_disabled')]);
-        }
+        // if (!$auth_user->hasPermissionTo('enable-login')) {
+        //     throw ValidationException::withMessages(['email' => trans('auth.login_permission_disabled')]);
+        // }
     }
 
     /**

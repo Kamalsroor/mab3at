@@ -113,7 +113,7 @@
                       <td v-text="purchases_bill.customer.name"></td>
                       <td v-text="purchases_bill.branch.name"></td>
                       <td v-text="purchases_bill.amount"></td>
-                      <td v-text="purchases_bill.date_at"></td>
+                      <td v-text="purchases_bill.created_at"></td>
                       <!-- <td v-text="purchases_bill.name"></td>
 
                       <td v-text="purchases_bill.group.name"></td>
@@ -205,15 +205,15 @@ export default {
     };
   },
   mounted() {
-    if (!helper.hasPermission("access-todo")) {
-      helper.notAccessibleMsg();
-      this.$router.push("/home");
-    }
+    // if (!helper.hasPermission("access-todo")) {
+    //   helper.notAccessibleMsg();
+    //   this.$router.push("/home");
+    // }
 
-    if (!helper.featureAvailable("todo")) {
-      helper.featureNotAvailableMsg();
-      this.$router.push("/home");
-    }
+    // if (!helper.featureAvailable("todo")) {
+    //   helper.featureNotAvailableMsg();
+    //   this.$router.push("/home");
+    // }
 
     this.getCustomers();
   },

@@ -199,7 +199,6 @@ export default {
           this.$emit("completed");
           this.customer_account = 0;
           this.generalForm.date_at = new Date();
-
           this.new_customer_account = 0;
           this.generalForm.amount = 0;
           this.selected_branch = {

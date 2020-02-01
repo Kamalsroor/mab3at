@@ -18,7 +18,7 @@ class UserPolicy
      */
     public function view(User $user)
     {
-        return  $user->can('list-user');
+        return $user->can('access-user');
     }
 
     /**

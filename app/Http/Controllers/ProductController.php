@@ -38,7 +38,6 @@ class ProductController extends Controller
         $this->SalesBill = $SalesBill;
 
         $this->group = $group;
-        $this->middleware('feature.available:todo');
     }
 
     /**
@@ -92,6 +91,7 @@ class ProductController extends Controller
             });
         })->get();
         if (count($PurchasesBill) > 0) {
+     
             if ($type == "PurchasesBill") {
                 return $this->error(['message' => 'تم شراء هذا الجهاز من قبل']);
             }

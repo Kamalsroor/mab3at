@@ -16,7 +16,7 @@ class CustomerRepository
      */
     public function __construct(Customer $customer)
     {
-        $this->data = $customer->with('user', 'user.profile', 'SalesBill.branch', 'SalesBill.user.profile', 'SalesBill.SalesBillDetails.SalesBillDetailSrials', 'AccountAdjustment', 'AccountAdjustment.user.profile', 'PurchasesBill.PurchasesBillDetails.PurchasesBillDetailSrials', 'PurchasesBill.branch', 'PurchasesBill.user.profile', 'DebentureCashings.user.profile', 'DebentureCashings.branch', 'DebentureDeposits.user.profile', 'DebentureDeposits.branch');
+        $this->data = $customer->with('user', 'user.profile', 'SalesBill.branch', 'SalesBill.user.profile', 'SalesBill.SalesBillDetails.Product', 'SalesBill.SalesBillDetails.SalesBillDetailSrials', 'AccountAdjustment', 'AccountAdjustment.user.profile', 'PurchasesBill.PurchasesBillDetails.PurchasesBillDetailSrials', 'PurchasesBill.PurchasesBillDetails.Product', 'PurchasesBill.branch', 'PurchasesBill.user.profile', 'DebentureCashings.user.profile', 'DebentureCashings.branch', 'DebentureDeposits.user.profile', 'DebentureDeposits.branch');
     }
 
     /**
@@ -223,23 +223,55 @@ class CustomerRepository
  * @return CustomerAccount
  */
 
-    public function getStatementByCustomer($id)
+    public function getStatementByCustomer($id, $request)
     {
         $data = $this->data->find($id);
-
+        // $result = ModelName::->get();
         if (!$data) {
             throw ValidationException::withMessages(['message' => trans('todo.could_not_find')]);
         }
         $customerStatement = collect();
 
         $items = $customerStatement->pull('items');
+        $DebentureCashings = collect();
+        foreach ($data->DebentureCashings->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
+            $value->type = 'DebentureCashings';
+            $DebentureCashings->push($value);
+        }
+
+        $DebentureDeposits = collect();
+        foreach ($data->DebentureDeposits->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
+            $value->type = 'DebentureDeposits';
+            $DebentureDeposits->push($value);
+
+        }
+
+        $PurchasesBill = collect();
+        foreach ($data->PurchasesBill->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
+            $value->type = 'PurchasesBill';
+            $PurchasesBill->push($value);
+
+        }
+
+        $SalesBill = collect();
+        foreach ($data->SalesBill->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
+            $value->type = 'SalesBill';
+            $SalesBill->push($value);
+
+        }
+
+        $AccountAdjustment = collect();
+        foreach ($data->AccountAdjustment->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
+            $value->type = 'AccountAdjustment';
+            $AccountAdjustment->push($value);
+        }
         $items = [
             'name' => $data->name,
-            'DebentureCashings' => $data->DebentureCashings,
-            'DebentureDeposits' => $data->DebentureDeposits,
-            'PurchasesBill' => $data->PurchasesBill,
-            'SalesBill' => $data->SalesBill,
-            'AccountAdjustment' => $data->AccountAdjustment,
+            'DebentureCashings' => $DebentureCashings,
+            'DebentureDeposits' => $DebentureDeposits,
+            'PurchasesBill' => $PurchasesBill,
+            'SalesBill' => $SalesBill,
+            'AccountAdjustment' => $AccountAdjustment,
         ];
         $customerStatement->push($items);
         return $customerStatement;

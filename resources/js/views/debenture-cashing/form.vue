@@ -220,6 +220,10 @@ export default {
 
     getCustomerAccount() {
       this.generalForm.customer_id = this.selected_customer.id;
+      if (this.generalForm.amount == null || this.generalForm.amount == "")
+        this.generalForm.amount = 0;
+      if (this.id) this.not_id = this.id;
+      else this.not_id = 0;
       axios
         .get(
           "/api/customer/" +

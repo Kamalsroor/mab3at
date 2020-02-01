@@ -38,7 +38,7 @@ class PurchasesBillController extends Controller
         $this->customer = $customer;
         $this->product = $product;
 
-        $this->middleware('feature.available:todo');
+        // 
     }
 
     /**

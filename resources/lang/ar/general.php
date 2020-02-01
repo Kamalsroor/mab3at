@@ -41,7 +41,7 @@
   'page_not_found_heading' => 'Oops! There is something wrong.',
   'page_not_found_message' => 'The page you have requested is either moved away or doesn\'t exist.',
   'per_page' => 'per page',
-  'permission_denied' => 'You don\'t have permission to perform this action.',
+  'permission_denied' => 'ليس لديك صلاحيه للاستخدام',
   'post' => 'Post',
   'proceed' => 'Proceed',
   'processing' => 'Processing....',

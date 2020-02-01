@@ -95,30 +95,38 @@ class ProductRepository
                 $q->whereHas('PurchasesBillDetailSrials', function ($q) use ($srial) {
                     $q->where('srialnumper', $srial);
                 });
-            })->get();
-            if (count($PurchasesBill) > 0) {
+            })->get(); // فواتير الشراء
+
+            if (count($PurchasesBill) > 0) { // لو الجهاز موجود
                 $SalesBill = $this->SalesBill->whereHas('SalesBillDetails', function ($q) use ($srial) {
                     $q->whereHas('SalesBillDetailSrials', function ($q) use ($srial) {
                         $q->where('srialnumper', $srial);
                     });
-                })->get();
-                if (count($SalesBill) > 0) {
+                })->get(); // فواتير المبيعات
+                if (count($SalesBill) > 0) { // لو الجهاز مباع او لا
                     $FoundFalse = [
                         'status' => "FoundFalse",
                         'srial' => $srial,
                     ];
                     $customerStatement->push($FoundFalse);
 
-                } else {
-
+                } else { // الجهاز غير مباع
+                    $PurchasesBillProduct = $PurchasesBill->last()->PurchasesBillDetails()->whereHas('PurchasesBillDetailSrials', function ($q) use ($srial) {
+                        $q->where('srialnumper', $srial);
+                    })->get()->last();
                     $FoundTrue = [
                         'status' => "FoundTrue",
-
                         'srial' => $srial,
+                        'amount' => $PurchasesBillProduct->amount,
+                        'date' => $PurchasesBill->last()->created_at,
+                        'customer_id' => $PurchasesBill->last()->customer->id,
+                        'customer' => $PurchasesBill->last()->customer,
+                        'branch' => $PurchasesBill->last()->branch,
+                        'Product' => $PurchasesBillProduct->Product,
                     ];
                     $customerStatement->push($FoundTrue);
                 }
-            } else {
+            } else { // الجهاز غير موجود
                 $NotFound = [
                     'status' => "NotFound",
                     'srial' => $srial,
@@ -128,7 +136,8 @@ class ProductRepository
             // $customerStatement->put($i, $items);
             // $i++;
         }
-        return $customerStatement;
+        $sort = $customerStatement;
+        return $sort;
     }
 
     /**

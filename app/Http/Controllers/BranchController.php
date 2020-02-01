@@ -29,7 +29,8 @@ class BranchController extends Controller
         $this->repo = $repo;
         $this->activity = $activity;
         $this->user = $user;
-        $this->middleware('feature.available:todo');
+        $this->middleware('permission:access-branch');
+
     }
 
     /**
@@ -78,8 +79,6 @@ class BranchController extends Controller
         return $this->ok($this->repo->getStockByBranch($id));
     }
 
- 
-    
     /**
      * Used to store branch
      * @post ("/api/branch")

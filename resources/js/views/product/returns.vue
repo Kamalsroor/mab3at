@@ -96,12 +96,20 @@
                   <thead>
                     <tr>
                       <th>السريال</th>
+                      <th>النوع</th>
+                      <th>العميل</th>
+                      <th>الفرع</th>
+                      <th>سعر الشراء</th>
                       <th>الحالة</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(data, index) in data" :key="index">
                       <td v-if="data.status == 'FoundTrue'" v-text="data.srial"></td>
+                      <td v-if="data.status == 'FoundTrue'" v-text="data.Product.name"></td>
+                      <td v-if="data.status == 'FoundTrue'" v-text="data.customer.name"></td>
+                      <td v-if="data.status == 'FoundTrue'" v-text="data.branch.name"></td>
+                      <td v-if="data.status == 'FoundTrue'" v-text="data.amount"></td>
                       <td v-if="data.status == 'FoundTrue'">يمكن عمل مرتجع به</td>
                     </tr>
                   </tbody>

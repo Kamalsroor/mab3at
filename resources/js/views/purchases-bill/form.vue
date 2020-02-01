@@ -90,7 +90,7 @@
             name="quantity"
             :placeholder="trans('debenture_cashing.quantity')"
           />
-          <show-error :form-name="generalForm" prop-name="quantity"></show-error>
+          <show-error :form-name="generalForm" prop-name="products"></show-error>
         </div>
       </div>
 
@@ -177,7 +177,11 @@
         </tbody>
       </table>
     </div>
-    <button type="submit" class="btn btn-info waves-effect waves-light pull-right">
+    <button
+      type="submit"
+      :disabled="submit_disabled"
+      class="btn btn-info waves-effect waves-light pull-right"
+    >
       <span v-if="id">{{ trans("general.update") }}</span>
       <span v-else>{{ trans("general.save") }}</span>
     </button>
@@ -228,6 +232,7 @@ export default {
       new_customer_account: 0,
       submitted: false,
       errorForSrails: 0,
+      submit_disabled: false,
 
       serial: null,
       price: 0,
@@ -265,13 +270,22 @@ export default {
       else this.store();
     },
     store() {
+      this.$Progress.start();
+      this.submit_disabled = true;
+
       this.errorForSrails = 0;
       for (let i = 0; i < this.generalForm.products.length; i++) {
         if (
           this.generalForm.products[i].quantity !=
           this.generalForm.products[i].serial.length
         ) {
-          helper.ErrorMsgVue("يجب اضافة جميع السريالات");
+          this.submit_disabled = false;
+          helper.ErrorMsgVue(
+            "يجب اضافة جميع السريالات" + this.generalForm.products[i].name
+          );
+          this.$Progress.fail();
+
+          // helper.ErrorMsgVue("يجب اضافة جميع السريالات لصنف");
           this.errorForSrails++;
         }
       }
@@ -279,11 +293,15 @@ export default {
         this.generalForm.date_at = moment(this.generalForm.date_at).format(
           "YYYY-MM-DD"
         );
+
         this.generalForm
           .post("/api/purchases_bill")
           .then(response => {
             toastr.success(response.message);
             //  new_customer_account: 0
+            this.$Progress.finish();
+            this.submit_disabled = false;
+
             this.$emit("completed");
             this.customer_account = 0;
             this.new_customer_account = 0;
@@ -300,9 +318,15 @@ export default {
             };
           })
           .catch(error => {
+            this.$Progress.fail();
+            this.submit_disabled = false;
+
             helper.showErrorMsg(error);
           });
       } else {
+        this.submit_disabled = false;
+        this.$Progress.fail();
+
         helper.ErrorMsgVue("يجب اضافة جميع السريالات");
       }
     },
@@ -367,7 +391,7 @@ export default {
           });
         } else {
           axios
-            .get("/api/product/" + value + "/sriral/SalesBill")
+            .get("/api/product/" + value + "/sriral/PurchasesBill")
             .then(response => response.data)
             .then(response => {
               this.generalForm.products[index].serial.push(value);

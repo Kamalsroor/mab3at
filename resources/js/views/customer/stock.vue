@@ -47,6 +47,14 @@
                           >
                             <i class="fas fa-eye"></i>
                           </button>
+                          <button
+                            class="btn btn-info btn-sm"
+                            v-tooltip="trans('general.edit')"
+                            @click.prevent="showStatementDetailed(customer)"
+                          >
+                            <i class="fas fa-eye"></i>
+                            مفصل
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -111,6 +119,9 @@ export default {
     },
     showStatement(customer) {
       this.$router.push("/customer/" + customer.id + "/statement");
+    },
+    showStatementDetailed(customer) {
+      this.$router.push("/customer/" + customer.id + "/statement/detailed");
     }
   }
 };

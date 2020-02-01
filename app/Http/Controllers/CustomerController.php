@@ -28,7 +28,7 @@ class CustomerController extends Controller
         $this->repo = $repo;
         $this->activity = $activity;
         $this->user = $user;
-        $this->middleware('feature.available:todo');
+        
     }
 
     /**
@@ -75,10 +75,10 @@ class CustomerController extends Controller
      * @get ("/api/branch")
      * @return Response
      */
-    public function getStatementByCustomer($id)
+    public function getStatementByCustomer($id , Request $request)
     {
         // dd($this->repo->paginate($this->request->all());
-        return $this->ok($this->repo->getStatementByCustomer($id));
+        return $this->ok($this->repo->getStatementByCustomer($id , $request));
     }
 
     /**

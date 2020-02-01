@@ -28,7 +28,7 @@ class GroupController extends Controller
         $this->repo = $repo;
         $this->activity = $activity;
         $this->user = $user;
-        $this->middleware('feature.available:todo');
+        
     }
 
     /**

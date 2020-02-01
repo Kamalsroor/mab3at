@@ -160,13 +160,13 @@
             <!-- Message Start -->
             <div class="media">
               <img
-                src="dist/img/user1-128x128.jpg"
+                :src="getAuthUser('avatar')"
                 alt="User Avatar"
                 class="img-size-50 ml-3 img-circle"
               />
               <div class="media-body">
                 <h3 class="dropdown-item-title">
-                  محمدرضا عطوان
+                  فسثفي
                   <span class="float-left text-sm text-danger">
                     <i class="fa fa-star"></i>
                   </span>

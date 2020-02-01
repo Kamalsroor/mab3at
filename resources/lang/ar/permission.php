@@ -8,7 +8,7 @@
   'deleted' => 'Permission deleted.',
   'name' => 'Name',
   'permission' => 'Permission',
-  'permission_denied' => 'You don\'t have permission to perform this action.',
+  'permission_denied' => 'ليس لديك صلاحيه للاستخدام',
   'permission_list' => 'Permission List',
   'tip_assign_permission' => 'Switch permissions on or off to enable disable permission for respective roles.',
   'tip_permission' => 'By default system supports few permissions which cannot be deleted. You can add as many permissions you want. Read our documentation to know more about permissions.',

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Socialite;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use Socialite;
 
 class SocialLoginController extends Controller
 {
@@ -76,9 +75,9 @@ class SocialLoginController extends Controller
                 \Cache::put('message', trans('auth.not_activated'), 60);
             }
 
-            if (!$user_exists->hasPermissionTo('enable-login')) {
-                \Cache::put('message', trans('auth.login_permission_disabled'), 60);
-            }
+            // if (!$user_exists->hasPermissionTo('enable-login')) {
+            //     \Cache::put('message', trans('auth.login_permission_disabled'), 60);
+            // }
         } else {
             $new_user = new \App\User;
             $new_user->email = $user->email;
@@ -128,6 +127,6 @@ class SocialLoginController extends Controller
         $token = \Cache::get('jwt_token');
 
         \Cache::forget('jwt_token');
-        return $this->success(['message' => trans('auth.logged_in'),'token' => $token]);
+        return $this->success(['message' => trans('auth.logged_in'), 'token' => $token]);
     }
 }

@@ -38,7 +38,7 @@ class DebenturesDepositController extends Controller
         $this->user = $user;
         $this->branch = $branch;
         $this->customer = $customer;
-        $this->middleware('feature.available:todo');
+        
     }
 
 

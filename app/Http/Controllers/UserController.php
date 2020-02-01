@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use Illuminate\Http\Request;
-use App\Repositories\RoleRepository;
-use App\Repositories\UserRepository;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Repositories\LocaleRepository;
 use App\Http\Requests\UserEmailRequest;
 use App\Http\Requests\UserProfileRequest;
 use App\Repositories\ActivityLogRepository;
-use App\Http\Requests\ChangePasswordRequest;
+use App\Repositories\LocaleRepository;
+use App\Repositories\RoleRepository;
+use App\Repositories\UserRepository;
+use App\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -33,8 +33,9 @@ class UserController extends Controller
         $this->repo = $repo;
         $this->activity = $activity;
         $this->role = $role;
+        $this->middleware('permission:access-user');
 
-        $this->middleware('prohibited.test.mode')->only(['forceResetPassword','destroy','uploadAvatar','removeAvatar']);
+        // $this->middleware('prohibited.test.mode')->only(['forceResetPassword','destroy','uploadAvatar','removeAvatar']);
         $this->locale = $locale;
     }
 
@@ -64,7 +65,7 @@ class UserController extends Controller
         $user = $this->repo->findOrFail(\Auth::user()->id);
         $genders = generateTranslatedSelectOption(getVar('list')['gender']);
 
-        return $this->success(compact('user','genders'));
+        return $this->success(compact('user', 'genders'));
     }
 
     /**
@@ -80,7 +81,7 @@ class UserController extends Controller
         $sidebar = isset($system_variables['sidebar']) ? $system_variables['sidebar'] : [];
         $locales = generateNormalSelectOption($this->locale->list());
 
-        return $this->success(compact('color_themes','directions','sidebar','locales'));
+        return $this->success(compact('color_themes', 'directions', 'sidebar', 'locales'));
     }
 
     /**
@@ -90,7 +91,7 @@ class UserController extends Controller
      */
     public function preference()
     {
-        $this->repo->updatePreference(\Auth::user()->UserPreference,$this->request->all());
+        $this->repo->updatePreference(\Auth::user()->UserPreference, $this->request->all());
 
         return $this->success(['message' => trans('user.preference_updated')]);
     }
@@ -133,9 +134,9 @@ class UserController extends Controller
         $user = $this->repo->create($this->request->all());
 
         $this->activity->record([
-            'module'    => $this->module,
+            'module' => $this->module,
             'module_id' => $user->id,
-            'activity'  => 'created'
+            'activity' => 'created',
         ]);
 
         return $this->success(['message' => trans('user.added')]);
@@ -166,7 +167,7 @@ class UserController extends Controller
         $user = $this->repo->findOrFail($id);
 
         $selected_roles = generateSelectOption($user->roles()->pluck('name', 'id')->all());
-        
+
         $roles = $user->roles()->pluck('id')->all();
 
         return $this->success(compact('user', 'selected_roles', 'roles'));
@@ -217,7 +218,7 @@ class UserController extends Controller
         $this->activity->record([
             'module' => $this->module,
             'module_id' => $user->id,
-            'activity' => 'updated'
+            'activity' => 'updated',
         ]);
 
         return $this->success(['message' => trans('user.profile_updated')]);
@@ -249,7 +250,7 @@ class UserController extends Controller
         $this->activity->record([
             'module' => $this->module,
             'module_id' => $user->id,
-            'activity' => 'updated'
+            'activity' => 'updated',
         ]);
 
         return $this->success(['message' => trans('user.profile_updated')]);
@@ -278,7 +279,7 @@ class UserController extends Controller
         $this->activity->record([
             'module' => $this->module,
             'module_id' => $user->id,
-            'activity' => 'updated'
+            'activity' => 'updated',
         ]);
 
         return $this->success(['message' => trans('user.profile_updated')]);
@@ -305,7 +306,7 @@ class UserController extends Controller
         $this->activity->record([
             'module' => $this->module,
             'module_id' => $user->id,
-            'activity' => 'updated'
+            'activity' => 'updated',
         ]);
 
         return $this->success(['message' => trans('passwords.change')]);
@@ -334,7 +335,7 @@ class UserController extends Controller
             'module' => $this->module,
             'module_id' => $user->id,
             'sub_module' => 'mail',
-            'activity' => 'sent'
+            'activity' => 'sent',
         ]);
 
         return $this->success(['message' => trans('template.mail_sent')]);
@@ -366,7 +367,7 @@ class UserController extends Controller
             'module' => $this->module,
             'module_id' => $auth_user->id,
             'sub_module' => 'profile',
-            'activity' => 'updated'
+            'activity' => 'updated',
         ]);
 
         return $this->success(['message' => trans('user.profile_updated')]);
@@ -387,7 +388,7 @@ class UserController extends Controller
 
         $this->authorize('avatar', $user);
 
-        $image_path = config('system.upload_path.avatar').'/';
+        $image_path = config('system.upload_path.avatar') . '/';
 
         $profile = $user->Profile;
         $image = $profile->avatar;
@@ -398,24 +399,24 @@ class UserController extends Controller
 
         $extension = request()->file('image')->getClientOriginalExtension();
         $filename = uniqid();
-        $file = request()->file('image')->move($image_path, $filename.".".$extension);
-        $img = \Image::make($image_path.$filename.".".$extension);
+        $file = request()->file('image')->move($image_path, $filename . "." . $extension);
+        $img = \Image::make($image_path . $filename . "." . $extension);
         $img->resize(200, null, function ($constraint) {
             $constraint->aspectRatio();
         });
-        $img->save($image_path.$filename.".".$extension);
+        $img->save($image_path . $filename . "." . $extension);
 
-        $profile->avatar = $image_path.$filename.".".$extension;
+        $profile->avatar = $image_path . $filename . "." . $extension;
         $profile->save();
 
         $this->activity->record([
             'module' => $this->module,
             'module_id' => $user->id,
             'sub_module' => 'avatar',
-            'activity' => 'uploaded'
+            'activity' => 'uploaded',
         ]);
 
-        return $this->success(['message' => trans('user.avatar_uploaded'),'image' => $image_path.$filename.".".$extension]);
+        return $this->success(['message' => trans('user.avatar_uploaded'), 'image' => $image_path . $filename . "." . $extension]);
     }
 
     /**
@@ -432,7 +433,7 @@ class UserController extends Controller
 
         $this->authorize('avatar', $user);
 
-        $image_path = config('system.upload_path.avatar').'/';
+        $image_path = config('system.upload_path.avatar') . '/';
 
         $profile = $user->Profile;
         $image = $profile->avatar;
@@ -452,7 +453,7 @@ class UserController extends Controller
             'module' => $this->module,
             'module_id' => $user->id,
             'sub_module' => 'avatar',
-            'activity' => 'removed'
+            'activity' => 'removed',
         ]);
 
         return $this->success(['message' => trans('user.avatar_removed')]);
@@ -475,7 +476,7 @@ class UserController extends Controller
         $this->activity->record([
             'module' => $this->module,
             'module_id' => $user->id,
-            'activity' => 'deleted'
+            'activity' => 'deleted',
         ]);
 
         $this->repo->delete($user);

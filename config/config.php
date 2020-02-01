@@ -1,4 +1,5 @@
 <?php
 return [
-    'mode' => 'test'
+    // 'mode' => 'test'
+    
 ];

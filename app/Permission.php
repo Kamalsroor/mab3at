@@ -7,17 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Permission extends Model
 {
     protected $fillable = [
-                            'name'
-                        ];
+        'name',
+        'label',
+    ];
     protected $primaryKey = 'id';
     protected $table = 'permissions';
 
     public function scopeFilterByName($q, $name = null)
     {
-        if (! $name) {
+        if (!$name) {
             return $q;
         }
 
-        return $q->where('name', 'like', '%'.$name.'%');
+        return $q->where('name', 'like', '%' . $name . '%');
     }
 }
