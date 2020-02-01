@@ -233,37 +233,74 @@ class CustomerRepository
         $customerStatement = collect();
 
         $items = $customerStatement->pull('items');
-        $DebentureCashings = collect();
-        foreach ($data->DebentureCashings->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
-            $value->type = 'DebentureCashings';
-            $DebentureCashings->push($value);
-        }
+        if ($request->from != 'Invalid date') {
+            $DebentureCashings = collect();
 
-        $DebentureDeposits = collect();
-        foreach ($data->DebentureDeposits->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
-            $value->type = 'DebentureDeposits';
-            $DebentureDeposits->push($value);
+            foreach ($data->DebentureCashings->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
+                $value->type = 'DebentureCashings';
+                $DebentureCashings->push($value);
+            }
 
-        }
+            $DebentureDeposits = collect();
+            foreach ($data->DebentureDeposits->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
+                $value->type = 'DebentureDeposits';
+                $DebentureDeposits->push($value);
 
-        $PurchasesBill = collect();
-        foreach ($data->PurchasesBill->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
-            $value->type = 'PurchasesBill';
-            $PurchasesBill->push($value);
+            }
 
-        }
+            $PurchasesBill = collect();
+            foreach ($data->PurchasesBill->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
+                $value->type = 'PurchasesBill';
+                $PurchasesBill->push($value);
 
-        $SalesBill = collect();
-        foreach ($data->SalesBill->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
-            $value->type = 'SalesBill';
-            $SalesBill->push($value);
+            }
 
-        }
+            $SalesBill = collect();
+            foreach ($data->SalesBill->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
+                $value->type = 'SalesBill';
+                $SalesBill->push($value);
 
-        $AccountAdjustment = collect();
-        foreach ($data->AccountAdjustment->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
-            $value->type = 'AccountAdjustment';
-            $AccountAdjustment->push($value);
+            }
+
+            $AccountAdjustment = collect();
+            foreach ($data->AccountAdjustment->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']) as $value) {
+                $value->type = 'AccountAdjustment';
+                $AccountAdjustment->push($value);
+            }
+        } else {
+            $DebentureCashings = collect();
+
+            foreach ($data->DebentureCashings as $value) {
+                $value->type = 'DebentureCashings';
+                $DebentureCashings->push($value);
+            }
+
+            $DebentureDeposits = collect();
+            foreach ($data->DebentureDeposits as $value) {
+                $value->type = 'DebentureDeposits';
+                $DebentureDeposits->push($value);
+
+            }
+
+            $PurchasesBill = collect();
+            foreach ($data->PurchasesBill as $value) {
+                $value->type = 'PurchasesBill';
+                $PurchasesBill->push($value);
+
+            }
+
+            $SalesBill = collect();
+            foreach ($data->SalesBill as $value) {
+                $value->type = 'SalesBill';
+                $SalesBill->push($value);
+
+            }
+
+            $AccountAdjustment = collect();
+            foreach ($data->AccountAdjustment as $value) {
+                $value->type = 'AccountAdjustment';
+                $AccountAdjustment->push($value);
+            }
         }
         $items = [
             'name' => $data->name,
