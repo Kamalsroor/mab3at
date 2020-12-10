@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreataSalesReturnsTable extends Migration
+class CreateSalesReturnsTable extends Migration
 {
 
     public function up()

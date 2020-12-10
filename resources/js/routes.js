@@ -1,11 +1,9 @@
 import Vue from "vue";
 import Loading from "vue-loading-overlay";
-import VueProgressBar from "vue-progressbar";
 
 import "vue-loading-overlay/dist/vue-loading.css";
 import VueRouter from "vue-router";
 import store from "./store";
-Vue.use(Loading, VueProgressBar);
 
 let pageLoader;
 

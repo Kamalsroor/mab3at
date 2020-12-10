@@ -3,9 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreataPurchasesBillsTable extends Migration
+class CreatePurchasesBillsTable extends Migration
 {
-
+    
     public function up()
     {
         Schema::create('purchases_bills', function (Blueprint $table) {

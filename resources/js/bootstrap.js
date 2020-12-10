@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import axios from "axios";
 
-import VueProgressBar from "vue-progressbar";
 import Form from "./services/form";
 import helper from "./services/helper";
 import VTooltip from "v-tooltip";
@@ -24,7 +23,6 @@ window._size = require("lodash/size");
 
 window.Vue = Vue;
 
-Vue.use(VueProgressBar);
 Vue.use(VueRouter);
 window.axios = axios;
 window.Form = Form;

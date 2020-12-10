@@ -6,13 +6,11 @@
 
 require("./bootstrap");
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
-import VueProgressBar from "vue-progressbar";
 
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 import store from "./store";
 
-Vue.use(VueProgressBar);
 import router from "./routes";
 
 /**
