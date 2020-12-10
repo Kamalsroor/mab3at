@@ -61,10 +61,10 @@
             guestFooter
         },
         mounted(){
-            if(!helper.featureAvailable('reset_password')){
-                helper.featureNotAvailableMsg();
-                return this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('reset_password')){
+            //     helper.featureNotAvailableMsg();
+            //     return this.$router.push('/home');
+            // }
 
             axios.post('/api/auth/validate-password-reset',{
                 token: this.resetForm.token

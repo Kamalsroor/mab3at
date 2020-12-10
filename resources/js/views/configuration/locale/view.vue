@@ -74,15 +74,15 @@
             };
         },
         mounted(){
-            if(!helper.hasPermission('access-configuration')){
-                helper.notAccessibleMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.hasPermission('access-configuration')){
+            //     helper.notAccessibleMsg();
+            //     this.$router.push('/home');
+            // }
 
-            if(!helper.featureAvailable('multilingual')){
-                helper.featureNotAvailableMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('multilingual')){
+            //     helper.featureNotAvailableMsg();
+            //     this.$router.push('/home');
+            // }
 
             this.fetchWords();
         },

@@ -29,7 +29,7 @@ class BranchController extends Controller
         $this->repo = $repo;
         $this->activity = $activity;
         $this->user = $user;
-        $this->middleware('permission:access-branch');
+        // $this->middleware('permission:access-branch');
 
     }
 

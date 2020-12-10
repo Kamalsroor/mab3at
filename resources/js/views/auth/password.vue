@@ -42,10 +42,10 @@
             guestFooter
         },
         mounted(){
-            if(!helper.featureAvailable('reset_password')){
-                helper.featureNotAvailableMsg();
-                return this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('reset_password')){
+            //     helper.featureNotAvailableMsg();
+            //     return this.$router.push('/home');
+            // }
         },
         methods: {
             submit(e){
