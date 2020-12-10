@@ -187,10 +187,10 @@ export default {
     };
   },
   mounted() {
-    if (!helper.hasPermission("access-branch")) {
-      helper.notAccessibleMsg();
-      this.$router.push("/home");
-    }
+    // if (!helper.hasPermission("access-branch")) {
+    //   helper.notAccessibleMsg();
+    //   this.$router.push("/home");
+    // }
 
     this.getBranches();
   },

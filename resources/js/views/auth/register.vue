@@ -90,10 +90,10 @@
             guestFooter,password
         },
         mounted(){
-            if(!helper.featureAvailable('registration')){
-                helper.featureNotAvailableMsg();
-                return this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('registration')){
+            //     helper.featureNotAvailableMsg();
+            //     return this.$router.push('/home');
+            // }
         },
         methods: {
             submit(){

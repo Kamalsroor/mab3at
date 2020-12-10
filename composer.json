@@ -17,6 +17,7 @@
         "laravel/socialite": "^4.1",
         "laravel/tinker": "^1.0",
         "laravel/ui": "^1.0",
+        "orangehill/iseed": "^2.6",
         "spatie/laravel-permission": "^3.0",
         "tymon/jwt-auth": "1.0.x-dev"
     },

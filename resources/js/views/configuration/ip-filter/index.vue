@@ -79,15 +79,15 @@
             };
         },
         mounted(){
-            if(!helper.hasPermission('access-configuration')){
-                helper.notAccessibleMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.hasPermission('access-configuration')){
+            //     helper.notAccessibleMsg();
+            //     this.$router.push('/home');
+            // }
 
-            if(!helper.featureAvailable('ip_filter')){
-                helper.featureNotAvailableMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('ip_filter')){
+            //     helper.featureNotAvailableMsg();
+            //     this.$router.push('/home');
+            // }
 
             this.getIpFilters();
         },

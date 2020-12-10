@@ -30,10 +30,10 @@
         },
         mounted(){
 
-            if(!helper.featureAvailable('social_login')){
-                helper.featureNotAvailableMsg();
-                return this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('social_login')){
+            //     helper.featureNotAvailableMsg();
+            //     return this.$router.push('/home');
+            // }
 
             axios.post('/api/auth/social/token')
                 .then(response => response.data)

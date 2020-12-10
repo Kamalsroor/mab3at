@@ -19,10 +19,10 @@
     export default {
         mounted(){
 
-            if(!helper.featureAvailable('terms_and_conditions')){
-                helper.featureNotAvailableMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('terms_and_conditions')){
+            //     helper.featureNotAvailableMsg();
+            //     this.$router.push('/home');
+            // }
         }
     }
 </script>

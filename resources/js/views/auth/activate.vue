@@ -36,10 +36,10 @@
         },
         mounted(){
 
-            if(!helper.featureAvailable('registration') || !helper.featureAvailable('email_verification')){
-                helper.featureNotAvailableMsg();
-                return this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('registration') || !helper.featureAvailable('email_verification')){
+            //     helper.featureNotAvailableMsg();
+            //     return this.$router.push('/home');
+            // }
 
             axios.get('/api/auth/activate/'+this.token)
                 .then(response => response.data)

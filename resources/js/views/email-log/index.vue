@@ -94,15 +94,15 @@
             };
         },
         mounted(){
-            if(!helper.featureAvailable('email_log')){
-                helper.featureNotAvailableMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('email_log')){
+            //     helper.featureNotAvailableMsg();
+            //     this.$router.push('/home');
+            // }
 
-            if(!helper.hasPermission('access-configuration')){
-                helper.notAccessibleMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.hasPermission('access-configuration')){
+            //     helper.notAccessibleMsg();
+            //     this.$router.push('/home');
+            // }
 
             this.getEmailLogs();
         },

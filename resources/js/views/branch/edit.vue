@@ -31,15 +31,15 @@
             }
         },
         mounted(){
-            if(!helper.hasPermission('access-todo')){
-                helper.notAccessibleMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.hasPermission('access-todo')){
+            //     helper.notAccessibleMsg();
+            //     this.$router.push('/home');
+            // }
 
-            if(!helper.featureAvailable('todo')){
-                helper.featureNotAvailableMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('todo')){
+            //     helper.featureNotAvailableMsg();
+            //     this.$router.push('/home');
+            // }
         }
     }
 </script>

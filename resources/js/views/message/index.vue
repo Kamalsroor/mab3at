@@ -45,15 +45,15 @@
             };
         },
         mounted(){
-            if(!helper.featureAvailable('message')){
-                helper.featureNotAvailableMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('message')){
+            //     helper.featureNotAvailableMsg();
+            //     this.$router.push('/home');
+            // }
             
-            if(!helper.hasPermission('access-message')){
-                helper.notAccessibleMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.hasPermission('access-message')){
+            //     helper.notAccessibleMsg();
+            //     this.$router.push('/home');
+            // }
 
             axios.post('/api/message/statistics')
                 .then(response => response.data)

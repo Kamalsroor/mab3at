@@ -86,15 +86,15 @@
             };
         },
         mounted(){
-            if(!helper.hasPermission('access-message')){
-                helper.notAccessibleMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.hasPermission('access-message')){
+            //     helper.notAccessibleMsg();
+            //     this.$router.push('/home');
+            // }
 
-            if(!helper.featureAvailable('message')){
-                helper.featureNotAvailableMsg();
-                this.$router.push('/home');
-            }
+            // if(!helper.featureAvailable('message')){
+            //     helper.featureNotAvailableMsg();
+            //     this.$router.push('/home');
+            // }
 
             this.getMessages();
             this.getStatistics();

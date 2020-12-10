@@ -162,7 +162,6 @@ class ProductController extends Controller
      */
     public function CheckSrirals(Request $request)
     {
-
         $data = $this->repo->CheckSrirals($this->request->serials);
 
 
