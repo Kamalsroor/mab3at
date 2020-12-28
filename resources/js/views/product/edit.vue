@@ -2,13 +2,13 @@
   <div>
     <div class="page-titles p-3 border-bottom">
       <h3 class="text-themecolor">
-        {{trans('todo.edit_todo')}}
+        {{ trans("todo.edit_todo") }}
         <button
           class="btn btn-info btn-sm pull-right"
           @click="$router.push('/product')"
         >
           <i class="fas fa-check-circle"></i>
-          <span class="d-none d-sm-inline">{{trans('todo.todo')}}</span>
+          <span class="d-none d-sm-inline">{{ trans("todo.todo") }}</span>
         </button>
       </h3>
     </div>
@@ -17,7 +17,7 @@
         <div class="col-sm-12">
           <div class="card">
             <div class="card-body p-4">
-              <h4 class="card-title">{{trans('todo.edit_todo')}}</h4>
+              <h4 class="card-title">{{ trans("todo.edit_todo") }}</h4>
               <general-form :id="id"></general-form>
             </div>
           </div>
@@ -34,19 +34,18 @@ export default {
   components: { generalForm },
   data() {
     return {
-      id: this.$route.params.id
+      id: this.$route.params.id,
     };
   },
   mounted() {
-    if (!helper.hasPermission("access-todo")) {
-      helper.notAccessibleMsg();
-      this.$router.push("/home");
-    }
-
-    if (!helper.featureAvailable("todo")) {
-      helper.featureNotAvailableMsg();
-      this.$router.push("/home");
-    }
-  }
+    // if (!helper.hasPermission("access-todo")) {
+    //   helper.notAccessibleMsg();
+    //   this.$router.push("/home");
+    // }
+    // if (!helper.featureAvailable("todo")) {
+    //   helper.featureNotAvailableMsg();
+    //   this.$router.push("/home");
+    // }
+  },
 };
 </script>

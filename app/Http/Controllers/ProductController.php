@@ -91,7 +91,7 @@ class ProductController extends Controller
             });
         })->get();
         if (count($PurchasesBill) > 0) {
-     
+
             if ($type == "PurchasesBill") {
                 return $this->error(['message' => 'تم شراء هذا الجهاز من قبل']);
             }
@@ -109,10 +109,9 @@ class ProductController extends Controller
                     return $this->error(['message' => 'تم بيع هذا الجهاز من قبل']);
                 }
             }
-
         }
 
-  
+
 
         return $this->ok($PurchasesBill);
     }
@@ -151,7 +150,7 @@ class ProductController extends Controller
     }
 
 
-        /**
+    /**
      * Used to store branch
      * @post ("/api/branch")
      * @param ({

@@ -7,7 +7,10 @@
   type
   amount
   date_at-->
-  <form @submit.prevent="proceed" @keydown="generalForm.errors.clear($event.target.name)">
+  <form
+    @submit.prevent="proceed"
+    @keydown="generalForm.errors.clear($event.target.name)"
+  >
     <div class="row">
       <div class="col-12 col-sm-6">
         <div class="form-group">
@@ -23,7 +26,10 @@
             @close="generalForm.branch_id = selected_branch.id"
             @remove="generalForm.branch_id = ''"
           ></v-select>
-          <show-error :form-name="generalForm" prop-name="branch_id"></show-error>
+          <show-error
+            :form-name="generalForm"
+            prop-name="branch_id"
+          ></show-error>
         </div>
       </div>
 
@@ -41,7 +47,10 @@
             @close="getCustomerAccount"
             @remove="generalForm.customer_id = ''"
           ></v-select>
-          <show-error :form-name="generalForm" prop-name="customer_id"></show-error>
+          <show-error
+            :form-name="generalForm"
+            prop-name="customer_id"
+          ></show-error>
         </div>
       </div>
 
@@ -59,7 +68,10 @@
             @close="getCustomerAccount"
             @remove="generalForm.serialNumber = ''"
           ></v-select>
-          <show-error :form-name="generalForm" prop-name="serialNumber"></show-error>
+          <show-error
+            :form-name="generalForm"
+            prop-name="serialNumber"
+          ></show-error>
         </div>
       </div>
       <div class="col-12 col-sm-3">
@@ -90,7 +102,10 @@
             name="quantity"
             :placeholder="trans('debenture_cashing.quantity')"
           />
-          <show-error :form-name="generalForm" prop-name="products"></show-error>
+          <show-error
+            :form-name="generalForm"
+            prop-name="products"
+          ></show-error>
         </div>
       </div>
 
@@ -112,15 +127,19 @@
             <td>{{ product.quantity }}</td>
             <td>{{ product.quantity * product.price }}</td>
             <td>
-              <b-button v-b-modal="product.name" variant="success">Serials</b-button>
+              <b-button v-b-modal="product.name" variant="success"
+                >Serials</b-button
+              >
               <!-- @click="addSerials(index)" -->
               <b-modal :id="product.name" :title="product.name">
                 <div class="row">
                   <div class="col-12 col-sm-12">
-                    <h5>{{product.serial.length}} عدد السريالات</h5>
+                    <h5>{{ product.serial.length }} عدد السريالات</h5>
                   </div>
                   <div class="col-12 col-sm-12">
-                    <h5>{{product.quantity - product.serial.length}} المتبقي</h5>
+                    <h5>
+                      {{ product.quantity - product.serial.length }} المتبقي
+                    </h5>
                   </div>
                   <div
                     v-if="product.quantity - product.serial.length == 0"
@@ -132,18 +151,24 @@
                     <div class="form-group">
                       <label for>السريال</label>
                       <input
-                        :disabled="product.quantity - product.serial.length == 0 || submitted"
+                        :disabled="
+                          product.quantity - product.serial.length == 0 ||
+                            submitted
+                        "
                         class="form-control"
                         type="text"
                         value
-                        :id="'serial-'+index"
+                        :id="'serial-' + index"
                         v-model="serial"
                         ref="title"
                         @keyup.enter="addSerials(index, serial)"
                         name="serial"
                         :placeholder="'السريال'"
                       />
-                      <show-error :form-name="generalForm" prop-name="name"></show-error>
+                      <show-error
+                        :form-name="generalForm"
+                        prop-name="name"
+                      ></show-error>
                     </div>
                   </div>
                   <hr />
@@ -156,13 +181,17 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(product, product_index) in product.serial" :key="product_index">
+                      <tr
+                        v-for="(product, product_index) in product.serial"
+                        :key="product_index"
+                      >
                         <td>{{ product }}</td>
                         <td>
                           <b-button
-                            @click="removeProductRow(index , product_index)"
+                            @click="removeProductRow(index, product_index)"
                             variant="danger"
-                          >حذف</b-button>
+                            >حذف</b-button
+                          >
                         </td>
                       </tr>
                     </tbody>
@@ -171,7 +200,9 @@
               </b-modal>
             </td>
             <td>
-              <b-button @click="removeRow(index)" variant="danger">حذف</b-button>
+              <b-button @click="removeRow(index)" variant="danger"
+                >حذف</b-button
+              >
             </td>
           </tr>
         </tbody>
@@ -189,13 +220,16 @@
       to="/purchases_bill"
       class="btn btn-danger waves-effect waves-light pull-right m-r-10"
       v-show="id"
-    >{{ trans("general.cancel") }}</router-link>
+      >{{ trans("general.cancel") }}</router-link
+    >
     <button
       v-if="!id"
       type="button"
       class="btn btn-danger waves-effect waves-light pull-right m-r-10"
       @click="$emit('cancel')"
-    >{{ trans("general.cancel") }}</button>
+    >
+      {{ trans("general.cancel") }}
+    </button>
   </form>
 </template>
 
@@ -215,19 +249,19 @@ export default {
         date_at: null,
         note: null,
         amount: 0,
-        products: []
+        products: [],
       }),
       branches: [],
       selected_branch: {
         id: null,
-        name: null
+        name: null,
       },
       not_id: null,
       customer_account: 0,
       customers: [],
       selected_customer: {
         id: null,
-        name: null
+        name: null,
       },
       new_customer_account: 0,
       submitted: false,
@@ -239,9 +273,9 @@ export default {
       quantity: null,
       selected_product: {
         id: null,
-        name: null
+        name: null,
       },
-      products: []
+      products: [],
     };
   },
 
@@ -252,15 +286,15 @@ export default {
     if (this.id) this.get();
     axios
       .get("/api/purchases_bill/pre-requisite")
-      .then(response => response.data)
-      .then(response => {
+      .then((response) => response.data)
+      .then((response) => {
         this.branches = response.branch;
         this.customers = response.customer;
         this.products = response.product;
 
         // this.types = response.type;
       })
-      .catch(error => {
+      .catch((error) => {
         helper.showDataErrorMsg(error);
       });
   },
@@ -270,7 +304,6 @@ export default {
       else this.store();
     },
     store() {
-      this.$Progress.start();
       this.submit_disabled = true;
 
       this.errorForSrails = 0;
@@ -283,7 +316,6 @@ export default {
           helper.ErrorMsgVue(
             "يجب اضافة جميع السريالات" + this.generalForm.products[i].name
           );
-          this.$Progress.fail();
 
           // helper.ErrorMsgVue("يجب اضافة جميع السريالات لصنف");
           this.errorForSrails++;
@@ -296,10 +328,9 @@ export default {
 
         this.generalForm
           .post("/api/purchases_bill")
-          .then(response => {
+          .then((response) => {
             toastr.success(response.message);
             //  new_customer_account: 0
-            this.$Progress.finish();
             this.submit_disabled = false;
 
             this.$emit("completed");
@@ -310,22 +341,20 @@ export default {
             this.generalForm.date_at = new Date();
             this.selected_branch = {
               id: null,
-              name: null
+              name: null,
             };
             this.selected_customer = {
               id: null,
-              name: null
+              name: null,
             };
           })
-          .catch(error => {
-            this.$Progress.fail();
+          .catch((error) => {
             this.submit_disabled = false;
 
             helper.showErrorMsg(error);
           });
       } else {
         this.submit_disabled = false;
-        this.$Progress.fail();
 
         helper.ErrorMsgVue("يجب اضافة جميع السريالات");
       }
@@ -334,14 +363,14 @@ export default {
     prodactWithPrice() {
       axios
         .get("/api/product/" + this.selected_product.id + "/" + this.price)
-        .then(response => response.data)
-        .then(response => {
+        .then((response) => response.data)
+        .then((response) => {
           if (response == "max_price" || response == "min_price") {
             helper.showDataErrorMsg(response);
           }
           // this.products = response;
         })
-        .catch(error => {
+        .catch((error) => {
           helper.showDataErrorMsg(error);
           helper.showErrorMsg(error);
 
@@ -377,7 +406,7 @@ export default {
           0
       ) {
         let filtered = this.generalForm.products[index].serial.filter(
-          m => m === value
+          (m) => m === value
         );
         console.log(filtered.length, "test");
         if (filtered.length > 0) {
@@ -392,8 +421,8 @@ export default {
         } else {
           axios
             .get("/api/product/" + value + "/sriral/PurchasesBill")
-            .then(response => response.data)
-            .then(response => {
+            .then((response) => response.data)
+            .then((response) => {
               this.generalForm.products[index].serial.push(value);
               this.submitted = false;
               this.$nextTick(function() {
@@ -403,7 +432,7 @@ export default {
                 }, 200);
               });
             })
-            .catch(error => {
+            .catch((error) => {
               helper.showDataErrorMsg(error);
               this.submitted = false;
               helper.showErrorMsg(error);
@@ -425,14 +454,14 @@ export default {
       if (parseInt(this.quantity) > 0) {
         axios
           .get("/api/product/" + this.selected_product.id + "/" + this.price)
-          .then(response => response.data)
-          .then(response => {
+          .then((response) => response.data)
+          .then((response) => {
             if (response == "max_price" || response == "min_price") {
               helper.showDataErrorMsg(response);
             } else {
               console.log("done");
               let filtered = this.generalForm.products.filter(
-                m => m.id === this.selected_product.id
+                (m) => m.id === this.selected_product.id
               );
               console.log(filtered.length, "test");
               if (filtered.length < 1) {
@@ -442,21 +471,21 @@ export default {
                   price: this.price,
                   quantity: this.quantity,
                   serials: [],
-                  serial: []
+                  serial: [],
                 });
 
                 this.price = 0;
                 this.quantity = null;
                 this.selected_product = {
                   id: null,
-                  name: null
+                  name: null,
                 };
               }
             }
 
             // this.products = response;
           })
-          .catch(error => {
+          .catch((error) => {
             helper.showDataErrorMsg(error);
             helper.showErrorMsg(error);
 
@@ -494,11 +523,11 @@ export default {
             "/" +
             this.not_id
         )
-        .then(response => response.data)
-        .then(response => {
+        .then((response) => response.data)
+        .then((response) => {
           this.customer_account = response.customerAccount;
         })
-        .catch(error => {
+        .catch((error) => {
           helper.showDataErrorMsg(error);
           this.$router.push("/purchases_bill");
         });
@@ -506,8 +535,8 @@ export default {
     get() {
       axios
         .get("/api/purchases_bill/" + this.id)
-        .then(response => response.data)
-        .then(response => {
+        .then((response) => response.data)
+        .then((response) => {
           this.generalForm.branch_id = response.branch_id;
           this.generalForm.customer_id = response.customer_id;
           this.generalForm.date_at = response.date_at;
@@ -521,7 +550,7 @@ export default {
           this.selected_customer.name = response.customer.name;
           this.getCustomerAccount();
         })
-        .catch(error => {
+        .catch((error) => {
           helper.showDataErrorMsg(error);
           this.$router.push("/purchases_bill");
         });
@@ -529,14 +558,14 @@ export default {
     update() {
       this.generalForm
         .patch("/api/purchases_bill/" + this.id)
-        .then(response => {
+        .then((response) => {
           toastr.success(response.message);
           this.$router.push("/purchases_bill");
         })
-        .catch(error => {
+        .catch((error) => {
           helper.showErrorMsg(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>

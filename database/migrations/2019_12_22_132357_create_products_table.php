@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->string('max_price')->nullable();
             $table->string('parcode')->nullable();
             $table->string('img')->nullable();
+            $table->longText('image')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });

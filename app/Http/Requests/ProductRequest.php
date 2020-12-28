@@ -31,6 +31,7 @@ class ProductRequest extends FormRequest
             'min_price' => 'required|numeric',
             'max_price' => 'required|numeric',
             'parcode' => 'nullable',
+            'image' => 'nullable',
             'status' => 'required|in:0,1',
         ];
     }

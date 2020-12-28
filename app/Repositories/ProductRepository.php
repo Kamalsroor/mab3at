@@ -20,7 +20,7 @@ class ProductRepository
      */
     public function __construct(Product $product, PurchasesBill $PurchasesBill, SalesBill $SalesBill)
     {
-// rwar
+        // rwar
         $this->data = $product->with('Category', 'Group');
         $this->PurchasesBill = $PurchasesBill;
         $this->SalesBill = $SalesBill;
@@ -109,7 +109,6 @@ class ProductRepository
                         'srial' => $srial,
                     ];
                     $customerStatement->push($FoundFalse);
-
                 } else { // الجهاز غير مباع
                     $PurchasesBillProduct = $PurchasesBill->last()->PurchasesBillDetails()->whereHas('PurchasesBillDetailSrials', function ($q) use ($srial) {
                         $q->where('srialnumper', $srial);
@@ -250,6 +249,7 @@ class ProductRepository
             'max_price' => (isset($params['max_price']) && $params['max_price']) ? $params['max_price'] : null,
             'parcode' => (isset($params['parcode']) && $params['parcode']) ? $params['parcode'] : null,
             'status' => (isset($params['status']) && $params['status']) ? $params['status'] : null,
+            'image' => (isset($params['image']) && $params['image']) ? $params['image'] : null,
         ];
         // if ($action === 'create') {
         //     $formatted['user_id'] = \Auth::user()->id;

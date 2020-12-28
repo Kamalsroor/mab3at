@@ -105,6 +105,7 @@ class CategoryRepository
     {
         $formatted = [
             'name' => isset($params['name']) ? $params['name'] : null,
+            'is_serial' => isset($params['is_serial']) ? $params['is_serial'] : 0,
         ];
         // if ($action === 'create') {
         //     $formatted['user_id'] = \Auth::user()->id;
