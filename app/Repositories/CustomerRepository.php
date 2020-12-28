@@ -106,8 +106,9 @@ class CustomerRepository
     public function listType()
     {
         $type = [
-            ['id' => 'client', 'name' => 'عميل'],
-            ['id' => 'seller', 'name' => 'تاجر'],
+            ['id' => 'cargo', 'name' => 'شحن'],
+            ['id' => 'trade', 'name' => 'تجارة'],
+            ['id' => 'cargo&trade', 'name' => 'شحن & تحارة'],
         ];
         return $type;
     }

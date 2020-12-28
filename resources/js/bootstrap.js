@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import axios from "axios";
+import VueProgressBar from 'vue-progressbar'
+
 
 import Form from "./services/form";
 import helper from "./services/helper";
@@ -20,8 +22,21 @@ window._eachRight = require("lodash/eachRight");
 window._replace = require("lodash/replace");
 window._has = require("lodash/has");
 window._size = require("lodash/size");
+const options = {
+  color: '#27ae60',
+  failedColor: '#c0392b',
+  thickness: '10px',
+  transition: {
+    speed: '3s',
+    opacity: '1s',
+    termination: 900
+  },
+  autoRevert: true,
+  inverse: false
+}
 
 window.Vue = Vue;
+Vue.use(VueProgressBar, options)
 
 Vue.use(VueRouter);
 window.axios = axios;

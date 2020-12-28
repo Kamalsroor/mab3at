@@ -42,6 +42,8 @@
             </div>
         <div id="root">
             <router-view></router-view>
+            <vue-progress-bar></vue-progress-bar>
+
         </div>
  
         <script src="/js/lang"></script>

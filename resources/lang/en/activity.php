@@ -2,6 +2,7 @@
   'activity' => 'Activity',
   'activity_log' => 'Activity Log',
   'added' => ':activity added.',
+  'error' => ':activity error.',
   'assigned' => ':activity assigned.',
   'authentication' => 'Authentication',
   'avatar' => 'Avatar',

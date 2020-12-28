@@ -95,6 +95,7 @@ class ActivityLogRepository
             'sub_module'    => isset($params['sub_module']) ? $params['sub_module'] : null,
             'sub_module_id' => isset($params['sub_moduleId']) ? $params['sub_moduleId'] : null,
             'activity'      => isset($params['activity']) ? $params['activity'] : null,
+            'massage'      => isset($params['massage']) ? $params['massage'] : null,
             'ip'            => getClientIp(),
             'user_agent'    => \Request::header('User-Agent')
         ];

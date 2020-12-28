@@ -14,6 +14,7 @@ class ActivityLog extends Model
                             'module_id',
                             'sub_module_id',
                             'activity',
+                            'massage',
                             'ip'
                         ];
     protected $primaryKey = 'id';

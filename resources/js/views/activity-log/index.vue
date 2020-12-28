@@ -46,6 +46,7 @@
                                         <th>{{trans('activity.user')}}</th>
                                         <th>{{trans('activity.ip')}}</th>
                                         <th>{{trans('activity.user_agent')}}</th>
+                                        <th width="30%">{{trans('activity.massage')}}</th>
                                         <th>{{trans('activity.activity')}}</th>
                                         <th>{{trans('activity.date_time')}}</th>
                                         <th class="pull-right">{{trans('general.action')}}</th>
@@ -56,7 +57,10 @@
                                         <td v-text="activity_log.user.profile.first_name+' '+activity_log.user.profile.last_name"></td>
                                         <td v-text="activity_log.ip"></td>
                                         <td v-text="activity_log.user_agent"></td>
-                                        <td>{{trans('activity.'+activity_log.activity,{activity: trans('activity.'+activity_log.module)})}}</td>
+                                        <td
+                                            v-text="activity_log.massage"
+                                        ></td>
+                                        <td>{{trans('activity.'+activity_log.activity,{activity: trans(activity_log.module+'.'+activity_log.module)})}}</td>
                                         <td>{{activity_log.created_at | moment }}</td>
                                         <td class="pull-right">
                                             <div class="btn-group">

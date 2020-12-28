@@ -95,17 +95,25 @@ class Form {
      * @param {string} url
      */
     submit(requestType, url) {
+        $(".preloader").fadeIn(400);
+        // Progress.start()
         return new Promise((resolve, reject) => {
             axios[requestType](url, this.data())
                 .then(response => {
-                    if(response.data.type != 'error')
+                    if(response.data.type != 'error'){
+
                         this.onSuccess(response.data);
+                        // Progress.finish()
+                        $(".preloader").fadeOut(500);
+                    }
+
 
                     resolve(response.data);
                 })
                 .catch(error => {
                     this.onFail(error.response.data);
-
+                    // Progress.fail()
+                    $(".preloader").fadeOut(500);
                     reject(error.response.data);
                 });
         });

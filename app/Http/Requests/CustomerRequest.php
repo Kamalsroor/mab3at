@@ -28,7 +28,7 @@ class CustomerRequest extends FormRequest
             'name' => 'required',
             'address' => 'nullable',
             'email' => 'nullable|email',
-            'type' => 'required|in:client,seller',
+            'type' => 'required|in:cargo,trade,cargo&trade',
             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11|unique:customers,phone,' . $this->id,
             'telephone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:8|unique:customers,telephone,' . $this->id,
             'user_id' => 'required|exists:users,id',

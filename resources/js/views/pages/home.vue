@@ -94,6 +94,7 @@
                     <tr>
                       <th v-if="hasRole('admin')">{{trans('user.user')}}</th>
                       <th>{{trans('activity.activity')}}</th>
+                      <th>{{trans('activity.massage')}}</th>
                       <th class="table-option">{{trans('activity.date_time')}}</th>
                     </tr>
                   </thead>
@@ -104,6 +105,9 @@
                         v-text="activity_log.user.profile.first_name+' '+activity_log.user.profile.last_name"
                       ></td>
                       <td>{{trans('activity.'+activity_log.activity,{activity: trans(activity_log.module+'.'+activity_log.module)})}}</td>
+                      <td
+                        v-text="activity_log.massage"
+                      ></td>
                       <td class="table-option">{{activity_log.created_at | momentDateTime }}</td>
                     </tr>
                   </tbody>

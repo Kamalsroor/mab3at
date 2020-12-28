@@ -23,6 +23,7 @@ class CreateActivityLogsTable extends Migration
             $table->string('sub_module')->nullable();
             $table->string('sub_module_id',5)->nullable();
             $table->text('activity')->nullable();
+            $table->text('massage')->nullable();
             $table->ipAddress('ip');
             $table->timestamps();
         });

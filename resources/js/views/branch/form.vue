@@ -75,12 +75,17 @@
         mounted() {
             if(this.id)
                 this.get();
+                this.$Progress.start()
+
             axios.get('/api/branch/pre-requisite')
                 .then(response => response.data)
                 .then(response => {
                     this.users = response;
+                    this.$Progress.finish()
+
                 })
                 .catch(error => {
+                    this.$Progress.fail()
                     helper.showDataErrorMsg(error);
                 });
         },
@@ -92,13 +97,19 @@
                     this.store ();
             },
             store(){
+                this.$Progress.start()
                 this.generalForm.post('/api/branch')
                     .then(response => {
                         toastr.success(response.message);
                         this.$emit('completed')
+                        this.$Progress.finish()
+
                     })
                     .catch(error => {
+                        console.log(error);
                         helper.showErrorMsg(error);
+                        this.$Progress.fail()
+
                     });
             },
             get(){
@@ -119,13 +130,16 @@
                     });
             },
             update(){
+                this.$Progress.start()
                 this.generalForm.patch('/api/branch/'+this.id)
                     .then(response => {
                         toastr.success(response.message);
+                        this.$Progress.finish()
                         this.$router.push('/branch');
                     })
                     .catch(error => {
                         helper.showErrorMsg(error);
+                        this.$Progress.fail()
                     });
             }
         }
