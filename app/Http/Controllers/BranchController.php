@@ -170,15 +170,26 @@ class BranchController extends Controller
      */
     public function destroy($id)
     {
-        $branch = $this->repo->findOrFail($id);
 
-        $this->activity->record([
-            'module' => $this->module,
-            'module_id' => $branch->id,
-            'activity' => 'deleted',
-        ]);
 
-        $this->repo->delete($branch);
+        try {
+
+            $branch = $this->repo->findOrFail($id);
+
+            $this->activity->record([
+                'module' => $this->module,
+                'module_id' => $branch->id,
+                'activity' => 'deleted',
+            ]);
+            $this->repo->delete($branch);
+        } catch (\Exception $e) {
+            $this->activity->record([
+                'module' => $this->module,
+                'massage' => $e->getMessage(),
+                'activity' => 'error',
+            ]);
+            return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
+        }
 
         return $this->success(['message' => trans('todo.deleted')]);
     }

@@ -41,7 +41,11 @@ class BranchRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => trans('todo.title'),
+            'name' => trans('branch.name'),
+            'address' => trans('branch.address'),
+            'phone' => trans('branch.phone'),
+            'telephone' => trans('branch.telephone'),
+            'user_id' => trans('branch.user'),
         ];
     }
 }

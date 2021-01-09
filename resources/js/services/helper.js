@@ -61,10 +61,27 @@ export default {
 
     // to set notification position
     notification(){
-        var notificationPosition = this.getConfig('notification_position') || 'toast-top-right';
+         var notificationPosition = this.getConfig("notification_position") || "toast-top-right";
         toastr.options = {
-            "positionClass": notificationPosition
+            "positionClass": notificationPosition,
+            "closeButton": true,
+            "progressBar": true,
         };
+
+//   "debug": false,
+//   "newestOnTop": false,
+//   "positionClass": "toast-top-right",
+//   "preventDuplicates": true,
+//   "onclick": null,
+//   "showDuration": "300",
+//   "hideDuration": "1000",
+//   "timeOut": "5000",
+//   "extendedTimeOut": "1000",
+//   "showEasing": "swing",
+//   "hideEasing": "linear",
+//   "showMethod": "fadeIn",
+//             "hideMethod": "fadeOut"
+        
         this.setLastActivity();
 
         $('[data-toastr]').on('click',function(){
@@ -292,24 +309,37 @@ export default {
     // shows toastr notification for axios form request
     showErrorMsg(error){
         this.setLastActivity();
+            console.log(error);
 
-        if(error.hasOwnProperty("error")){
+        if (error.hasOwnProperty("error")) {
 
             if (error.error.indexOf(' ') >= 0)
                 toastr.error(error.error);
             else
                 toastr.error(i18n.general[error.error]);
 
-            if(error.error === 'token_expired')
+            if (error.error === 'token_expired')
                 router.push('/login');
-        } else if(error.hasOwnProperty("response") && error.response.status == 403) {
+        } else if (error.hasOwnProperty("response") && error.response.status == 403) {
             toastr.error(i18n.general.permission_denied);
-        } else if(error.hasOwnProperty("response") && error.response.status == 422 && error.response.data.hasOwnProperty("error")) {
+        } else if (error.hasOwnProperty("response") && error.response.status == 422 && error.response.data.hasOwnProperty("error")) {
             toastr.error(error.response.data.error);
-        } else if(error.hasOwnProperty("response") && error.response.status == 404) {
+        } else if (error.hasOwnProperty("response") && error.response.status == 404) {
             toastr.error(i18n.general.invalid_link);
-        } else if(error.errors.hasOwnProperty("message"))
+        } else if (error.errors.hasOwnProperty("message")) {
             toastr.error(error.errors.message[0]);
+        } else if (error.hasOwnProperty("errors") ) { 
+            // toastr.error(error.message);
+            const errors = error.errors;
+            Object.entries(errors).forEach((entry) => {
+            const [key, value] = entry;
+            for (let i = 0; i < value.length; i++) {
+                toastr.error(value[i]);
+            }
+            });
+
+        }
+        
     },
 
     // returns error message for axios form request

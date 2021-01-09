@@ -55,6 +55,7 @@ class Handler extends ExceptionHandler
         if ($exception instanceof FileNotFoundException) {
             return response()->view('errors.file-not-found', compact('exception'), 500);
         }
+
         return parent::render($request, $exception);
     }
 }

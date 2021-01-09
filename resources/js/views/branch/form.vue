@@ -3,21 +3,21 @@
         <div class="row">
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('branch.name')}}</label>
+                    <label for="">{{trans('branch.name')}}*</label>
                     <input class="form-control" type="text" value="" v-model="generalForm.name" name="name" :placeholder="trans('branch.name')">
                     <show-error :form-name="generalForm" prop-name="name"></show-error>
                 </div>
             </div>
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('branch.address')}}</label>
+                    <label for="">{{trans('branch.address')}}*</label>
                     <input class="form-control" type="text" value="" v-model="generalForm.address" name="address" :placeholder="trans('branch.address')">
                     <show-error :form-name="generalForm" prop-name="address"></show-error>
                 </div>
             </div>
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('branch.phone')}}</label>
+                    <label for="">{{trans('branch.phone')}}*</label>
                     <input class="form-control" type="text" value="" v-model="generalForm.phone" name="phone" :placeholder="trans('branch.phone')">
                     <show-error :form-name="generalForm" prop-name="phone"></show-error>
                 </div>
@@ -31,7 +31,7 @@
             </div>
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('branch.user')}}</label>
+                    <label for="">{{trans('branch.user')}}*</label>
                     <v-select label="name" v-model="selected_user" name="user_id" id="user_id" :options="users" :placeholder="trans('branch.select_user')" @select="generalForm.errors.clear('user_id')" @close="generalForm.user_id = selected_user.id" @remove="generalForm.user_id = ''"></v-select>
                     <show-error :form-name="generalForm" prop-name="user_id"></show-error>
                 </div>

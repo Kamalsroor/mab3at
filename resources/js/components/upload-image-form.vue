@@ -49,9 +49,10 @@ export default {
     id: {
       default: "",
     },
-    name: {
+    uploadPath: {
       required: true,
     },
+
     imageSource: {
       default: "",
     },
@@ -86,55 +87,11 @@ export default {
       this.source = "";
       $("#" + this.id).val("");
     },
-    uploadImage() {
-      let data = new FormData();
-      data.append("image", $("#" + this.id)[0].files[0]);
-      axios
-        .post("/api" + this.uploadPath, data)
-        .then((response) => response.data)
-        .then((response) => {
-          toastr.success(response.message);
-          this.source = "";
-          $("#" + this.id).val("");
-          this.uploaded = response.image;
-          this.$emit("uploaded", response.image);
-        })
-        .catch((error) => {
-          if (error.response.status == 422) {
-            toastr.error(error.response.data.error);
-            this.cancelUploadImage();
-          } else if (
-            error.response.status == 413 ||
-            error.response.status == 500
-          ) {
-            toastr.error(i18n.general.file_too_large);
-            this.cancelUploadImage();
-          } else helper.showDataErrorMsg(error);
-        });
-    },
+
     confirmRemove(imageSource) {
       return (dialog) => this.removeImage();
     },
-    removeImage() {
-      axios
-        .delete("/api" + this.removePath)
-        .then((response) => response.data)
-        .then((response) => {
-          toastr.success(response.message);
-          this.isRemoved = true;
-          this.uploaded = "";
-          this.$emit("removed", "");
-        })
-        .catch((error) => {
-          if (error.response.status == 422) {
-            toastr.error(error.response.data.error);
-            this.cancelUploadImage();
-          } else {
-            helper.showDataErrorMsg(error);
-          }
-        });
-    },
-  },
+
   computed: {
     defaultImage() {
       return (this.imageSource && !this.isRemoved) || this.uploaded
