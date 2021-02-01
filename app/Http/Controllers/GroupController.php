@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Group;
 use App\Http\Requests\GroupRequest;
 use App\Repositories\ActivityLogRepository;
 use App\Repositories\GroupRepository;
@@ -28,61 +29,65 @@ class GroupController extends Controller
         $this->repo = $repo;
         $this->activity = $activity;
         $this->user = $user;
-        
+        $this->middleware('permission:access-group');
+
     }
 
     /**
-     * Used to get Pre Requisite for branch Module
-     * @get ("/api/branch/pre-requisite")
+     * Used to get Pre Requisite for group Module
+     * @get ("/api/group/pre-requisite")
      * @return Response
      */
     public function preRequisite()
     {
-        $user = generateSelectOption($this->user->listByName());
-        // $newCollection = collect($this->repo->listType())->pluck('id', 'name');
-        $type = generateSelectOption(collect($this->repo->listType())->pluck('name', 'id'));
-
-        return $this->success(compact('user', 'type'));
-
+        return $this->success();
+        // return $this->ok($user);
     }
 
     /**
-     * Used to get all Branch
-     * @get ("/api/branch")
+     * Used to get all Group
+     * @get ("/api/group")
      * @return Response
      */
     public function index()
     {
-        // dd($this->repo->paginate($this->request->all());
-
         return $this->ok($this->repo->paginate($this->request->all()));
     }
 
+
     /**
-     * Used to store branch
-     * @post ("/api/branch")
+     * Used to store group
+     * @post ("/api/group")
      * @param ({
-     *      @Parameter("name", type="string", required="true", description="Name of branch"),
+     *      @Parameter("name", type="string", required="true", description="Name of group"),
      *      @Parameter("date", type="date", required="true", description="Due date of Todo"),
      * })
      * @return Response
      */
     public function store(GroupRequest $request)
     {
-        $data = $this->repo->create($this->request->all());
+        try {
+            $group = $this->repo->create($this->request->all());
+            $this->activity->record([
+                'module' => $this->module,
+                'module_id' => $group->id,
+                'activity' => 'added',
+            ]);
+        } catch (\Exception $e) {
+            $this->activity->record([
+                'module' => $this->module,
+                'massage' => $e->getMessage(),
+                'activity' => 'error',
+            ]);
+            return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
+        }
 
-        $this->activity->record([
-            'module' => $this->module,
-            'module_id' => $data->id,
-            'activity' => 'added',
-        ]);
-
-        return $this->success(['message' => trans('todo.added')]);
+        return $this->success(['message' => trans('app.added')]);
     }
 
     /**
-     * Used to get Branch detail
-     * @get ("/api/branch/{id}")
+     * Used to get Group detail
+     * @get ("/api/group/{id}")
      * @param ({
      *      @Parameter("id", type="integer", required="true", description="Id of Todo"),
      * })
@@ -90,15 +95,13 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $data = $this->repo->findOrFail($id);
-        // dd($data);
-
-        return $this->ok($data);
+        $group = $this->repo->findOrFail($id);
+        return $this->ok($group);
     }
 
     /**
-     * Used to update Branch
-     * @patch ("/api/branch/{id}")
+     * Used to update Group
+     * @patch ("/api/group/{id}")
      * @param ({
      *      @Parameter("id", type="integer", required="true", description="Id of Todo"),
      *      @Parameter("title", type="string", required="true", description="Title of Todo"),
@@ -108,38 +111,60 @@ class GroupController extends Controller
      */
     public function update($id, GroupRequest $request)
     {
+        try {
 
-        $data = $this->repo->find($id);
-        $data = $this->repo->update($data, $this->request->all());
+            $group = $this->repo->findOrFail($id);
+            $group = $this->repo->update($group, $this->request->all());
+            $this->activity->record([
+                'module' => $this->module,
+                'module_id' => $group->id,
+                'activity' => 'updated',
+            ]);
+        } catch (\Exception $e) {
+            $this->activity->record([
+                'module' => $this->module,
+                'massage' => $e->getMessage(),
+                'activity' => 'error',
+            ]);
+            return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
+        }
 
-        $this->activity->record([
-            'module' => $this->module,
-            'module_id' => $data->id,
-            'activity' => 'updated',
-        ]);
-        return $this->success(['message' => trans('todo.updated')]);
+
+        return $this->success(['message' => trans('app.updated')]);
     }
 
     /**
-     * Used to delete Branch
-     * @delete ("/api/branch/{id}")
+     * Used to delete Group
+     * @delete ("/api/group/{id}")
      * @param ({
      *      @Parameter("id", type="integer", required="true", description="Id of Todo"),
      * })
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id , Request $request)
     {
-        $data = $this->repo->findOrFail($id);
+        try {
+            $cheackPassword = checkPassword($request->password);
+            if(is_object($cheackPassword)){
+                return $cheackPassword ;
+            }
+            $group = $this->repo->findOrFail($id);
 
-        $this->activity->record([
-            'module' => $this->module,
-            'module_id' => $data->id,
-            'activity' => 'deleted',
-        ]);
+            $this->activity->record([
+                'module' => $this->module,
+                'module_id' => $group->id,
+                'activity' => 'deleted',
+            ]);
+            $this->repo->delete($group);
+        } catch (\Exception $e) {
+            $this->activity->record([
+                'module' => $this->module,
+                'massage' => $e->getMessage(),
+                'activity' => 'error',
+            ]);
+            return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
+        }
 
-        $this->repo->delete($data);
-
-        return $this->success(['message' => trans('todo.deleted')]);
+        return $this->success(['message' => trans('app.deleted')]);
     }
 }

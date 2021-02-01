@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
 use App\Http\Requests\CustomerRequest;
 use App\Repositories\ActivityLogRepository;
 use App\Repositories\CustomerRepository;
@@ -28,97 +29,66 @@ class CustomerController extends Controller
         $this->repo = $repo;
         $this->activity = $activity;
         $this->user = $user;
-        
+        $this->middleware('permission:access-customer');
+
     }
 
     /**
-     * Used to get Pre Requisite for branch Module
-     * @get ("/api/branch/pre-requisite")
+     * Used to get Pre Requisite for customer Module
+     * @get ("/api/customer/pre-requisite")
      * @return Response
      */
     public function preRequisite()
     {
-        $user = generateSelectOption($this->user->listByName());
-        // $newCollection = collect($this->repo->listType())->pluck('id', 'name');
         $type = generateSelectOption(collect($this->repo->listType())->pluck('name', 'id'));
-
-        return $this->success(compact('user', 'type'));
+        return $this->success(compact( 'type'));
+        // return $this->ok($user);
     }
 
     /**
-     * Used to get Pre Requisite for branch Module
-     * @get ("/api/branch/pre-requisite")
-     * @return Response
-     */
-    public function getCustomerAccount($customer_id, $amount = 0)
-    {
-        // if ($not_id != 0){
-        //     $not_id = $not_id;
-        // }
-        $customerAccount = $this->repo->getCustomerAccount($customer_id, $amount);
-        return $this->success(compact('customerAccount'));
-    }
-
-    /**
-     * Used to get all Branch
-     * @get ("/api/branch")
-     * @return Response
-     */
-    public function getStatement()
-    {
-        // dd($this->repo->paginate($this->request->all());
-        return $this->ok($this->repo->getStatement());
-    }
-
-    /**
-     * Used to get all Branch
-     * @get ("/api/branch")
-     * @return Response
-     */
-    public function getStatementByCustomer($id , Request $request)
-    {
-        // dd($this->repo->paginate($this->request->all());
-        return $this->ok($this->repo->getStatementByCustomer($id , $request));
-    }
-
-    /**
-     * Used to get all Branch
-     * @get ("/api/branch")
+     * Used to get all Customer
+     * @get ("/api/customer")
      * @return Response
      */
     public function index()
     {
-        // dd($this->repo->paginate($this->request->all());
-
         return $this->ok($this->repo->paginate($this->request->all()));
     }
 
+
     /**
-     * Used to store branch
-     * @post ("/api/branch")
+     * Used to store customer
+     * @post ("/api/customer")
      * @param ({
-     *      @Parameter("name", type="string", required="true", description="Name of branch"),
+     *      @Parameter("name", type="string", required="true", description="Name of customer"),
      *      @Parameter("date", type="date", required="true", description="Due date of Todo"),
      * })
      * @return Response
      */
     public function store(CustomerRequest $request)
     {
+        try {
+            $customer = $this->repo->create($this->request->all());
+            $this->activity->record([
+                'module' => $this->module,
+                'module_id' => $customer->id,
+                'activity' => 'added',
+            ]);
+        } catch (\Exception $e) {
+            $this->activity->record([
+                'module' => $this->module,
+                'massage' => $e->getMessage(),
+                'activity' => 'error',
+            ]);
+            return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
+        }
 
-        $data = $this->repo->create($this->request->all());
-
-        $this->activity->record([
-            'module' => $this->module,
-            'module_id' => $data->id,
-            'activity' => 'added',
-        ]);
-
-        return $this->success(['message' => trans('todo.added')]);
+        return $this->success(['message' => trans('app.added')]);
     }
 
     /**
-     * Used to get Branch detail
-     * @get ("/api/branch/{id}")
+     * Used to get Customer detail
+     * @get ("/api/customer/{id}")
      * @param ({
      *      @Parameter("id", type="integer", required="true", description="Id of Todo"),
      * })
@@ -126,15 +96,15 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        $data = $this->repo->findOrFail($id);
-        // dd($data);
-
-        return $this->ok($data);
+        $customer = $this->repo->findOrFail($id);
+        // dd( , $customer->type);
+        $customer->type_name = collect($this->repo->listType())->pluck('name', 'id')->toArray()[$customer->type];
+        return $this->ok($customer);
     }
 
     /**
-     * Used to update Branch
-     * @patch ("/api/branch/{id}")
+     * Used to update Customer
+     * @patch ("/api/customer/{id}")
      * @param ({
      *      @Parameter("id", type="integer", required="true", description="Id of Todo"),
      *      @Parameter("title", type="string", required="true", description="Title of Todo"),
@@ -144,38 +114,60 @@ class CustomerController extends Controller
      */
     public function update($id, CustomerRequest $request)
     {
+        try {
 
-        $data = $this->repo->find($id);
-        $data = $this->repo->update($data, $this->request->all());
+            $customer = $this->repo->findOrFail($id);
+            $customer = $this->repo->update($customer, $this->request->all());
+            $this->activity->record([
+                'module' => $this->module,
+                'module_id' => $customer->id,
+                'activity' => 'updated',
+            ]);
+        } catch (\Exception $e) {
+            $this->activity->record([
+                'module' => $this->module,
+                'massage' => $e->getMessage(),
+                'activity' => 'error',
+            ]);
+            return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
+        }
 
-        $this->activity->record([
-            'module' => $this->module,
-            'module_id' => $data->id,
-            'activity' => 'updated',
-        ]);
-        return $this->success(['message' => trans('todo.updated')]);
+
+        return $this->success(['message' => trans('app.updated')]);
     }
 
     /**
-     * Used to delete Branch
-     * @delete ("/api/branch/{id}")
+     * Used to delete Customer
+     * @delete ("/api/customer/{id}")
      * @param ({
      *      @Parameter("id", type="integer", required="true", description="Id of Todo"),
      * })
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id , Request $request)
     {
-        $data = $this->repo->findOrFail($id);
+        try {
+            $cheackPassword = checkPassword($request->password);
+            if(is_object($cheackPassword)){
+                return $cheackPassword ;
+            }
+            $customer = $this->repo->findOrFail($id);
 
-        $this->activity->record([
-            'module' => $this->module,
-            'module_id' => $data->id,
-            'activity' => 'deleted',
-        ]);
+            $this->activity->record([
+                'module' => $this->module,
+                'module_id' => $customer->id,
+                'activity' => 'deleted',
+            ]);
+            $this->repo->delete($customer);
+        } catch (\Exception $e) {
+            $this->activity->record([
+                'module' => $this->module,
+                'massage' => $e->getMessage(),
+                'activity' => 'error',
+            ]);
+            return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
+        }
 
-        $this->repo->delete($data);
-
-        return $this->success(['message' => trans('todo.deleted')]);
+        return $this->success(['message' => trans('app.deleted')]);
     }
 }

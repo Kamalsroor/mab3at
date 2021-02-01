@@ -6,37 +6,38 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
-    //
-    protected $fillable = ['name', 'address', 'phone', 'telephone', 'user_id', 'email', 'type'];
+    protected $fillable = ['name', 'address', 'phone', 'telephone', 'email', 'type'];
     protected $primaryKey = 'id';
     protected $table = 'customers';
 
-    public function user()
+
+
+    public function scopeCreatedAtDateBetween($q, $dates)
     {
-        return $this->belongsTo('App\User', 'user_id');
-    }
-    public function DebentureCashings()
-    {
-        return $this->hasMany('App\DebentureCashing', 'customer_id');
+        if ((! $dates['start_date'] || ! $dates['end_date']) && $dates['start_date'] <= $dates['end_date']) {
+            return $q;
+        }
+        return $q->where('created_at', '>=', getStartOfDate($dates['start_date']))->where('created_at', '<=', getEndOfDate($dates['end_date']));
     }
 
-    public function DebentureDeposits()
+    public function scopeFilterByname($q, $name = null)
     {
-        return $this->hasMany('App\DebenturesDeposit', 'customer_id');
+        if (! $name) {
+            return $q;
+        }
+
+        return $q->where('name', 'like', '%'.$name.'%');
+    }
+    
+    public function scopeFilterByAddress($q, $address = null)
+    {
+        if (! $address) {
+            return $q;
+        }
+
+        return $q->where('address', 'like', '%'.$address.'%');
     }
 
-    public function SalesBill()
-    {
-        return $this->hasMany('App\SalesBill', 'customer_id');
-    }
-    public function AccountAdjustment()
-    {
-        return $this->hasMany('App\AccountAdjustment', 'customer_id');
-    }
 
     
-    public function PurchasesBill()
-    {
-        return $this->hasMany('App\PurchasesBill', 'customer_id');
-    }
 }

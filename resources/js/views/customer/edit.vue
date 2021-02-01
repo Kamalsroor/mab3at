@@ -2,7 +2,7 @@
     <div>
         <div class="page-titles p-3 border-bottom">
             <h3 class="text-themecolor">{{trans('todo.edit_todo')}}
-                <button class="btn btn-info btn-sm pull-right" @click="$router.push('/customer')"><i class="fas fa-check-circle"></i> <span class="d-none d-sm-inline">{{trans('todo.todo')}}</span></button>
+                <button class="btn btn-info btn-sm pull-left" @click="$router.push('/customer')"><i class="fas fa-check-circle"></i> <span class="d-none d-sm-inline">{{trans('customer.all_customer')}}</span></button>
             </h3>
         </div>
         <div class="container-fluid p-0">
@@ -31,10 +31,10 @@
             }
         },
         mounted(){
-            // if(!helper.hasPermission('access-todo')){
-            //     helper.notAccessibleMsg();
-            //     this.$router.push('/home');
-            // }
+            if(!helper.hasPermission('edit-customer')){
+                helper.notAccessibleMsg();
+                this.$router.push('/home');
+            }
 
             // if(!helper.featureAvailable('todo')){
             //     helper.featureNotAvailableMsg();

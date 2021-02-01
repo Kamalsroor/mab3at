@@ -16,6 +16,11 @@ import showTip from "./components/show-tip";
 import paginationRecord from "./components/pagination-record";
 import showError from "./components/show-error";
 import moduleInfo from "./components/module-info";
+import VuePageTransition from 'vue-page-transition'
+import VueConfirmDialog from "vue-confirm-dialog";
+
+
+
 
 window._get = require("lodash/get");
 window._eachRight = require("lodash/eachRight");
@@ -37,6 +42,8 @@ const options = {
 
 window.Vue = Vue;
 Vue.use(VueProgressBar, options)
+Vue.use(VuePageTransition)
+Vue.use(VueConfirmDialog);
 
 Vue.use(VueRouter);
 window.axios = axios;
@@ -56,7 +63,23 @@ Vue.prototype.$last = function(item, list) {
 
 Vue.use(VTooltip);
 
-Vue.use(VuejsDialog);
+
+let VuejsDialogOption = {
+  loader: false, // set to true if you want the dailog to show a loader after click on "proceed"
+  reverse: false, // switch the button positions (left to right, and vise versa)
+  okText: 'اكمل',
+  cancelText: 'اغلاق',
+  animation: 'bounce',
+  // animation: 'zoom', // Available: "zoom", "bounce", "fade"
+  type: 'basic', // coming soon: 'soft', 'hard'
+  verification: 'continue', // for hard confirm, user will be prompted to type this to enable the proceed button
+  verificationHelp: 'Type "[+:verification]" below to confirm', // Verification help text. [+:verification] will be matched with 'options.verification' (i.e 'Type "continue" below to confirm')
+  clicksCount: 3, // for soft confirm, user will be asked to click on "proceed" btn 3 times before actually proceeding
+  backdropClose: true, // set to true to close the dialog when clicking outside of the dialog window, i.e. click landing on the mask
+  customClass: '' // Custom class to be injected into the parent node for the current dialog instance
+};
+
+Vue.use(VuejsDialog,VuejsDialogOption);
 Vue.use(Loading);
 Vue.component("show-tip", showTip);
 Vue.component("pagination-record", paginationRecord);

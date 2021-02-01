@@ -29,7 +29,7 @@ class BranchController extends Controller
         $this->repo = $repo;
         $this->activity = $activity;
         $this->user = $user;
-        // $this->middleware('permission:access-branch');
+        $this->middleware('permission:access-branch');
 
     }
 
@@ -52,32 +52,9 @@ class BranchController extends Controller
      */
     public function index()
     {
-        // dd($this->repo->paginate($this->request->all());
-
         return $this->ok($this->repo->paginate($this->request->all()));
     }
 
-    /**
-     * Used to get all Branch
-     * @get ("/api/branch")
-     * @return Response
-     */
-    public function Stock()
-    {
-        // dd($this->repo->paginate($this->request->all());
-        return $this->ok($this->repo->getStock());
-    }
-
-    /**
-     * Used to get all Branch
-     * @get ("/api/branch")
-     * @return Response
-     */
-    public function getStockByBranch($id)
-    {
-        // dd($this->repo->paginate($this->request->all());
-        return $this->ok($this->repo->getStockByBranch($id));
-    }
 
     /**
      * Used to store branch
@@ -91,7 +68,6 @@ class BranchController extends Controller
     public function store(BranchRequest $request)
     {
         try {
-
             $branch = $this->repo->create($this->request->all());
             $this->activity->record([
                 'module' => $this->module,
@@ -107,7 +83,7 @@ class BranchController extends Controller
             return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
         }
 
-        return $this->success(['message' => trans('todo.added')]);
+        return $this->success(['message' => trans('app.added')]);
     }
 
     /**
@@ -121,8 +97,6 @@ class BranchController extends Controller
     public function show($id)
     {
         $branch = $this->repo->findOrFail($id);
-        // dd($branch);
-
         return $this->ok($branch);
     }
 
@@ -157,7 +131,7 @@ class BranchController extends Controller
         }
 
 
-        return $this->success(['message' => trans('todo.updated')]);
+        return $this->success(['message' => trans('app.updated')]);
     }
 
     /**
@@ -168,12 +142,13 @@ class BranchController extends Controller
      * })
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id , Request $request)
     {
-
-
         try {
-
+            $cheackPassword = checkPassword($request->password);
+            if(is_object($cheackPassword)){
+                return $cheackPassword ;
+            }
             $branch = $this->repo->findOrFail($id);
 
             $this->activity->record([
@@ -191,6 +166,6 @@ class BranchController extends Controller
             return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
         }
 
-        return $this->success(['message' => trans('todo.deleted')]);
+        return $this->success(['message' => trans('app.deleted')]);
     }
 }

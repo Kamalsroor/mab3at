@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RolesTableSeeder extends Seeder
 {
@@ -13,27 +15,109 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
         
+        \DB::table('permissions')->delete();
+
+        \DB::table('permissions')->insert([
+            [
+                'name' => 'access-configuration',
+                'label' => 'التحكم بالاعدادات',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'access-user',
+                'label' => 'التحكم بالاعضاء',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'create-user',
+                'label' => 'اضافة اعضاء',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'edit-user',
+                'label' => 'تعديل اعضاء',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'delete-user',
+                'label' => 'حذف اعضاء',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'access-branch',
+                'label' => 'التحكم بالفروع',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'create-branch',
+                'label' => 'اضافة الفروع',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'edit-branch',
+                'label' => 'تعديل الفروع',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'delete-branch',
+                'label' => 'حذف الفروع',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'access-customer',
+                'label' => 'التحكم بالعملاء',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'create-customer',
+                'label' => 'اضافة العملاء',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'edit-customer',
+                'label' => 'تعديل العملاء',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'delete-customer',
+                'label' => 'حذف العملاء',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'access-group',
+                'label' => 'التحكم بالمجموعات',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'create-group',
+                'label' => 'اضافة المجموعات',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'edit-group',
+                'label' => 'تعديل المجموعات',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'delete-group',
+                'label' => 'حذف المجموعات',
+                'guard_name' => 'api',
+            ],
+        ]);
+
 
         \DB::table('roles')->delete();
-        
-        \DB::table('roles')->insert(array (
-            0 => 
-            array (
-                'id' => 1,
-                'name' => 'admin',
+        \DB::table('roles')->insert([
+            [
+                'name' => 'الاداره',
                 'guard_name' => 'api',
-                'created_at' => '2018-05-03 05:06:06',
-                'updated_at' => '2018-05-03 05:06:06',
-            ),
-            1 => 
-            array (
-                'id' => 2,
+            ],
+            [
                 'name' => 'user',
                 'guard_name' => 'api',
-                'created_at' => '2018-05-03 05:06:06',
-                'updated_at' => '2018-05-03 05:06:06',
-            ),
-        ));
+            ],
+        ]);
+        $Role = Role::find(1)->syncPermissions(permission::all()->pluck('name')->all());
         
         
     }

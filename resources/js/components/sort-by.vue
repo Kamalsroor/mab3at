@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown">
-      <button type="button" style="margin-top:-5px;" class="btn btn-info btn-sm" href="#" role="button" id="sortByLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button type="button" style="margin:0px 10px;" class="btn btn-info btn-sm" href="#" role="button" id="sortByLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-sort-alpha-down"></i> <span class="d-none d-sm-inline">{{trans('general.sort_by')}}</span>
       </button>
       <div :class="['dropdown-menu',getConfig('direction') == 'ltr' ? 'dropdown-menu-right' : '']" aria-labelledby="sortByLink">

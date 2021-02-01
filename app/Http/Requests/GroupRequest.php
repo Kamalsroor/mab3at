@@ -25,7 +25,8 @@ class GroupRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:groups,name,' . $this->id,
+            'name' => 'required',
+          
         ];
     }
 
@@ -37,7 +38,8 @@ class GroupRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => trans('todo.title'),
+            'name' => trans('group.name'),
+            
         ];
     }
 }

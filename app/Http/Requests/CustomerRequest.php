@@ -31,7 +31,7 @@ class CustomerRequest extends FormRequest
             'type' => 'required|in:cargo,trade,cargo&trade',
             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11|unique:customers,phone,' . $this->id,
             'telephone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:8|unique:customers,telephone,' . $this->id,
-            'user_id' => 'required|exists:users,id',
+            // 'user_id' => 'required|exists:users,id',
         ];
     }
 
@@ -43,7 +43,13 @@ class CustomerRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => trans('todo.title'),
+            'name' => trans('customer.name'),
+            'address' => trans('customer.address'),
+            'phone' => trans('customer.phone'),
+            'telephone' => trans('customer.telephone'),
+            // 'user_id' => trans('customer.user'),
+            'type' => trans('customer.type'),
+            'email' => trans('customer.email'),
         ];
     }
 }

@@ -10,7 +10,7 @@
         <span class="card-subtitle" v-else>{{trans('general.no_result_found')}}</span>
 
         <sort-by
-          class="pull-right"
+          class="pull-left"
           :order-by-options="orderByOptions"
           :sort-by="filterTodoForm.sort_by"
           :order="filterTodoForm.order"
@@ -18,7 +18,7 @@
           @updateOrder="value => {filterTodoForm.order = value}"
         ></sort-by>
         <button
-          class="btn btn-info btn-sm pull-right m-r-10"
+          class="btn btn-info btn-sm pull-left m-r-10"
           v-if="!showFilterPanel"
           @click="showFilterPanel = !showFilterPanel"
         >
@@ -26,8 +26,8 @@
           <span class="d-none d-sm-inline">{{trans('general.filter')}}</span>
         </button>
         <button
-          class="btn btn-info btn-sm pull-right m-r-10"
-          v-if="branches.total && !showCreatePanel"
+          class="btn btn-info btn-sm pull-left m-r-10"
+          v-if="branches.total && !showCreatePanel && hasPermission('create-branch')"
           @click="showCreatePanel = !showCreatePanel"
         >
           <i class="fas fa-plus"></i>
@@ -52,18 +52,26 @@
               <div class="card-body p-4">
                 <h4 class="card-title">{{trans('general.filter')}}</h4>
                 <div class="row">
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label for>{{trans('todo.keyword')}}</label>
-                      <input class="form-control" name="keyword" v-model="filterTodoForm.keyword" />
-                    </div>
+    
+
+                  <div class="col-6 col-sm-3">
+                      <div class="form-group">
+                          <label for="">{{trans('branch.name')}}</label>
+                          <input class="form-control" name="name" v-model="filterTodoForm.name">
+                      </div>
                   </div>
-                  <div class="col-6">
+                  <div class="col-6 col-sm-3">
+                      <div class="form-group">
+                          <label for="">{{trans('branch.address')}}</label>
+                          <input class="form-control" name="address" v-model="filterTodoForm.address">
+                      </div>
+                  </div>
+                  <!-- <div class="col-6">
                     <div class="form-group">
                       <switches v-model="filterTodoForm.status" theme="bootstrap" color="success"></switches>
                       {{trans('todo.show_completed')}}
                     </div>
-                  </div>
+                  </div> -->
                   <div class="col-12">
                     <div class="form-group">
                       <date-range-picker
@@ -76,7 +84,7 @@
                 </div>
                 <button
                   class="btn btn-danger btn-sm pull-right"
-                  v-if="showFilterPanel"
+                  v-if="showFilterPanel "
                   @click="showFilterPanel = !showFilterPanel"
                 >{{trans('general.cancel')}}</button>
               </div>
@@ -93,6 +101,7 @@
                       <th>{{trans('branch.phone')}}</th>
                       <th>{{trans('branch.telephone')}}</th>
                       <th>{{trans('branch.user')}}</th>
+                      <th>{{trans('branch.created_at')}}</th>
                       <th class="table-option">{{trans('general.action')}}</th>
                     </tr>
                   </thead>
@@ -103,21 +112,30 @@
                       <td v-text="branch.phone"></td>
                       <td v-text="branch.telephone"></td>
                       <td v-text="branch.user.profile.first_name+' '+branch.user.profile.last_name"></td>
+                      <td v-text="branch.created_at"></td>
                       <td class="table-option">
                         <div class="btn-group">
                           <button
                             class="btn btn-info btn-sm"
                             v-tooltip="trans('general.edit')"
+                            v-if="hasPermission('edit-branch')"
                             @click.prevent="edit(branch)"
                           >
+                          
                             <i class="fas fa-edit"></i>
+                            <span class="d-none d-sm-inline">{{trans('general.edit')}}</span>
                           </button>
                           <button
                             class="btn btn-danger btn-sm"
                             :key="branch.id"
-                            v-confirm="{ok: confirmDelete(branch)}"
+                            v-if="hasPermission('delete-branch')"
+                   
+                            @click.prevent="confirmDelete(branch)"
+
                             v-tooltip="trans('general.delete')"
                           >
+                            <span class="d-none d-sm-inline">{{trans('general.delete')}}</span>
+
                             <i class="fas fa-trash"></i>
                           </button>
                         </div>
@@ -173,29 +191,59 @@ export default {
         data: []
       },
       filterTodoForm: {
-        keyword: "",
-        status: false,
+        name: "",
+        address: "",
+        // status: false,
         start_date: "",
         end_date: "",
         sort_by: "created_at",
         order: "desc",
         page_length: helper.getConfig("page_length")
       },
-      orderByOptions: [],
+      orderByOptions: [
+          {
+              value: 'name',
+              translation: i18n.branch.name
+          },
+          {
+              value: 'address',
+              translation: i18n.branch.address
+          },
+          {
+              value: 'phone',
+              translation: i18n.branch.phone
+          },
+          {
+              value: 'telephone',
+              translation: i18n.branch.telephone
+          },
+          {
+            value: 'user',
+              translation: i18n.branch.user
+          }
+          ,
+          {
+              value: 'created_at',
+              translation: i18n.branch.created_at
+          }
+
+      
+      ],
       showCreatePanel: false,
       showFilterPanel: false
     };
   },
   mounted() {
-    // if (!helper.hasPermission("access-branch")) {
-    //   helper.notAccessibleMsg();
-    //   this.$router.push("/home");
-    // }
-
+    if (!helper.hasPermission("access-branch")) {
+      helper.notAccessibleMsg();
+      this.$router.push("/home");
+    }
+  
     this.getBranches();
   },
   methods: {
     hasPermission(permission) {
+      console.log(helper.hasPermission(permission));
       return helper.hasPermission(permission);
     },
     getBranches(page) {
@@ -204,7 +252,7 @@ export default {
       }
       let url = helper.getFilterURL(this.filterTodoForm);
       axios
-        .get("/api/branch?page=" + page)
+        .get("/api/branch?page=" + page + url)
         .then(response => response.data)
         .then(response => (this.branches = response))
         .catch(error => {
@@ -215,7 +263,38 @@ export default {
       this.$router.push("/branch/" + branch.id + "/edit");
     },
     confirmDelete(branch) {
-      return dialog => this.delete(branch);
+        Vue.$confirm({
+        auth: true,
+        title: 'Are you sure?',
+        message: 'Are you sure you want to logout?',
+        button: {
+          yes: 'Yes',
+          no: 'Cancel'
+        },
+          callback: (confirm, password) => {
+              if (confirm && password ) {
+                  axios
+                  .delete("/api/branch/" + branch.id, {
+                    params: {
+                        password: password
+                    }
+                })
+                  .then(response => response.data)
+                  .then(response => {
+                    toastr.success(response.message);
+                    this.getBranches();
+                  })
+                  .catch(error => {
+                    helper.showDataErrorMsg(error);
+                  });
+              }
+              console.log('tset');
+        }
+      })
+
+       
+    return false;
+      // return dialog => this.delete(branch);
     },
     delete(branch) {
       axios

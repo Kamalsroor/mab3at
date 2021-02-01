@@ -161,6 +161,12 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/customers/statement', 'CustomerController@getStatement');
     Route::get('/customers/statement/{id}', 'CustomerController@getStatementByCustomer');
 
+    Route::get('/group', 'GroupController@index');
+    Route::post('/group', 'GroupController@store');
+    Route::get('/group/pre-requisite', 'GroupController@preRequisite');
+    Route::get('/group/{id}', 'GroupController@show');
+    Route::patch('/group/{id}', 'GroupController@update');
+    Route::delete('/group/{id}', 'GroupController@destroy');
     
 
     Route::get('/category', 'CategoryController@index');
@@ -170,12 +176,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::patch('/category/{id}', 'CategoryController@update');
     Route::delete('/category/{id}', 'CategoryController@destroy');
 
-    Route::get('/group', 'GroupController@index');
-    Route::post('/group', 'GroupController@store');
-    Route::get('/group/pre-requisite', 'GroupController@preRequisite');
-    Route::get('/group/{id}', 'GroupController@show');
-    Route::patch('/group/{id}', 'GroupController@update');
-    Route::delete('/group/{id}', 'GroupController@destroy');
+
 
     Route::get('/product', 'ProductController@index');
     Route::post('/product', 'ProductController@store');

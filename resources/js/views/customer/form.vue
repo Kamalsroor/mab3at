@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('customer.name')}}</label>
+                    <label for="">{{trans('customer.name')}}<span>*</span></label>
                     <input class="form-control" type="text" value="" v-model="generalForm.name" name="name" :placeholder="trans('customer.name')">
                     <show-error :form-name="generalForm" prop-name="name"></show-error>
                 </div>
@@ -17,16 +17,9 @@
             </div>
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('customer.phone')}}</label>
+                    <label for="">{{trans('customer.phone')}}<span>*</span></label>
                     <input class="form-control" type="text" value="" v-model="generalForm.phone" name="phone" :placeholder="trans('customer.phone')">
                     <show-error :form-name="generalForm" prop-name="phone"></show-error>
-                </div>
-            </div>
-            <div class="col-12 col-sm-4">
-                <div class="form-group">
-                    <label for="">{{trans('customer.telephone')}}</label>
-                    <input class="form-control" type="text" value="" v-model="generalForm.telephone" name="telephone" :placeholder="trans('customer.telephone')">
-                    <show-error :form-name="generalForm" prop-name="telephone"></show-error>
                 </div>
             </div>
             <div class="col-12 col-sm-4">
@@ -38,9 +31,9 @@
             </div>
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('customer.user')}}</label>
-                    <v-select label="name" v-model="selected_user" name="user_id" id="user_id" :options="users" :placeholder="trans('customer.select_user')" @select="generalForm.errors.clear('user_id')" @close="generalForm.user_id = selected_user.id" @remove="generalForm.user_id = ''"></v-select>
-                    <show-error :form-name="generalForm" prop-name="user_id"></show-error>
+                    <label for="">{{trans('customer.telephone')}}</label>
+                    <input class="form-control" type="text" value="" v-model="generalForm.telephone" name="telephone" :placeholder="trans('customer.telephone')">
+                    <show-error :form-name="generalForm" prop-name="telephone"></show-error>
                 </div>
             </div>
             <div class="col-12 col-sm-4">
@@ -50,6 +43,7 @@
                     <show-error :form-name="generalForm" prop-name="type"></show-error>
                 </div>
             </div>
+        
         </div>
         <button type="submit" class="btn btn-info waves-effect waves-light pull-right">
             <span v-if="id">{{trans('general.update')}}</span>
@@ -74,17 +68,11 @@
                     name : '',
                     address : '',
                     phone : '',
-                    user_id: null,
                     type : null,
                     email : '',
                     telephone : '',
                 }),
-                users : [],
                 types : [],
-                selected_user: {
-                    id: null,
-                    name: null
-                },
                 selected_type: {
                     id: null,
                     name: null
@@ -96,13 +84,17 @@
         mounted() {
             if(this.id)
                 this.get();
+                this.$Progress.start()
+
             axios.get('/api/customer/pre-requisite')
                 .then(response => response.data)
                 .then(response => {
-                    this.users = response.user;
+                    console.log(response);
                     this.types = response.type;
+                    this.$Progress.finish()
                 })
                 .catch(error => {
+                    this.$Progress.fail()
                     helper.showDataErrorMsg(error);
                 });
         },
@@ -114,13 +106,19 @@
                     this.store ();
             },
             store(){
+                this.$Progress.start()
                 this.generalForm.post('/api/customer')
                     .then(response => {
                         toastr.success(response.message);
                         this.$emit('completed')
+                        this.$Progress.finish()
+                        this.generalForm.user_id  = null ;
+                        this.selected_type  =   {id: null,name: null} ;
                     })
                     .catch(error => {
+                        console.log(error);
                         helper.showErrorMsg(error);
+                        this.$Progress.fail()
                     });
             },
             get(){
@@ -130,14 +128,13 @@
                         this.generalForm.name = response.name;
                         this.generalForm.address = response.address;
                         this.generalForm.phone = response.phone;
-                        this.selected_user.id = response.user_id;
-                        this.selected_user.name = response.user.profile.first_name+' '+response.user.profile.last_name;
-                        this.generalForm.user_id = response.user_id;
+                        this.generalForm.email = response.email;
                         this.generalForm.type = response.type;
                         this.selected_type.id = response.type;
-                        this.selected_type.name = response.typeName;
+                        this.selected_type.name = response.type_name;
+                        // this.selected_type.name = response.user.profile.first_name+' '+response.user.profile.last_name;
+                        // this.generalForm.user_id = response.user_id;
                         this.generalForm.telephone = response.telephone;
-                        this.generalForm.email = response.email;
                     })
                     .catch(error => {
                         helper.showDataErrorMsg(error);
@@ -145,13 +142,16 @@
                     });
             },
             update(){
+                this.$Progress.start()
                 this.generalForm.patch('/api/customer/'+this.id)
                     .then(response => {
                         toastr.success(response.message);
+                        this.$Progress.finish()
                         this.$router.push('/customer');
                     })
                     .catch(error => {
                         helper.showErrorMsg(error);
+                        this.$Progress.fail()
                     });
             }
         }

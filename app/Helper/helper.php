@@ -515,7 +515,44 @@ function getPostMaxSize()
 
 function getVar($list)
 {
-    $file = resource_path('var/'.$list.'.json');
 
+    $file = resource_path('var/'.$list.'.json');
     return (\File::exists($file)) ? json_decode(file_get_contents($file), true) : [];
 }
+
+
+/*
+ *  Used to get value-list json
+ *  @return array
+ */
+
+function errorResponse($items)
+{
+    foreach ($items as $key => $item) {
+        $data['errors'][$key][] = $item;
+    }
+    return response()->json($data, 422);
+}
+
+/*
+ *  Used to get value-list json
+ *  @return array
+ */
+
+function checkPassword($password)
+{
+    if(isset($password)){
+        if (auth()->attempt(['email' => auth()->user()->email, 'password' => $password]) != false) {
+            return true ; 
+        }else{
+   
+            return errorResponse(['message' => "يرجي ادخال رقم سري صحيح"]);
+        }
+    }else{
+        return errorResponse(['message' => "يرجي ادخال الرقم السري"]);
+    }
+}
+
+
+
+

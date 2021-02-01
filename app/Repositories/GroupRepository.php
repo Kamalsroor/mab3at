@@ -16,8 +16,11 @@ class GroupRepository
      */
     public function __construct(Group $group)
     {
-        $this->data = $group;
+        $this->group = $group;
+
     }
+
+
 
     /**
      * Get todo query
@@ -27,7 +30,7 @@ class GroupRepository
 
     public function getQuery()
     {
-        return $this->data;
+        return $this->group;
     }
 
     /**
@@ -39,27 +42,11 @@ class GroupRepository
 
     public function findOrFail($id)
     {
-        $data = $this->data->find($id);
-        if (!$data) {
+        $group = $this->group->find($id);
+        if (!$group) {
             throw ValidationException::withMessages(['message' => trans('todo.could_not_find')]);
         }
-        return $data;
-    }
-
-    /**
-     * Find todo with given id or throw an error.
-     *
-     * @param integer $id
-     * @return Todo
-     */
-
-    public function find($id)
-    {
-        $data = $this->data->find($id);
-        if (!$data) {
-            throw ValidationException::withMessages(['message' => trans('todo.could_not_find')]);
-        }
-        return $data;
+        return $group;
     }
 
     /**
@@ -71,15 +58,19 @@ class GroupRepository
 
     public function paginate($params)
     {
-
         $sort_by = isset($params['sort_by']) ? $params['sort_by'] : 'created_at';
         $order = isset($params['order']) ? $params['order'] : 'desc';
         $page_length = isset($params['page_length']) ? $params['page_length'] : config('config.page_length');
-        $keyword = isset($params['keyword']) ? $params['keyword'] : null;
+        $name = isset($params['name']) ? $params['name'] : null;
         $status = isset($params['status']) ? $params['status'] : 0;
         $start_date = isset($params['start_date']) ? $params['start_date'] : null;
+
+
         $end_date = isset($params['end_date']) ? $params['end_date'] : null;
-        $query = $this->data;
+        $query = $this->group->createdAtDateBetween([
+            'start_date' => $start_date,
+            'end_date' => $end_date
+        ])->filterByName($name);
         return $query->orderBy($sort_by, $order)->paginate($page_length);
     }
 
@@ -91,20 +82,7 @@ class GroupRepository
      */
     public function create($params)
     {
-        return $this->data->forceCreate($this->formatParams($params));
-    }
-
-
-    /**
-     * List Group by name only
-     *
-     * @param string $token
-     * @return Group
-     */
-
-    public function listByName()
-    {
-        return $this->data->get()->pluck('name', 'id')->all();
+        return $this->group->forceCreate($this->formatParams($params));
     }
 
     /**
@@ -118,29 +96,32 @@ class GroupRepository
     {
         $formatted = [
             'name' => isset($params['name']) ? $params['name'] : null,
+       
         ];
         // if ($action === 'create') {
         //     $formatted['user_id'] = \Auth::user()->id;
         // }
+
         return $formatted;
     }
 
     /**
-     * Update given Branch.
+     * Update given Group.
      *
-     * @param Branch $branch
+     * @param Group $group
      * @param array $params
      *
-     * @return branch
+     * @return group
      */
     public function update(Group $group, $params)
     {
         $group->forceFill($this->formatParams($params, 'update'))->save();
+
         return $group;
     }
 
     /**
-     * Delete Branch.
+     * Delete Group.
      *
      * @param integer $id
      * @return bool|null
@@ -151,13 +132,45 @@ class GroupRepository
     }
 
     /**
-     * Delete multiple branches.
+     * List group by name only
+     *
+     * @param string $token
+     * @return group
+     */
+
+    public function listByName()
+    {
+        return $this->group->get()->pluck('name', 'id')->all();
+    }
+
+ 
+    /**
+     * Delete multiple groupes.
      *
      * @param array $ids
      * @return bool|null
      */
     public function deleteMultiple($ids)
     {
-        return $this->data->whereIn('id', $ids)->delete();
+        return $this->group->whereIn('id', $ids)->delete();
     }
+
+
+    /**
+     * List user by name only
+     *
+     * @param string $token
+     * @return User
+     */
+
+    public function listType()
+    {
+        $type = [
+            ['id' => 'cargo', 'name' => 'شحن'],
+            ['id' => 'trade', 'name' => 'تجارة'],
+            ['id' => 'cargo&trade', 'name' => 'شحن & تحارة'],
+        ];
+        return $type;
+    }
+
 }

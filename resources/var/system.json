@@ -36,7 +36,7 @@
 	    "show_activity_log_menu": 1
 	},
 	"default_role": { 
-		"admin": "admin",
+		"admin": "الاداره",
 		"user": "user" 
 	},
 	"default_template_field": { 

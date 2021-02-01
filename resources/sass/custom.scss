@@ -348,3 +348,11 @@ Install page
    font-weight: 400;
    font-size: 16px;
 }
+
+.form-group {
+  label{
+    span{
+      color: red;
+    }
+  }
+}

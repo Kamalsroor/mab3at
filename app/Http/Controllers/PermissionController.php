@@ -88,11 +88,12 @@ class PermissionController extends Controller
                     $permissions[] = $permission_id;
                 }
             }
-            if ($role->name === $this->role->findByName(config('system.default_role.admin'))->name) {
-                $role->syncPermissions($this->repo->listByName());
-            } else {
+
+            // if ($role->name === $this->role->findByName(config('system.default_role.admin'))->name) {
+            //     $role->syncPermissions($this->repo->listByName());
+            // } else {
                 $role->syncPermissions($this->repo->listByName($permissions));
-            }
+            // }
         }
 
         $this->activity->record([

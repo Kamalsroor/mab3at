@@ -17397,8 +17397,8 @@ widget-chart-page product review
   color: #54667a;
 }
 
-.profile-tab li a.nav-link.active.router-link-active,
-.customtab li a.nav-link.active.router-link-active {
+.profile-tab li a.nav-link.active,
+.customtab li a.nav-link.active {
   border-bottom: 2px solid #009efb;
   color: #009efb;
 }
@@ -18688,9 +18688,9 @@ Vertical tabs
   vertical-align: top;
 }
 
-.tabs-vertical li .nav-link.router-link-active.active,
+.tabs-vertical li .nav-link.active,
 .tabs-vertical li .nav-link:hover,
-.tabs-vertical li .nav-link.router-link-active.active:focus {
+.tabs-vertical li .nav-link.active:focus {
   background: #009efb;
   border: 0px;
   color: #ffffff;
@@ -18698,7 +18698,7 @@ Vertical tabs
 
 /*Custom vertical tab*/
 
-.customvtab .tabs-vertical li .nav-link.router-link-active.active,
+.customvtab .tabs-vertical li .nav-link.active,
 .customvtab .tabs-vertical li .nav-link:hover,
 .customvtab .tabs-vertical li .nav-link:focus {
   background: #ffffff;
@@ -22843,6 +22843,10 @@ Install page
   text-align: center;
   font-weight: 400;
   font-size: 16px;
+}
+
+.form-group label span {
+  color: red;
 }
 
 

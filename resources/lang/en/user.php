@@ -61,4 +61,5 @@
   'user_preference' => 'User Preference',
   'updated_at' => 'Last Updated at',
   'preference_updated' => 'Preference updated.'
+  
 );

@@ -108,6 +108,8 @@ let routes = [
         component: require("./views/branch/edit").default,
         meta: { menu: "definition" }
       },
+
+     
       {
         path: "/customer",
 
@@ -120,18 +122,7 @@ let routes = [
         component: require("./views/customer/edit").default,
         meta: { menu: "definition" }
       },
-      {
-        path: "/category",
 
-        component: require("./views/category/index").default,
-        meta: { menu: "definition" }
-      },
-      {
-        path: "/category/:id/edit",
-
-        component: require("./views/category/edit").default,
-        meta: { menu: "definition" }
-      },
       {
         path: "/group",
 
@@ -144,50 +135,9 @@ let routes = [
         component: require("./views/group/edit").default,
         meta: { menu: "definition" }
       },
-      {
-        path: "/product",
 
-        component: require("./views/product/index").default,
-        meta: { menu: "definition" }
-      },
-      {
-        path: "/product/:id/edit",
 
-        component: require("./views/product/edit").default,
-        meta: { menu: "definition" }
-      },
 
-      // bill
-      {
-        path: "/bill",
-
-        component: require("./views/pages/bill").default,
-        meta: { menu: "bill" }
-      },
-      {
-        path: "/purchases_bill",
-
-        component: require("./views/purchases-bill/index").default,
-        meta: { menu: "bill" }
-      },
-      {
-        path: "/purchases_bill/:id/edit",
-
-        component: require("./views/purchases-bill/edit").default,
-        meta: { menu: "bill" }
-      },
-      {
-        path: "/sales_bill",
-
-        component: require("./views/sales-bill/index").default,
-        meta: { menu: "bill" }
-      },
-      {
-        path: "/sales_bill/:id/edit",
-
-        component: require("./views/sales-bill/edit").default,
-        meta: { menu: "bill" }
-      },
 
       {
         path: "/debenture",
@@ -330,18 +280,7 @@ let routes = [
 
         component: require("./views/activity-log/index").default
       },
-      {
-        path: "/todo",
-
-        component: require("./views/todo/index").default
-      },
-
-      {
-        path: "/todo/:id/edit",
-
-        component: require("./views/todo/edit").default
-      },
-
+     
       {
         path: "/message",
 
@@ -388,68 +327,8 @@ let routes = [
         component: require("./views/message/view").default
       },
 
-      {
-        path: "/product/returns",
-
-        component: require("./views/product/returns").default
-      },
-      {
-        path: "/debenture_cashing",
-
-        component: require("./views/debenture-cashing/index").default
-      },
-      {
-        path: "/debenture_cashing/:id/edit",
-
-        component: require("./views/debenture-cashing/edit").default
-      },
-      {
-        path: "/debenture_deposit",
-
-        component: require("./views/debenture-deposit/index").default
-      },
-      {
-        path: "/debenture_deposit/:id/edit",
-
-        component: require("./views/debenture-deposit/edit").default
-      },
-
-      {
-        path: "/account_adjustment",
-
-        component: require("./views/account-adjustment/index").default
-      },
-      {
-        path: "/account_adjustment/:id/edit",
-
-        component: require("./views/account-adjustment/edit").default
-      },
-      {
-        path: "/stock",
-
-        component: require("./views/branch/stock").default
-      },
-      {
-        path: "/customer/statement",
-
-        component: require("./views/customer/stock").default
-      },
-      {
-        path: "/customer/:id/statement",
-
-        component: require("./views/customer/customerstatement").default
-      },
-      {
-        path: "/customer/:id/statement/detailed",
-
-        component: require("./views/customer/customerstatementdetailed").default
-      },
-
-      {
-        path: "/branch/:id/stock",
-
-        component: require("./views/branch/branchstock").default
-      }
+    
+ 
     ]
   },
   {
