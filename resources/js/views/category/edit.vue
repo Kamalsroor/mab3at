@@ -1,0 +1,45 @@
+<template>
+    <div>
+        <div class="page-titles p-3 border-bottom">
+            <h3 class="text-themecolor">{{trans('todo.edit_todo')}}
+                <button class="btn btn-info btn-sm pull-left" @click="$router.push('/category')"><i class="fas fa-check-circle"></i> <span class="d-none d-sm-inline">{{trans('category.all_category')}}</span></button>
+            </h3>
+        </div>
+        <div class="container-fluid p-0">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <h4 class="card-title">{{trans('todo.edit_todo')}}</h4>
+                            <general-form :id="id"></general-form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import generalForm from './form';
+
+    export default {
+        components : { generalForm },
+        data() {
+            return {
+                id:this.$route.params.id
+            }
+        },
+        mounted(){
+            if(!helper.hasPermission('edit-category')){
+                helper.notAccessibleMsg();
+                this.$router.push('/home');
+            }
+
+            // if(!helper.featureAvailable('todo')){
+            //     helper.featureNotAvailableMsg();
+            //     this.$router.push('/home');
+            // }
+        }
+    }
+</script>

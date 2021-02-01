@@ -48,6 +48,12 @@
               <p>{{ trans("group.group") }}</p>
             </router-link>
           </li>
+          <li v-if="hasPermission('access-category')" class="nav-item">
+            <router-link to="/category" class="nav-link ">
+              <i class="nav-icon fa fa-users"></i>
+              <p>{{ trans("category.category") }}</p>
+            </router-link>
+          </li>
           <li class="nav-item">
             <router-link class="nav-link active" to="/configuration/role" exact>
               <i class="fas fa-users fa-fw"></i>

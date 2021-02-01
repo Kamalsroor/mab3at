@@ -80,7 +80,7 @@ class BranchController extends Controller
                 'massage' => $e->getMessage(),
                 'activity' => 'error',
             ]);
-            return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
+            return $this->error(['message' => "خطاء , اعد تحميل الصفحه" ,'Exception' => $e ]);
         }
 
         return $this->success(['message' => trans('app.added')]);
@@ -127,7 +127,7 @@ class BranchController extends Controller
                 'massage' => $e->getMessage(),
                 'activity' => 'error',
             ]);
-            return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
+            return $this->error(['message' => "خطاء , اعد تحميل الصفحه" ,'Exception' => $e ]);
         }
 
 
@@ -163,7 +163,7 @@ class BranchController extends Controller
                 'massage' => $e->getMessage(),
                 'activity' => 'error',
             ]);
-            return $this->error(['message' => "خطاء , اعد تحميل الصفحه"]);
+            return $this->error(['message' => "خطاء , اعد تحميل الصفحه" ,'Exception' => $e ]);
         }
 
         return $this->success(['message' => trans('app.deleted')]);

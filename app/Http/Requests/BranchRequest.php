@@ -25,7 +25,7 @@ class BranchRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|branches:categories,name,' . $this->id,
             'address' => 'required',
             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11|unique:branches,phone,' . $this->id,
             'telephone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:8|unique:branches,telephone,' . $this->id,

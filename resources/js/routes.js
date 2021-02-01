@@ -136,6 +136,19 @@ let routes = [
         meta: { menu: "definition" }
       },
 
+      {
+        path: "/category",
+
+        component: require("./views/category/index").default,
+        meta: { menu: "definition" }
+      },
+      {
+        path: "/category/:id/edit",
+
+        component: require("./views/category/edit").default,
+        meta: { menu: "definition" }
+      },
+
 
 
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\TodoRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\ActivityLogRepository;
 
@@ -18,11 +17,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct(UserRepository $user, ActivityLogRepository $activity, TodoRepository $todo)
+    public function __construct(UserRepository $user, ActivityLogRepository $activity)
     {
         $this->user = $user;
         $this->activity = $activity;
-        $this->todo = $todo;
     }
 
     /**
@@ -56,7 +54,7 @@ class HomeController extends Controller
 
         $activity_logs = $activity_logs->orderBy('created_at', 'desc')->take(10)->get();
 
-        $todos = $this->todo->getQuery()->filterByUserId(\Auth::user()->id)->orderBy('created_at', 'desc')->take(5)->get();
+        $todos = [];
 
         return $this->success(compact('users', 'today_registered_users', 'weekly_registered_users', 'monthly_registered_users', 'activity_logs', 'todos'));
     }

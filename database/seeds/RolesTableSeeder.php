@@ -103,6 +103,26 @@ class RolesTableSeeder extends Seeder
                 'label' => 'حذف المجموعات',
                 'guard_name' => 'api',
             ],
+            [
+                'name' => 'access-category',
+                'label' => 'التحكم بالفئات',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'create-category',
+                'label' => 'اضافة الفئات',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'edit-category',
+                'label' => 'تعديل الفئات',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'delete-category',
+                'label' => 'حذف الفئات',
+                'guard_name' => 'api',
+            ],
         ]);
 
 

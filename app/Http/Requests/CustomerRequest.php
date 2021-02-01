@@ -25,7 +25,7 @@ class CustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|customers:categories,name,' . $this->id,
             'address' => 'nullable',
             'email' => 'nullable|email',
             'type' => 'required|in:cargo,trade,cargo&trade',
