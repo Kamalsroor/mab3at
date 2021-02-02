@@ -123,6 +123,26 @@ class RolesTableSeeder extends Seeder
                 'label' => 'حذف الفئات',
                 'guard_name' => 'api',
             ],
+            [
+                'name' => 'access-product',
+                'label' => 'التحكم بالمنتاجات',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'create-product',
+                'label' => 'اضافة المنتاجات',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'edit-product',
+                'label' => 'تعديل المنتاجات',
+                'guard_name' => 'api',
+            ],
+            [
+                'name' => 'delete-product',
+                'label' => 'حذف المنتاجات',
+                'guard_name' => 'api',
+            ],
         ]);
 
 

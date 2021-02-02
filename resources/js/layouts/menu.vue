@@ -54,6 +54,12 @@
               <p>{{ trans("category.category") }}</p>
             </router-link>
           </li>
+          <li v-if="hasPermission('access-product')" class="nav-item">
+            <router-link to="/product" class="nav-link ">
+              <i class="nav-icon fa fa-users"></i>
+              <p>{{ trans("product.product") }}</p>
+            </router-link>
+          </li>
           <li class="nav-item">
             <router-link class="nav-link active" to="/configuration/role" exact>
               <i class="fas fa-users fa-fw"></i>
