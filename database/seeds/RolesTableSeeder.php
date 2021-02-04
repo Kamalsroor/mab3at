@@ -143,6 +143,13 @@ class RolesTableSeeder extends Seeder
                 'label' => 'حذف المنتاجات',
                 'guard_name' => 'api',
             ],
+            [
+                'name' => 'access-message',
+                'label' => 'التحكم بالرسائل',
+                'guard_name' => 'api',
+            ],
+       
+            
         ]);
 
 

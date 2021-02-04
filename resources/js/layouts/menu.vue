@@ -63,20 +63,148 @@
           <li class="nav-item">
             <router-link class="nav-link active" to="/configuration/role" exact>
               <i class="fas fa-users fa-fw"></i>
-              <span class="hide-menu">{{trans('role.role')}}</span>
+              <span >{{trans('role.role')}}</span>
             </router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link active" to="/configuration/permission" exact>
               <i class="fas fa-key fa-fw"></i>
-              <span class="hide-menu">{{trans('permission.permission')}}</span>
+              <span >{{trans('permission.permission')}}</span>
             </router-link>
           </li>
         </ul>
     </li>
-
-
-
+    
+    <li class="nav-item " @click="toggleMenu" >
+        <a href="javascript:;" class="nav-link derop-down-menu">
+          <i class="nav-icon fas fa-table"></i>
+          <p>
+            الاعدادات
+            <i class="fas fa-angle-left right"></i>
+          </p>
+        </a>
+        <ul class="nav nav-treeview">
+          <li class="nav-item">
+            <router-link class="nav-link active" to="/configuration/basic" exact>
+              <i class="fas fa-cog fa-fw"></i>
+              <span >{{trans('configuration.basic_configuration')}}</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link active" to="/configuration/logo" exact>
+              <i class="fas fa-image fa-fw"></i>
+              <span >{{trans('general.logo')}}</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link active" to="/configuration/system" exact>
+              <i class="fas fa-cogs fa-fw"></i>
+              <span >{{trans('configuration.system_configuration')}}</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link active" to="/configuration/mail" exact>
+              <i class="fas fa-envelope fa-fw"></i>
+              <span >{{trans('mail.mail_configuration')}}</span>
+            </router-link>
+          </li>
+          <li v-if="getConfig('multilingual')">
+            <router-link class="nav-link active" to="/configuration/locale" exact>
+              <i class="fas fa-globe fa-fw"></i>
+              <span >{{trans('locale.locale')}}</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link active" to="/configuration/role" exact>
+              <i class="fas fa-users fa-fw"></i>
+              <span >{{trans('role.role')}}</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link active" to="/configuration/permission" exact>
+              <i class="fas fa-key fa-fw"></i>
+              <span >{{trans('permission.permission')}}</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link active" to="/configuration/menu" exact>
+              <i class="fas fa-list fa-fw"></i>
+              <span >{{trans('general.menu')}}</span>
+            </router-link>
+          </li>
+          <!-- <li class="nav-item"><router-link class="nav-link active" to="/configuration/sms" exact><i class="fas fa-comment fa-fw"></i> <span >{{trans('general.sms')}}</span></router-link></li> -->
+          <li class="nav-item">
+            <router-link class="nav-link active" to="/configuration/authentication" exact>
+              <i class="fas fa-sign-in-alt fa-fw"></i>
+              <span >{{trans('auth.authentication')}}</span>
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="getConfig('ip_filter')">
+            <router-link class="nav-link active" to="/configuration/ip-filter" exact>
+              <i class="fas fa-ellipsis-v fa-fw"></i>
+              <span >{{trans('ip_filter.ip_filter')}}</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link active" to="/configuration/scheduled-job" exact>
+              <i class="fas fa-clock fa-fw"></i>
+              <span >{{trans('general.scheduled_job')}}</span>
+            </router-link>
+          </li>
+           <li class="nav-item" v-if="hasPermission('access-message') && getConfig('show_message_menu')">
+              <router-link class="nav-link active" to="/message" exact>
+                <i class="far fa-envelope-open fa-fw"></i>
+                <span >{{trans('message.message')}}</span>
+              </router-link>
+            </li>
+            <li
+              class="nav-item"
+              v-if="hasPermission('access-configuration') && getConfig('show_configuration_menu')"
+            >
+              <router-link class="nav-link active" to="/configuration" exact>
+                <i class="fas fa-cogs fa-fw"></i>
+                <span >{{trans('configuration.configuration')}}</span>
+              </router-link>
+            </li>
+            <li
+              class="nav-item"
+              v-if="hasPermission('access-configuration') && getConfig('show_backup_menu')"
+            >
+              <router-link class="nav-link active" to="/backup" exact>
+                <i class="fas fa-database fa-fw"></i>
+                <span >{{trans('backup.backup')}}</span>
+              </router-link>
+            </li>
+            <li
+              class="nav-item"
+              v-if="hasPermission('access-configuration') && getConfig('show_email_template_menu')"
+            >
+              <router-link class="nav-link active" to="/email-template" exact>
+                <i class="far fa-envelope fa-fw"></i>
+                <span >{{trans('template.email_template')}}</span>
+              </router-link>
+            </li>
+            <li
+              class="nav-item"
+              v-if="hasPermission('access-configuration') && getConfig('show_email_log_menu')"
+            >
+              <router-link class="nav-link active" to="/email-log" exact>
+                <i class="fas fa-envelope fa-fw"></i>
+                <span >{{trans('mail.email_log')}}</span>
+              </router-link>
+            </li>
+            <li
+              class="nav-item"
+              v-if="hasPermission('access-configuration') && getConfig('show_activity_log_menu')"
+            >
+              <router-link class="nav-link active" to="/activity-log" exact>
+                <i class="fas fa-bars fa-fw"></i>
+                <span >{{trans('activity.activity_log')}}</span>
+              </router-link>
+            </li>
+        </ul>
+    </li>
+  
   </ul>
 </template>
 
