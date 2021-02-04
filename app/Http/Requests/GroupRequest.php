@@ -25,7 +25,7 @@ class GroupRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|customers:groups,name,' . $this->id,
+            'name' => 'required|unique:groups,name,' . $this->id,
           
         ];
     }

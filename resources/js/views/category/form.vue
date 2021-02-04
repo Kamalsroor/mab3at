@@ -96,7 +96,6 @@
                     .then(response => {
                         this.generalForm.name = response.name;
                         this.generalForm.is_serial = response.is_serial;
-                     
                     })
                     .catch(error => {
                         helper.showDataErrorMsg(error);

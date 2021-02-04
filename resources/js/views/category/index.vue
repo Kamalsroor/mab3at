@@ -242,11 +242,11 @@ export default {
     confirmDelete(category) {
         Vue.$confirm({
         auth: true,
-        title: 'Are you sure?',
-        message: 'Are you sure you want to logout?',
+        title: 'هل انت متأكد ؟',
+        message: 'هل انت متأكد , سوف تقوم بمسح السجل ؟',
         button: {
-          yes: 'Yes',
-          no: 'Cancel'
+          yes: 'نعم',
+          no: 'لا , اغلاق'
         },
           callback: (confirm, password) => {
               if (confirm && password ) {

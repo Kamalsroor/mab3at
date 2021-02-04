@@ -16,7 +16,7 @@ class ProductRepository
      */
     public function __construct(Product $product)
     {
-        $this->product = $product;
+        $this->product = $product->with('Category', 'Group');
 
     }
 
@@ -71,7 +71,7 @@ class ProductRepository
         $query = $this->product->createdAtDateBetween([
             'start_date' => $start_date,
             'end_date' => $end_date
-        ])->filterByName($name)->filterByAddress($address);
+        ])->filterByName($name);
         return $query->orderBy($sort_by, $order)->paginate($page_length);
     }
 
@@ -97,13 +97,15 @@ class ProductRepository
     {
         $formatted = [
             'name' => isset($params['name']) ? $params['name'] : null,
-            'address' => isset($params['address']) ? $params['address'] : null,
-            'phone' => isset($params['phone']) ? $params['phone'] : null,
-            'telephone' => isset($params['telephone']) ? $params['telephone'] : null,
-            'type' => (isset($params['type']) && $params['type']) ? $params['type'] : null,
-            'email' => (isset($params['email']) && $params['email']) ? $params['email'] : null,
+            'parcode' => isset($params['parcode']) ? $params['parcode'] : null,
+            'category_id' => (isset($params['category_id']) && $params['category_id']) ? $params['category_id'] : null,
+            'group_id' => (isset($params['group_id']) && $params['group_id']) ? $params['group_id'] : null,
+            'min_price' => isset($params['min_price']) ? $params['min_price'] : 0,
+            'max_price' => isset($params['max_price']) ? $params['max_price'] : 0,
+            'status' => isset($params['status']) && $params['status'] != ""  ? $params['status'] : 0,
 
         ];
+
         // if ($action === 'create') {
         //     $formatted['user_id'] = \Auth::user()->id;
         // }

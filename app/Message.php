@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Message extends Model
 {
@@ -13,6 +14,7 @@ class Message extends Model
                         ];
     protected $primaryKey = 'id';
     protected $table = 'messages';
+    use SoftDeletes;
 
     public function userTo()
     {

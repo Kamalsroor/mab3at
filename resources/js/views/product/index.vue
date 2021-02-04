@@ -98,11 +98,18 @@
                   <thead>
                     <tr>
                       <th>{{trans('product.name')}}</th>
-                      <th>{{trans('product.address')}}</th>
-                      <th>{{trans('product.phone')}}</th>
-                      <th>{{trans('product.telephone')}}</th>
-                      <th>{{trans('product.email')}}</th>
-                      <th>{{trans('product.type')}}</th>
+                      <th>{{trans('product.parcode')}}</th>
+                      <th>{{trans('product.min_price')}}</th>
+                      <th>{{trans('product.max_price')}}</th>
+                      <th>{{trans('product.status')}}</th>
+                      <th>{{trans('product.category_id')}}</th>
+                      <th>{{trans('product.group_id')}}</th>
+
+                 
+
+
+
+
                       <th>{{trans('product.created_at')}}</th>
                       <th class="table-option">{{trans('general.action')}}</th>
                     </tr>
@@ -110,11 +117,13 @@
                   <tbody>
                     <tr v-for="(product, index) in productes.data" :key="index">
                       <td v-text="product.name"></td>
-                      <td v-text="product.address"></td>
-                      <td v-text="product.phone"></td>
-                      <td v-text="product.telephone"></td>
-                      <td v-text="product.email"></td>
-                      <td v-text="product.type"></td>
+                      <td v-text="product.parcode"></td>
+                      <td v-text="product.min_price"></td>
+                      <td v-text="product.max_price"></td>
+                      <td v-text="product.status"></td>
+                      <td v-text="product.category.name"></td>
+                      <td v-text="product.group.name"></td>
+
                       <td v-text="product.created_at"></td>
                       <td class="table-option">
                         <div class="btn-group">
@@ -208,27 +217,6 @@ export default {
               value: 'name',
               translation: i18n.product.name
           },
-          {
-              value: 'address',
-              translation: i18n.product.address
-          },
-          {
-              value: 'phone',
-              translation: i18n.product.phone
-          },
-          {
-              value: 'telephone',
-              translation: i18n.product.telephone
-          },
-          {
-            value: 'type',
-              translation: i18n.product.type
-          }
-          ,
-          {
-            value: 'email',
-              translation: i18n.product.email
-          }
           ,
           {
               value: 'created_at',
@@ -273,11 +261,11 @@ export default {
     confirmDelete(product) {
         Vue.$confirm({
         auth: true,
-        title: 'Are you sure?',
-        message: 'Are you sure you want to logout?',
+        title: 'هل انت متأكد ؟',
+        message: 'هل انت متأكد , سوف تقوم بمسح السجل ؟',
         button: {
-          yes: 'Yes',
-          no: 'Cancel'
+          yes: 'نعم',
+          no: 'لا , اغلاق'
         },
           callback: (confirm, password) => {
               if (confirm && password ) {

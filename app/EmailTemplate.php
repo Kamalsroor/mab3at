@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmailTemplate extends Model
 {
@@ -15,6 +16,7 @@ class EmailTemplate extends Model
                         ];
     protected $primaryKey = 'id';
     protected $table = 'email_templates';
+    use SoftDeletes;
 
     public function setBodyAttribute($value)
     {

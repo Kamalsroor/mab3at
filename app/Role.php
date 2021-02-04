@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends Model
 {
@@ -11,6 +12,7 @@ class Role extends Model
                         ];
     protected $primaryKey = 'id';
     protected $table = 'roles';
+    use SoftDeletes;
 
     public function getDetailAttribute()
     {

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ActivityLog extends Model
 {
@@ -19,6 +20,7 @@ class ActivityLog extends Model
                         ];
     protected $primaryKey = 'id';
     protected $table = 'activity_logs';
+    use SoftDeletes;
 
     public function user()
     {

@@ -8,41 +8,68 @@
                     <show-error :form-name="generalForm" prop-name="name"></show-error>
                 </div>
             </div>
-            <div class="col-12 col-sm-4">
+
+            <div class="col-12 col-sm-6">
                 <div class="form-group">
-                    <label for="">{{trans('product.address')}}</label>
-                    <input class="form-control" type="text" value="" v-model="generalForm.address" name="address" :placeholder="trans('product.address')">
-                    <show-error :form-name="generalForm" prop-name="address"></show-error>
+                    <label for>{{ trans("product.status") }}</label>
+                    <br />
+                    <switches
+                        class="m-l-20"
+                        v-model="generalForm.status"
+                        theme="bulma"
+                        color="blue"
+                    ></switches>
+                    <show-error :form-name="generalForm" prop-name="status"></show-error>
                 </div>
             </div>
+
+
+
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('product.phone')}}<span>*</span></label>
-                    <input class="form-control" type="text" value="" v-model="generalForm.phone" name="phone" :placeholder="trans('product.phone')">
-                    <show-error :form-name="generalForm" prop-name="phone"></show-error>
+                    <label for="">{{trans('product.min_price')}}</label>
+                    <input class="form-control" type="number" value="" v-on:change="CheckPrice"  v-model="generalForm.min_price" name="min_price"  :placeholder="trans('product.min_price')">
+                    <show-error :form-name="generalForm" prop-name="min_price"></show-error>
                 </div>
             </div>
+
+
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('product.email')}}</label>
-                    <input class="form-control" type="email" value="" v-model="generalForm.email" name="email" :placeholder="trans('product.email')">
-                    <show-error :form-name="generalForm" prop-name="email"></show-error>
+                    <label for="">{{trans('product.max_price')}}</label>
+                    <input class="form-control" type="number" value=""  v-on:change="CheckPrice" v-model="generalForm.max_price" name="max_price" :placeholder="trans('product.max_price')">
+                    <show-error :form-name="generalForm" prop-name="max_price"></show-error>
                 </div>
             </div>
+
+
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('product.telephone')}}</label>
-                    <input class="form-control" type="text" value="" v-model="generalForm.telephone" name="telephone" :placeholder="trans('product.telephone')">
-                    <show-error :form-name="generalForm" prop-name="telephone"></show-error>
+                    <label for="">{{trans('product.selected_group')}}</label>
+                    <v-select label="name" v-model="selected_group" name="type" id="group_id" :options="groups" :placeholder="trans('product.select_group_id')" @select="generalForm.errors.clear('group_id')" @close="generalForm.group_id = selected_group.id" @remove="generalForm.group_id = ''"></v-select>
+                    <show-error :form-name="generalForm" prop-name="group_id"></show-error>
                 </div>
             </div>
+
+
             <div class="col-12 col-sm-4">
                 <div class="form-group">
-                    <label for="">{{trans('product.type')}}</label>
-                    <v-select label="name" v-model="selected_type" name="type" id="type" :options="types" :placeholder="trans('product.select_type')" @select="generalForm.errors.clear('type')" @close="generalForm.type = selected_type.id" @remove="generalForm.type = ''"></v-select>
-                    <show-error :form-name="generalForm" prop-name="type"></show-error>
+                    <label for="">{{trans('product.selected_category')}}</label>
+                    <v-select label="name" v-model="selected_category" name="type" id="category_id" :options="categorys" :placeholder="trans('product.select_category_id')" @select="generalForm.errors.clear('category_id')" @close="generalForm.category_id = selected_category.id" @remove="generalForm.category_id = ''"></v-select>
+                    <show-error :form-name="generalForm" prop-name="category_id"></show-error>
                 </div>
             </div>
+
+
+            <div class="col-12 col-sm-4" >
+                <div class="form-group" >
+                    <label for="">{{trans('product.parcode')}}<span>*</span></label>
+                    <input class="form-control" type="text" value="" v-model="generalForm.parcode" name="parcode" :placeholder="trans('product.parcode')">
+                    <show-error :form-name="generalForm" prop-name="parcode"></show-error>
+                </div>
+
+            </div>
+            
         
         </div>
         <button type="submit" class="btn btn-info waves-effect waves-light pull-right">
@@ -59,25 +86,33 @@
     import datepicker from 'vuejs-datepicker'
     import autosizeTextarea from '../../components/autosize-textarea'
     import vSelect from 'vue-multiselect'
+    import switches from "vue-switches";
 
     export default {
-        components: {datepicker,autosizeTextarea,vSelect},
+        components: {datepicker,autosizeTextarea,vSelect,switches},
         data() {
             return {
                 generalForm: new Form({
-                    name : '',
-                    address : '',
-                    phone : '',
-                    type : null,
-                    email : '',
-                    telephone : '',
+                    name : null,
+                    parcode : null,
+                    image : null,
+                    group_id : null,
+                    category_id : null,
+                    min_price : 0,
+                    max_price : 0,
+                    status: 1,
+
                 }),
-                types : [],
-                selected_type: {
+                categorys : [],
+                selected_category: {
                     id: null,
                     name: null
                 },
-
+                groups : [],
+                selected_group: {
+                    id: null,
+                    name: null
+                },
             };
         },
         props: ['id'],
@@ -90,7 +125,8 @@
                 .then(response => response.data)
                 .then(response => {
                     console.log(response);
-                    this.types = response.type;
+                    this.categorys = response.category;
+                    this.groups = response.group;
                     this.$Progress.finish()
                 })
                 .catch(error => {
@@ -105,6 +141,18 @@
                 else
                     this.store ();
             },
+            CheckPrice: function(evt){
+                if (this.generalForm.max_price != null && parseInt(this.generalForm.max_price) > 0) {
+                    if (parseInt(this.generalForm.min_price) > parseInt(this.generalForm.max_price)) {
+                        toastr.error("يجب ان يكون اعلي سعر اكبر من اقل سعر");
+                    } 
+                    
+                console.log(this.generalForm.max_price);
+                }
+            },
+      
+        
+            
             store(){
                 this.$Progress.start()
                 this.generalForm.post('/api/product')
@@ -112,8 +160,11 @@
                         toastr.success(response.message);
                         this.$emit('completed')
                         this.$Progress.finish()
-                        this.generalForm.user_id  = null ;
-                        this.selected_type  =   {id: null,name: null} ;
+                        this.generalForm.group_id  = null ;
+                        this.selected_category  =   {id: null,name: null} ;
+                        this.generalForm.category_id  = null ;
+                        this.selected_group  =   {id: null,name: null} ;
+                        this.generalForm.status = 1;
                     })
                     .catch(error => {
                         console.log(error);
@@ -126,15 +177,18 @@
                     .then(response => response.data)
                     .then(response => {
                         this.generalForm.name = response.name;
-                        this.generalForm.address = response.address;
-                        this.generalForm.phone = response.phone;
-                        this.generalForm.email = response.email;
-                        this.generalForm.type = response.type;
-                        this.selected_type.id = response.type;
-                        this.selected_type.name = response.type_name;
-                        // this.selected_type.name = response.user.profile.first_name+' '+response.user.profile.last_name;
-                        // this.generalForm.user_id = response.user_id;
-                        this.generalForm.telephone = response.telephone;
+                        this.generalForm.parcode = response.parcode;
+                        this.generalForm.image = response.image;
+                        this.generalForm.category_id = response.category_id;
+                        this.generalForm.group_id = response.group_id;
+                        this.generalForm.min_price = response.min_price;
+                        this.generalForm.max_price = response.max_price;
+                        this.generalForm.status = response.status;
+                        this.selected_category.id = response.category_id;
+                        this.selected_category.name = response.category.name;
+                        this.selected_group.id = response.group_id;
+                        this.selected_group.name = response.group.name;
+
                     })
                     .catch(error => {
                         helper.showDataErrorMsg(error);

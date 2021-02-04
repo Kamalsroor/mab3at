@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Upload extends Model
 {
@@ -12,6 +13,7 @@ class Upload extends Model
     ];
     protected $primaryKey = 'id';
     protected $table = 'uploads';
+    use SoftDeletes;
 
     public function scopeFilterByModule($q, $module)
     {

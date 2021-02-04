@@ -3,12 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Customer extends Model
 {
     protected $fillable = ['name', 'address', 'phone', 'telephone', 'email', 'type'];
     protected $primaryKey = 'id';
     protected $table = 'customers';
+    use SoftDeletes;
 
 
 

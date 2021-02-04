@@ -87,7 +87,10 @@ return [
   'unique'               => 'قيمة الحقل :attribute مُستخدمة من قبل',
   'uploaded'             => 'فشل في تحميل الـ :attribute',
   'url'                  => 'صيغة الرابط :attribute غير صحيحة',
-
+  'gte'                  => 'قيمة الحقل :attribute يجب ان تكون اكبر من قيمة الحقل :other',
+  'gte'                  => [
+    'numeric' => 'يجب أن تكون قيمة الحقل :attribute مساوية أو أكبر لـ :other :value.',
+  ],
   /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -100,8 +103,8 @@ return [
     */
 
   'custom' => [
-    'attribute-name' => [
-      'rule-name' => 'custom-message',
+    'max_price' => [
+      'gte' => 'يجب أن تكون قيمة الحقل اعلي سعر مساوية أو أكبر لـ اقل سعر.',
     ],
   ],
 

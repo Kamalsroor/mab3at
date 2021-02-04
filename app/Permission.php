@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Permission extends Model
 {
@@ -12,6 +13,7 @@ class Permission extends Model
     ];
     protected $primaryKey = 'id';
     protected $table = 'permissions';
+    use SoftDeletes;
 
     public function scopeFilterByName($q, $name = null)
     {

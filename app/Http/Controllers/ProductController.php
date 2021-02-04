@@ -8,7 +8,8 @@ use App\Repositories\ActivityLogRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
-
+use App\Repositories\CategoryRepository;
+use App\Repositories\GroupRepository;
 class ProductController extends Controller
 {
     protected $module = 'product';
@@ -23,12 +24,15 @@ class ProductController extends Controller
      *
      * @return void
      */
-    public function __construct(Request $request, ProductRepository $repo, UserRepository $user, ActivityLogRepository $activity)
+    public function __construct(Request $request, ProductRepository $repo, UserRepository $user, ActivityLogRepository $activity ,CategoryRepository $category ,GroupRepository $group)
     {
         $this->request = $request;
         $this->repo = $repo;
         $this->activity = $activity;
         $this->user = $user;
+        $this->category = $category;
+        $this->group = $group;
+
         $this->middleware('permission:access-product');
 
     }
@@ -40,10 +44,15 @@ class ProductController extends Controller
      */
     public function preRequisite()
     {
-        $type = generateSelectOption(collect($this->repo->listType())->pluck('name', 'id'));
-        return $this->success(compact( 'type'));
+        $category = generateSelectOption($this->category->listByName());
+        
+        $group = generateSelectOption($this->group->listByName());
+
+        return $this->success(compact('category' ,'group'));
         // return $this->ok($user);
     }
+
+
 
     /**
      * Used to get all Product
@@ -98,7 +107,6 @@ class ProductController extends Controller
     {
         $product = $this->repo->findOrFail($id);
         // dd( , $product->type);
-        $product->type_name = collect($this->repo->listType())->pluck('name', 'id')->toArray()[$product->type];
         return $this->ok($product);
     }
 

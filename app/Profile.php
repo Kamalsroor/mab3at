@@ -2,6 +2,7 @@
 namespace App;
 
 use Eloquent;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Profile extends Eloquent
 {
@@ -13,6 +14,7 @@ class Profile extends Eloquent
                         ];
     protected $primaryKey = 'id';
     protected $table = 'profiles';
+    use SoftDeletes;
 
     public function user()
     {

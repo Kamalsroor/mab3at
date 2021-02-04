@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Backup extends Model
 {
@@ -12,7 +13,8 @@ class Backup extends Model
                 ];
     protected $primaryKey = 'id';
     protected $table = 'backups';
-    
+    use SoftDeletes;
+
     public function scopeCreatedAtDateBetween($q, $dates)
     {
         if ((! $dates['start_date'] || ! $dates['end_date']) && $dates['start_date'] <= $dates['end_date']) {

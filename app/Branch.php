@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Branch extends Model
 {
@@ -10,6 +11,7 @@ class Branch extends Model
     protected $fillable = ['name', 'address', 'phone', 'telephone', 'user_id'];
     protected $primaryKey = 'id';
     protected $table = 'branches';
+    use SoftDeletes;
 
 
     public function user()

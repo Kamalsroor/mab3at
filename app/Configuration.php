@@ -2,6 +2,7 @@
 namespace App;
 
 use Eloquent;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Configuration extends Eloquent
 {
@@ -13,6 +14,7 @@ class Configuration extends Eloquent
     protected $primaryKey = 'id';
     protected $table = 'config';
     public $timestamps = false;
+    use SoftDeletes;
 
     public function getValueAttribute()
     {

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
@@ -12,6 +13,7 @@ class Category extends Model
     ];
     protected $primaryKey = 'id';
     protected $table = 'categories';
+    use SoftDeletes;
 
 
     public function scopeCreatedAtDateBetween($q, $dates)

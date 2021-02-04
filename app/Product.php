@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
@@ -19,17 +20,20 @@ class Product extends Model
     ];
     protected $primaryKey = 'id';
     protected $table = 'products';
+    use SoftDeletes;
 
 
-    public function group()
+    public function Group()
     {
         return $this->belongsTo('App\Group', 'group_id');
     }
 
-    public function category()
+    public function Category()
     {
         return $this->belongsTo('App\Category', 'category_id');
     }
+
+    
 
     public function scopeCreatedAtDateBetween($q, $dates)
     {

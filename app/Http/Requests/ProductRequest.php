@@ -25,15 +25,17 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|products:categories,name,' . $this->id,
-            'address' => 'nullable',
-            'email' => 'nullable|email',
-            'type' => 'required|in:cargo,trade,cargo&trade',
-            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11|unique:products,phone,' . $this->id,
-            'telephone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:8|unique:products,telephone,' . $this->id,
-            // 'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|unique:products,name,' . $this->id,
+            'parcode' => 'sometimes|nullable|string',
+            'group_id' => 'required|exists:groups,id',
+            'category_id' => 'required|exists:categories,id',
+            'min_price' => 'sometimes|nullable|numeric|min:1',
+            'max_price' => 'sometimes|nullable|numeric|min:1|required_unless:min_price,0|gte:min_price',
+            'status' => 'sometimes|nullable|in:0,1,false,true',
         ];
     }
+
+
 
     /**
      * Translate fields with user friendly name.
@@ -44,12 +46,14 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => trans('product.name'),
-            'address' => trans('product.address'),
-            'phone' => trans('product.phone'),
-            'telephone' => trans('product.telephone'),
-            // 'user_id' => trans('product.user'),
-            'type' => trans('product.type'),
-            'email' => trans('product.email'),
+            'parcode' => trans('product.parcode'),
+            'group_id' => trans('product.group_id'),
+            'category_id' => trans('product.category_id'),
+            'min_price' => trans('product.min_price'),
+            'max_price' => trans('product.max_price'),
+            'status' => trans('product.status'),
+
+       
         ];
     }
 }
