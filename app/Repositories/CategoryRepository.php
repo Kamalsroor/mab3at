@@ -42,7 +42,7 @@ class CategoryRepository
 
     public function findOrFail($id)
     {
-        $category = $this->category->find($id);
+        $category = $this->category->withTrashed()->find($id);
         if (!$category) {
             throw ValidationException::withMessages(['message' => trans('todo.could_not_find')]);
         }
@@ -64,13 +64,14 @@ class CategoryRepository
         $name = isset($params['name']) ? $params['name'] : null;
         $status = isset($params['status']) ? $params['status'] : 0;
         $start_date = isset($params['start_date']) ? $params['start_date'] : null;
+        $deleted = isset($params['deleted']) ? $params['deleted'] : false;
 
 
         $end_date = isset($params['end_date']) ? $params['end_date'] : null;
         $query = $this->category->createdAtDateBetween([
             'start_date' => $start_date,
             'end_date' => $end_date
-        ])->filterByName($name);
+        ])->filterByName($name)->GetDeleted($deleted);
         return $query->orderBy($sort_by, $order)->paginate($page_length);
     }
 
@@ -132,6 +133,20 @@ class CategoryRepository
     {
         return $category->delete();
     }
+
+
+
+    /**
+     * Restore Category.
+     *
+     * @param integer $id
+     * @return bool|null
+     */
+    public function restore(Category $category)
+    {
+        return $category->restore();
+    }
+
 
     /**
      * List category by name only

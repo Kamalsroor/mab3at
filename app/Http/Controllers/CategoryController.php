@@ -148,13 +148,21 @@ class CategoryController extends Controller
                 return $cheackPassword ;
             }
             $category = $this->repo->findOrFail($id);
-
+            
+            $deleted_at = false;
+            if ($category->deleted_at) {
+                $deleted_at = true;
+                $this->repo->restore($category);
+            }else{
+                $this->repo->delete($category);
+            }
             $this->activity->record([
                 'module' => $this->module,
                 'module_id' => $category->id,
-                'activity' => 'deleted',
+                'activity' =>  $deleted_at ? 'restored' : 'deleted',
             ]);
-            $this->repo->delete($category);
+
+
         } catch (\Exception $e) {
             $this->activity->record([
                 'module' => $this->module,
@@ -163,7 +171,11 @@ class CategoryController extends Controller
             ]);
             return $this->error(['message' => "خطاء , اعد تحميل الصفحه" ,'Exception' => $e  ]);
         }
-
+        if ($deleted_at) {
+            return $this->success(['message' => trans('app.restore')]);
+        }
         return $this->success(['message' => trans('app.deleted')]);
+
+        
     }
 }

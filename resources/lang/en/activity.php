@@ -12,6 +12,7 @@
   'created' => ':activity created.',
   'date_time' => 'Date & Time',
   'deleted' => ':activity deleted.',
+  'restored' => ':activity restored.',
   'downloaded' => ':activity downloaded.',
   'generated' => ':activity generated.',
   'ip' => 'IP Address',

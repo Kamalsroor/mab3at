@@ -149,13 +149,20 @@ class GroupController extends Controller
                 return $cheackPassword ;
             }
             $group = $this->repo->findOrFail($id);
-
+            $deleted_at = false;
+            if ($group->deleted_at) {
+                $deleted_at = true;
+                $this->repo->restore($group);
+            }else{
+                $this->repo->delete($group);
+            }
             $this->activity->record([
                 'module' => $this->module,
                 'module_id' => $group->id,
-                'activity' => 'deleted',
+                'activity' =>  $deleted_at ? 'restored' : 'deleted',
             ]);
-            $this->repo->delete($group);
+
+           
         } catch (\Exception $e) {
             $this->activity->record([
                 'module' => $this->module,
@@ -164,7 +171,9 @@ class GroupController extends Controller
             ]);
             return $this->error(['message' => "خطاء , اعد تحميل الصفحه" ,'Exception' => $e ]);
         }
-
+        if ($deleted_at) {
+            return $this->success(['message' => trans('app.restore')]);
+        }
         return $this->success(['message' => trans('app.deleted')]);
     }
 }

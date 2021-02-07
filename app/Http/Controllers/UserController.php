@@ -472,15 +472,23 @@ class UserController extends Controller
         $user = $this->repo->findOrFail($id);
 
         $this->authorize('delete', $user);
-
+        $deleted_at = false;
+        if ($user->deleted_at) {
+            $deleted_at = true;
+            $this->repo->restore($user);
+        }else{
+            $this->repo->delete($user);
+        }
         $this->activity->record([
             'module' => $this->module,
             'module_id' => $user->id,
-            'activity' => 'deleted',
+            'activity' =>  $deleted_at ? 'restored' : 'deleted',
         ]);
+  
 
-        $this->repo->delete($user);
-
-        return $this->success(['message' => trans('user.deleted')]);
+        if ($deleted_at) {
+            return $this->success(['message' => trans('app.restore')]);
+        }
+        return $this->success(['message' => trans('app.deleted')]);
     }
 }

@@ -72,6 +72,12 @@
                       {{trans('todo.show_completed')}}
                     </div>
                   </div> -->
+                  <div class="col-6">
+                    <div class="form-group">
+                      <switches v-model="filterTodoForm.deleted" theme="bootstrap" color="success"></switches>
+                      {{trans('general.show_deleted')}}
+                    </div>
+                  </div>
                   <div class="col-12">
                     <div class="form-group">
                       <date-range-picker
@@ -113,7 +119,7 @@
                       <td v-text="branch.telephone"></td>
                       <td v-text="branch.user.profile.first_name+' '+branch.user.profile.last_name"></td>
                       <td v-text="branch.created_at"></td>
-                      <td class="table-option">
+                      <td class="table-option" v-if="!branch.deleted_at">
                         <div class="btn-group">
                           <button
                             class="btn btn-info btn-sm"
@@ -137,6 +143,24 @@
                             <span class="d-none d-sm-inline">{{trans('general.delete')}}</span>
 
                             <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                      <td class="table-option" v-else>
+                        <div class="btn-group">
+                          
+                          <button
+                            class="btn btn-success btn-sm"
+                            :key="branch.id"
+                            v-if="hasPermission('delete-branch')"
+                   
+                            @click.prevent="resetDelete(branch)"
+
+                            v-tooltip="trans('general.restore')"
+                          >
+                            <span class="d-none d-sm-inline">{{trans('general.restore')}}</span>
+
+                            <i class="fas fa-recycle"></i>
                           </button>
                         </div>
                       </td>
@@ -194,6 +218,7 @@ export default {
         name: "",
         address: "",
         // status: false,
+        deleted: false,
         start_date: "",
         end_date: "",
         sort_by: "created_at",
@@ -296,6 +321,46 @@ export default {
     return false;
       // return dialog => this.delete(branch);
     },
+
+    resetDelete(branch) {
+       Vue.$confirm({
+        auth: true,
+        title: 'هل انت متأكد ؟',
+        message: 'هل انت متأكد , سوف تقوم باسترجاع السجل المحذوف ؟',
+        button: {
+          yes: 'نعم',
+          no: 'لا , اغلاق'
+        },
+          callback: (confirm, password) => {
+              if (confirm && password ) {
+                  axios
+                  .delete("/api/branch/" + branch.id, {
+                    params: {
+                        password: password
+                    }
+                })
+                  .then(response => response.data)
+                  .then(response => {
+                    toastr.success(response.message);
+                    this.getBranches();
+                  })
+                  .catch(error => {
+                    helper.showDataErrorMsg(error);
+                  });
+              }
+        }
+      })
+
+
+       
+    return false;
+      // return dialog => this.delete(branch);
+    },
+
+
+
+
+
     delete(branch) {
       axios
         .delete("/api/branch/" + branch.id)
@@ -326,6 +391,7 @@ export default {
       },
       deep: true
     }
+    
   }
 };
 </script>

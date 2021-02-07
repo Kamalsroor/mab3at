@@ -545,7 +545,6 @@ function checkPassword($password)
         if (auth()->attempt(['email' => auth()->user()->email, 'password' => $password]) != false) {
             return true ; 
         }else{
-   
             return errorResponse(['message' => "يرجي ادخال رقم سري صحيح"]);
         }
     }else{

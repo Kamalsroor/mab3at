@@ -42,7 +42,7 @@ class GroupRepository
 
     public function findOrFail($id)
     {
-        $group = $this->group->find($id);
+        $group = $this->group->withTrashed()->find($id);
         if (!$group) {
             throw ValidationException::withMessages(['message' => trans('todo.could_not_find')]);
         }
@@ -64,13 +64,14 @@ class GroupRepository
         $name = isset($params['name']) ? $params['name'] : null;
         $status = isset($params['status']) ? $params['status'] : 0;
         $start_date = isset($params['start_date']) ? $params['start_date'] : null;
+        $deleted = isset($params['deleted']) ? $params['deleted'] : false;
 
 
         $end_date = isset($params['end_date']) ? $params['end_date'] : null;
         $query = $this->group->createdAtDateBetween([
             'start_date' => $start_date,
             'end_date' => $end_date
-        ])->filterByName($name);
+        ])->filterByName($name)->GetDeleted($deleted);
         return $query->orderBy($sort_by, $order)->paginate($page_length);
     }
 
@@ -131,6 +132,19 @@ class GroupRepository
         return $group->delete();
     }
 
+
+    /**
+     * Restore Group.
+     *
+     * @param integer $id
+     * @return bool|null
+     */
+    public function restore(Group $group)
+    {
+        return $group->restore();
+    }
+
+    
     /**
      * List group by name only
      *

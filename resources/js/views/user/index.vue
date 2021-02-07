@@ -30,6 +30,12 @@
                                             <input class="form-control" name="email" v-model="filterUserForm.email">
                                         </div>
                                     </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                        <switches v-model="filterTodoForm.deleted" theme="bootstrap" color="success"></switches>
+                                        {{trans('general.show_deleted')}}
+                                        </div>
+                                    </div>
                                     <div class="col-6 col-sm-3">
                                         <div class="form-group">
                                             <label for="">{{trans('role.role')}}</label>
@@ -207,11 +213,29 @@
                                                 <span v-for="status in getUserStatus(user)" :class="['label','label-'+status.color,'m-r-5']">{{status.label}}</span>
                                             </td>
                                             <td>{{user.created_at | moment}}</td>
-                                            <td class="table-option">
+                                            <td class="table-option" v-if="!user.deleted_at">
                                                 <div class="btn-group">
 
                                                     <router-link :to="`/user/${user.id}`" class="btn btn-info btn-sm" v-tooltip="trans('user.view_user')"><i class="fas fa-arrow-circle-right"></i></router-link>
                                                     <button class="btn btn-danger btn-sm" :key="user.id" v-if="hasPermission('delete-user')" v-confirm="{ok: confirmDelete(user)}" v-tooltip="trans('user.delete_user')"><i class="fas fa-trash"></i></button>
+                                                </div>
+                                            </td>
+                                            <td class="table-option" v-else>
+                                                <div class="btn-group">
+                                                
+                                                <button
+                                                    class="btn btn-success btn-sm"
+                                                    :key="user.id"
+                                                    v-if="hasPermission('delete-user')"
+                                        
+                                                    @click.prevent="resetDelete(user)"
+
+                                                    v-tooltip="trans('general.restore')"
+                                                >
+                                                    <span class="d-none d-sm-inline">{{trans('general.restore')}}</span>
+
+                                                    <i class="fas fa-recycle"></i>
+                                                </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -253,6 +277,7 @@
                     email: '',
                     role_id: '',
                     status: '',
+                    deleted: false,
                     created_at_start_date: '',
                     created_at_end_date: '',
                     sort_by : 'first_name',
@@ -345,6 +370,43 @@
                         helper.showErrorMsg(error);
                     });
             },
+
+            // resetDelete(product) {
+            //     Vue.$confirm({
+            //         auth: true,
+            //         title: 'هل انت متأكد ؟',
+            //         message: 'هل انت متأكد , سوف تقوم باسترجاع السجل المحذوف ؟',
+            //         button: {
+            //         yes: 'نعم',
+            //         no: 'لا , اغلاق'
+            //         },
+            //         callback: (confirm, password) => {
+            //             if (confirm && password ) {
+            //                 axios
+            //                 .delete("/api/product/" + product.id, {
+            //                     params: {
+            //                         password: password
+            //                     }
+            //                 })
+            //                 .then(response => response.data)
+            //                 .then(response => {
+            //                     toastr.success(response.message);
+            //                     this.getProducts();
+            //                 })
+            //                 .catch(error => {
+            //                     helper.showDataErrorMsg(error);
+            //                 });
+            //             }
+            //         }
+            //     })
+
+
+                
+            //     return false;
+            //     // return dialog => this.delete(user);
+            // },
+
+
             getUsers(page){
                 if (typeof page !== 'number') {
                     page = 1;

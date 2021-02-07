@@ -72,7 +72,7 @@ class UserRepository
 
     public function findOrFail($id = null)
     {
-        $user = $this->user->with('profile', 'roles','userPreference')->find($id);
+        $user = $this->user->withTrashed()->with('profile', 'roles','userPreference')->find($id);
 
         if (! $user) {
             throw ValidationException::withMessages(['message' => trans('user.could_not_find')]);
@@ -90,7 +90,7 @@ class UserRepository
 
     public function findByEmail($email = null)
     {
-        return $this->user->with('profile', 'roles', 'userPreference')->filterByEmail($email)->first();
+        return $this->user->withTrashed()->with('profile', 'roles', 'userPreference')->filterByEmail($email)->first();
     }
 
     /**
@@ -102,7 +102,7 @@ class UserRepository
 
     public function findByActivationToken($token = null)
     {
-        return $this->user->with('profile', 'roles', 'userPreference')->whereActivationToken($token)->first();
+        return $this->user->withTrashed()->with('profile', 'roles', 'userPreference')->whereActivationToken($token)->first();
     }
 
     /**
@@ -149,6 +149,7 @@ class UserRepository
         $status                = isset($params['status']) ? $params['status'] : null;
         $created_at_start_date = isset($params['created_at_start_date']) ? $params['created_at_start_date'] : null;
         $created_at_end_date   = isset($params['created_at_end_date']) ? $params['created_at_end_date'] : null;
+        $deleted = isset($params['deleted']) ? $params['deleted'] : false;
 
         $query = $this->user->with('profile', 'roles')->filterByName($name)->filterByEmail($email)->filterByRoleId($role_id)->filterByStatus($status)->createdAtDateBetween([
             'start_date' => $created_at_start_date,
@@ -163,7 +164,7 @@ class UserRepository
             $query->orderBy($sort_by, $order);
         }
 
-        return $query->paginate($page_length);
+        return $query->paginate($page_length)->GetDeleted($deleted);
     }
 
     /**
@@ -416,6 +417,20 @@ class UserRepository
     {
         return $user->delete();
     }
+
+
+    /**
+     * Restore User.
+     *
+     * @param integer $id
+     * @return bool|null
+     */
+    public function restore(User $user)
+    {
+        return $user->restore();
+    }
+
+
 
     /**
      * Delete multiple users.

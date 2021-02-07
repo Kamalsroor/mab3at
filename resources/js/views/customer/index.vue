@@ -73,6 +73,12 @@
                       {{trans('todo.show_completed')}}
                     </div>
                   </div> -->
+                  <div class="col-6">
+                    <div class="form-group">
+                      <switches v-model="filterTodoForm.deleted" theme="bootstrap" color="success"></switches>
+                      {{trans('general.show_deleted')}}
+                    </div>
+                  </div>
                   <div class="col-12">
                     <div class="form-group">
                       <date-range-picker
@@ -116,7 +122,7 @@
                       <td v-text="customer.email"></td>
                       <td v-text="customer.type"></td>
                       <td v-text="customer.created_at"></td>
-                      <td class="table-option">
+                      <td class="table-option" v-if="!customer.deleted_at">
                         <div class="btn-group">
                           <button
                             class="btn btn-info btn-sm"
@@ -140,6 +146,24 @@
                             <span class="d-none d-sm-inline">{{trans('general.delete')}}</span>
 
                             <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                      <td class="table-option" v-else>
+                        <div class="btn-group">
+                          
+                          <button
+                            class="btn btn-success btn-sm"
+                            :key="customer.id"
+                            v-if="hasPermission('delete-customer')"
+                   
+                            @click.prevent="resetDelete(customer)"
+
+                            v-tooltip="trans('general.restore')"
+                          >
+                            <span class="d-none d-sm-inline">{{trans('general.restore')}}</span>
+
+                            <i class="fas fa-recycle"></i>
                           </button>
                         </div>
                       </td>
@@ -196,6 +220,7 @@ export default {
       filterTodoForm: {
         name: "",
         address: "",
+        deleted: false,
         // status: false,
         start_date: "",
         end_date: "",
@@ -304,6 +329,44 @@ export default {
     return false;
       // return dialog => this.delete(customer);
     },
+
+    
+    resetDelete(customer) {
+       Vue.$confirm({
+        auth: true,
+        title: 'هل انت متأكد ؟',
+        message: 'هل انت متأكد , سوف تقوم باسترجاع السجل المحذوف ؟',
+        button: {
+          yes: 'نعم',
+          no: 'لا , اغلاق'
+        },
+          callback: (confirm, password) => {
+              if (confirm && password ) {
+                  axios
+                  .delete("/api/customer/" + customer.id, {
+                    params: {
+                        password: password
+                    }
+                })
+                  .then(response => response.data)
+                  .then(response => {
+                    toastr.success(response.message);
+                    this.getCustomeres();
+                  })
+                  .catch(error => {
+                    helper.showDataErrorMsg(error);
+                  });
+              }
+        }
+      })
+
+
+       
+    return false;
+      // return dialog => this.delete(branch);
+    },
+
+
     delete(customer) {
       axios
         .delete("/api/customer/" + customer.id)

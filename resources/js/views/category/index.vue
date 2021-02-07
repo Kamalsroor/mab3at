@@ -68,6 +68,12 @@
                       {{trans('todo.show_completed')}}
                     </div>
                   </div> -->
+                  <div class="col-6">
+                    <div class="form-category">
+                      <switches v-model="filterTodoForm.deleted" theme="bootstrap" color="success"></switches>
+                      {{trans('general.show_deleted')}}
+                    </div>
+                  </div>
                   <div class="col-12">
                     <div class="form-category">
                       <date-range-picker
@@ -107,7 +113,7 @@
                       <td v-else>لا</td>
 
                       <td v-text="category.created_at"></td>
-                      <td class="table-option">
+                      <td class="table-option" v-if="!category.deleted_at">
                         <div class="btn-category">
                           <button
                             class="btn btn-info btn-sm"
@@ -134,6 +140,26 @@
                           </button>
                         </div>
                       </td>
+
+                      <td class="table-option" v-else>
+                        <div class="btn-category">
+                          
+                          <button
+                            class="btn btn-success btn-sm"
+                            :key="category.id"
+                            v-if="hasPermission('delete-category')"
+                   
+                            @click.prevent="resetDelete(category)"
+
+                            v-tooltip="trans('general.restore')"
+                          >
+                            <span class="d-none d-sm-inline">{{trans('general.restore')}}</span>
+
+                            <i class="fas fa-recycle"></i>
+                          </button>
+                        </div>
+                      </td>
+
                     </tr>
                   </tbody>
                 </table>
@@ -187,6 +213,7 @@ export default {
       filterTodoForm: {
         name: "",
         // status: false,
+        deleted: false,
         start_date: "",
         end_date: "",
         sort_by: "created_at",
@@ -273,6 +300,42 @@ export default {
     return false;
       // return dialog => this.delete(category);
     },
+    
+    resetDelete(category) {
+       Vue.$confirm({
+        auth: true,
+        title: 'هل انت متأكد ؟',
+        message: 'هل انت متأكد , سوف تقوم باسترجاع السجل المحذوف ؟',
+        button: {
+          yes: 'نعم',
+          no: 'لا , اغلاق'
+        },
+          callback: (confirm, password) => {
+              if (confirm && password ) {
+                  axios
+                  .delete("/api/category/" + category.id, {
+                    params: {
+                        password: password
+                    }
+                })
+                  .then(response => response.data)
+                  .then(response => {
+                    toastr.success(response.message);
+                    this.getCategories();
+                  })
+                  .catch(error => {
+                    helper.showDataErrorMsg(error);
+                  });
+              }
+        }
+      })
+
+
+       
+    return false;
+      // return dialog => this.delete(category);
+    },
+
     delete(category) {
       axios
         .delete("/api/category/" + category.id)

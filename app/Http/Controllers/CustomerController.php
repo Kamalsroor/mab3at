@@ -152,13 +152,20 @@ class CustomerController extends Controller
                 return $cheackPassword ;
             }
             $customer = $this->repo->findOrFail($id);
-
+            $deleted_at = false;
+            if ($customer->deleted_at) {
+                $deleted_at = true;
+                $this->repo->restore($customer);
+            }else{
+                $this->repo->delete($customer);
+            }
             $this->activity->record([
                 'module' => $this->module,
                 'module_id' => $customer->id,
-                'activity' => 'deleted',
+                'activity' =>  $deleted_at ? 'restored' : 'deleted',
             ]);
-            $this->repo->delete($customer);
+
+           
         } catch (\Exception $e) {
             $this->activity->record([
                 'module' => $this->module,
@@ -167,7 +174,9 @@ class CustomerController extends Controller
             ]);
             return $this->error(['message' => "خطاء , اعد تحميل الصفحه" ,'Exception' => $e ]);
         }
-
+        if ($deleted_at) {
+            return $this->success(['message' => trans('app.restore')]);
+        }
         return $this->success(['message' => trans('app.deleted')]);
     }
 }

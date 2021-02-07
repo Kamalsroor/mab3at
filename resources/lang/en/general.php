@@ -1,4 +1,7 @@
 <?php return array(
+
+
+    'show_deleted' => 'اظهار المحذوف',
     'action' => 'التحكم',
     'add' => 'اضافة',
     'add_new' => 'اضافة جديد',
@@ -16,6 +19,7 @@
     'date_between' => 'Date Between',
     'date_range' => 'Date Range',
     'delete' => 'حذف',
+    'restore' => 'استرجاع',
     'delete_upload' => 'Delete Upload',
     'descending' => 'تنازلي',
     'edit' => 'تعديل',

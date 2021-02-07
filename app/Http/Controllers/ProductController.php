@@ -161,12 +161,20 @@ class ProductController extends Controller
             }
             $product = $this->repo->findOrFail($id);
 
+            $deleted_at = false;
+            if ($product->deleted_at) {
+                $deleted_at = true;
+                $this->repo->restore($product);
+            }else{
+                $this->repo->delete($product);
+            }
             $this->activity->record([
                 'module' => $this->module,
                 'module_id' => $product->id,
-                'activity' => 'deleted',
+                'activity' =>  $deleted_at ? 'restored' : 'deleted',
             ]);
-            $this->repo->delete($product);
+
+
         } catch (\Exception $e) {
             $this->activity->record([
                 'module' => $this->module,
@@ -175,7 +183,9 @@ class ProductController extends Controller
             ]);
             return $this->error(['message' => "خطاء , اعد تحميل الصفحه" ,'Exception' => $e ]);
         }
-
+        if ($deleted_at) {
+            return $this->success(['message' => trans('app.restore')]);
+        }
         return $this->success(['message' => trans('app.deleted')]);
     }
 }

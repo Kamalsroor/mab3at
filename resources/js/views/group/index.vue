@@ -68,6 +68,13 @@
                       {{trans('todo.show_completed')}}
                     </div>
                   </div> -->
+
+                  <div class="col-6">
+                    <div class="form-group">
+                      <switches v-model="filterTodoForm.deleted" theme="bootstrap" color="success"></switches>
+                      {{trans('general.show_deleted')}}
+                    </div>
+                  </div>
                   <div class="col-12">
                     <div class="form-group">
                       <date-range-picker
@@ -103,7 +110,7 @@
                       <td v-text="group.name"></td>
                      
                       <td v-text="group.created_at"></td>
-                      <td class="table-option">
+                      <td class="table-option" v-if="!group.deleted_at">
                         <div class="btn-group">
                           <button
                             class="btn btn-info btn-sm"
@@ -127,6 +134,24 @@
                             <span class="d-none d-sm-inline">{{trans('general.delete')}}</span>
 
                             <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                      <td class="table-option" v-else>
+                        <div class="btn-group">
+                          
+                          <button
+                            class="btn btn-success btn-sm"
+                            :key="group.id"
+                            v-if="hasPermission('delete-group')"
+                   
+                            @click.prevent="resetDelete(group)"
+
+                            v-tooltip="trans('general.restore')"
+                          >
+                            <span class="d-none d-sm-inline">{{trans('general.restore')}}</span>
+
+                            <i class="fas fa-recycle"></i>
                           </button>
                         </div>
                       </td>
@@ -185,6 +210,9 @@ export default {
         // status: false,
         start_date: "",
         end_date: "",
+        deleted: false,
+
+
         sort_by: "created_at",
         order: "desc",
         page_length: helper.getConfig("page_length")
@@ -269,6 +297,45 @@ export default {
     return false;
       // return dialog => this.delete(group);
     },
+
+    
+    
+    resetDelete(group) {
+       Vue.$confirm({
+        auth: true,
+        title: 'هل انت متأكد ؟',
+        message: 'هل انت متأكد , سوف تقوم باسترجاع السجل المحذوف ؟',
+        button: {
+          yes: 'نعم',
+          no: 'لا , اغلاق'
+        },
+          callback: (confirm, password) => {
+              if (confirm && password ) {
+                  axios
+                  .delete("/api/group/" + group.id, {
+                    params: {
+                        password: password
+                    }
+                })
+                  .then(response => response.data)
+                  .then(response => {
+                    toastr.success(response.message);
+                    this.getGroupes();
+                  })
+                  .catch(error => {
+                    helper.showDataErrorMsg(error);
+                  });
+              }
+        }
+      })
+
+
+       
+    return false;
+      // return dialog => this.delete(group);
+    },
+
+
     delete(group) {
       axios
         .delete("/api/group/" + group.id)

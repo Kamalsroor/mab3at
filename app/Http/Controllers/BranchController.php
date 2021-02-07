@@ -97,6 +97,9 @@ class BranchController extends Controller
     public function show($id)
     {
         $branch = $this->repo->findOrFail($id);
+        if ($branch->deleted_at) {
+            return $this->error(['message' => "خطاء , لا يمكن تعديل هذا السجل لانه محذوف"  ]);
+        }
         return $this->ok($branch);
     }
 
@@ -129,8 +132,6 @@ class BranchController extends Controller
             ]);
             return $this->error(['message' => "خطاء , اعد تحميل الصفحه" ,'Exception' => $e ]);
         }
-
-
         return $this->success(['message' => trans('app.updated')]);
     }
 
@@ -149,14 +150,23 @@ class BranchController extends Controller
             if(is_object($cheackPassword)){
                 return $cheackPassword ;
             }
+
             $branch = $this->repo->findOrFail($id);
+            $deleted_at = false;
+            if ($branch->deleted_at) {
+                $deleted_at = true;
+                $this->repo->restore($branch);
+            }else{
+                $this->repo->delete($branch);
+            }
+
 
             $this->activity->record([
                 'module' => $this->module,
                 'module_id' => $branch->id,
-                'activity' => 'deleted',
+                'activity' =>  $deleted_at ? 'restored' : 'deleted',
             ]);
-            $this->repo->delete($branch);
+      
         } catch (\Exception $e) {
             $this->activity->record([
                 'module' => $this->module,
@@ -165,7 +175,9 @@ class BranchController extends Controller
             ]);
             return $this->error(['message' => "خطاء , اعد تحميل الصفحه" ,'Exception' => $e ]);
         }
-
+        if ($deleted_at) {
+            return $this->success(['message' => trans('app.restore')]);
+        }
         return $this->success(['message' => trans('app.deleted')]);
     }
 }
