@@ -110,13 +110,9 @@
                       <th>{{trans('product.status')}}</th>
                       <th>{{trans('product.category_id')}}</th>
                       <th>{{trans('product.group_id')}}</th>
-
-                 
-
-
-
-
                       <th>{{trans('product.created_at')}}</th>
+                      <th v-if="filterTodoForm.deleted">{{trans('app.deleted_at')}}</th>
+
                       <th class="table-option">{{trans('general.action')}}</th>
                     </tr>
                   </thead>
@@ -129,8 +125,8 @@
                       <td v-text="product.status"></td>
                       <td v-text="product.category.name"></td>
                       <td v-text="product.group.name"></td>
-
                       <td v-text="product.created_at"></td>
+                      <td v-if="product.deleted_at" v-text="product.deleted_at"></td>
                       <td class="table-option" v-if="!product.deleted_at">
                         <div class="btn-group">
                           <button

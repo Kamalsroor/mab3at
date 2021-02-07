@@ -25,12 +25,12 @@ class Product extends Model
 
     public function Group()
     {
-        return $this->belongsTo('App\Group', 'group_id');
+        return $this->belongsTo('App\Group', 'group_id')->withTrashed();
     }
 
     public function Category()
     {
-        return $this->belongsTo('App\Category', 'category_id');
+        return $this->belongsTo('App\Category', 'category_id')->withTrashed();
     }
 
     

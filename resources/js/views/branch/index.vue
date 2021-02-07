@@ -108,6 +108,7 @@
                       <th>{{trans('branch.telephone')}}</th>
                       <th>{{trans('branch.user')}}</th>
                       <th>{{trans('branch.created_at')}}</th>
+                      <th v-if="filterTodoForm.deleted">{{trans('app.deleted_at')}}</th>
                       <th class="table-option">{{trans('general.action')}}</th>
                     </tr>
                   </thead>
@@ -119,6 +120,8 @@
                       <td v-text="branch.telephone"></td>
                       <td v-text="branch.user.profile.first_name+' '+branch.user.profile.last_name"></td>
                       <td v-text="branch.created_at"></td>
+                      <td v-if="branch.deleted_at" v-text="branch.deleted_at"></td>
+               
                       <td class="table-option" v-if="!branch.deleted_at">
                         <div class="btn-group">
                           <button

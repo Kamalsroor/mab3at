@@ -110,6 +110,8 @@
                       <th>{{trans('customer.email')}}</th>
                       <th>{{trans('customer.type')}}</th>
                       <th>{{trans('customer.created_at')}}</th>
+                      <th v-if="filterTodoForm.deleted">{{trans('app.deleted_at')}}</th>
+
                       <th class="table-option">{{trans('general.action')}}</th>
                     </tr>
                   </thead>
@@ -122,6 +124,8 @@
                       <td v-text="customer.email"></td>
                       <td v-text="customer.type"></td>
                       <td v-text="customer.created_at"></td>
+                      <td v-if="customer.deleted_at" v-text="customer.deleted_at"></td>
+
                       <td class="table-option" v-if="!customer.deleted_at">
                         <div class="btn-group">
                           <button

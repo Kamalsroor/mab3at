@@ -102,6 +102,9 @@
                       <th>{{trans('group.name')}}</th>
                      
                       <th>{{trans('group.created_at')}}</th>
+                      <th v-if="filterTodoForm.deleted">{{trans('app.deleted_at')}}</th>
+                      
+
                       <th class="table-option">{{trans('general.action')}}</th>
                     </tr>
                   </thead>
@@ -110,6 +113,7 @@
                       <td v-text="group.name"></td>
                      
                       <td v-text="group.created_at"></td>
+                      <td v-if="group.deleted_at" v-text="group.deleted_at"></td>
                       <td class="table-option" v-if="!group.deleted_at">
                         <div class="btn-group">
                           <button

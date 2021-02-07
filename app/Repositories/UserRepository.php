@@ -151,7 +151,7 @@ class UserRepository
         $created_at_end_date   = isset($params['created_at_end_date']) ? $params['created_at_end_date'] : null;
         $deleted = isset($params['deleted']) ? $params['deleted'] : false;
 
-        $query = $this->user->with('profile', 'roles')->filterByName($name)->filterByEmail($email)->filterByRoleId($role_id)->filterByStatus($status)->createdAtDateBetween([
+        $query = $this->user->with('profile', 'roles')->GetDeleted($deleted)->filterByName($name)->filterByEmail($email)->filterByRoleId($role_id)->filterByStatus($status)->createdAtDateBetween([
             'start_date' => $created_at_start_date,
             'end_date' => $created_at_end_date
         ]);
@@ -164,7 +164,7 @@ class UserRepository
             $query->orderBy($sort_by, $order);
         }
 
-        return $query->paginate($page_length)->GetDeleted($deleted);
+        return $query->paginate($page_length);
     }
 
     /**

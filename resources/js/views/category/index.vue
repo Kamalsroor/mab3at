@@ -102,6 +102,8 @@
                       <th>{{trans('category.is_serial')}}</th>
                      
                       <th>{{trans('category.created_at')}}</th>
+                      <th  v-if="filterTodoForm.deleted">{{trans('app.deleted_at')}}</th>
+
                       <th class="table-option">{{trans('general.action')}}</th>
                     </tr>
                   </thead>
@@ -112,7 +114,10 @@
                       <td v-if="category.is_serial">نعم</td>
                       <td v-else>لا</td>
 
+
                       <td v-text="category.created_at"></td>
+                      <td v-if="category.deleted_at" v-text="category.deleted_at"></td>
+
                       <td class="table-option" v-if="!category.deleted_at">
                         <div class="btn-category">
                           <button

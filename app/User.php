@@ -125,4 +125,13 @@ class User extends Authenticatable implements JWTSubject
 
         return $q->where('created_at', '>=', getStartOfDate($dates['start_date']))->where('created_at', '<=', getEndOfDate($dates['end_date']));
     }
+
+    public function scopeGetDeleted($q, $deleted = false)
+    {
+        if ($deleted) {
+            return $q->onlyTrashed();
+        }
+
+        return $q;
+    }
 }
